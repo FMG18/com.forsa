@@ -333,7 +333,7 @@ private fun ForsaLoginScreen(
                 Icon(Icons.Default.Email, contentDescription = null)
             },
             singleLine = true,
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
@@ -360,7 +360,7 @@ private fun ForsaLoginScreen(
             },
             singleLine = true,
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
@@ -460,7 +460,7 @@ private fun ForsaRegisterScreen(
                 Icon(Icons.Default.Person, contentDescription = null)
             },
             singleLine = true,
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Next
             ),
@@ -478,7 +478,7 @@ private fun ForsaRegisterScreen(
                 Icon(Icons.Default.Email, contentDescription = null)
             },
             singleLine = true,
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
             ),
@@ -505,7 +505,7 @@ private fun ForsaRegisterScreen(
             },
             singleLine = true,
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Next
             ),
@@ -524,7 +524,7 @@ private fun ForsaRegisterScreen(
             },
             singleLine = true,
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
                 imeAction = ImeAction.Done
             ),
@@ -632,7 +632,7 @@ private fun ForsaResetPasswordScreen(
                 Icon(Icons.Default.Email, contentDescription = null)
             },
             singleLine = true,
-            keyboardOptions = androidx.compose.ui.text.input.KeyboardOptions(
+            keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Done
             ),
