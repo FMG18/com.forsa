@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "527827665262",
+    "project_id": "forsa-73786",
+    "storage_bucket": "forsa-73786.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527827665262:android:319b28f9c62c231b13417f",
+        "android_client_info": {
+          "package_name": "com.forsa.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527827665262-84h164djnj42osg0qgf2euvafdn5n9pn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.forsa.app",
+            "certificate_hash": "06bc3207d1aff008896352a946430ebd847c5186"
+          }
+        },
+        {
+          "client_id": "527827665262-erivc9rtp9bckhegrannmacrkbcqe7uf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYFHsBeODGtuvT-j8o55HyRMTj3sO3I0s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527827665262-erivc9rtp9bckhegrannmacrkbcqe7uf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
