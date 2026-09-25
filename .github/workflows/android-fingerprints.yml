@@ -32,17 +32,33 @@ jobs:
             -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
 
-      - name: Print SHA-1 and SHA-256
+      - name: Extract fingerprints
+        id: fingerprints
         shell: bash
         run: |
           keytool -list -v \
             -keystore "$HOME/.android/debug.keystore" \
             -storepass android \
-            -alias androiddebugkey \
-            | grep -E 'Owner:|SHA1:|SHA256:'
+            -alias androiddebugkey > fingerprint.txt
 
-      - name: Upload keystore fingerprints
+          SHA1=$(grep -m1 'SHA1:' fingerprint.txt | sed 's/.*SHA1: //')
+          SHA256=$(grep -m1 'SHA256:' fingerprint.txt | sed 's/.*SHA256: //')
+
+          echo "SHA1=$SHA1" >> "$GITHUB_OUTPUT"
+          echo "SHA256=$SHA256" >> "$GITHUB_OUTPUT"
+
+          {
+            echo '## Forsa Android fingerprints'
+            echo
+            echo "**SHA-1:** \`$SHA1\`"
+            echo
+            echo "**SHA-256:** \`$SHA256\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          cat fingerprint.txt | grep -E 'Owner:|SHA1:|SHA256:'
+
+      - name: Upload fingerprint report
         uses: actions/upload-artifact@v4
         with:
           name: forsa-android-fingerprints
-          path: "$HOME/.android/debug.keystore"
+          path: fingerprint.txt
