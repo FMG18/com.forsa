@@ -4395,6 +4395,7 @@ private fun RegisterScreen(
                                                         "phone" to "",
                                                         "city" to "",
                                                         "role" to role.orEmpty(),
+                                                        "roleConfirmed" to true,
                                                         "companyName" to "",
                                                         "companyAbout" to "",
                                                         "companyCity" to ""
