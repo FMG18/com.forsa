@@ -1775,6 +1775,11 @@ private fun PromotionScreen(
     )
     var selectedPlan by remember { mutableStateOf(plans.first()) }
     var submitting by remember { mutableStateOf(false) }
+    var activeOrderId by remember { mutableStateOf("") }
+    var paymentStatus by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
 
     Column(
         Modifier
@@ -1834,13 +1839,38 @@ private fun PromotionScreen(
             }
         }
 
+        DisposableEffect(activeOrderId) {
+            if (activeOrderId.isBlank()) {
+                onDispose { }
+            } else {
+                val registration = db.collection("promotionOrders").document(activeOrderId)
+                    .addSnapshotListener { snapshot, error ->
+                        if (error != null || snapshot == null || !snapshot.exists()) return@addSnapshotListener
+                        paymentStatus = snapshot.getString("status").orEmpty()
+                        if (paymentStatus == "paid") {
+                            submitting = false
+                            onMessage("تم الدفع وتفعيل ترقية الإعلان")
+                            onDone()
+                        }
+                    }
+
+                onDispose { registration.remove() }
+            }
+        }
+
         Surface(
             Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Text(
-                "الأسعار تجريبية حالياً. الدفع الفعلي سيُربط ببوابة الدفع قبل الإطلاق، ولا يتم تفعيل الترويج بمجرد إنشاء الطلب.",
+                if (paymentStatus.isNotBlank() && paymentStatus != "paid") {
+                    "حالة الدفع: " + paymentStatus
+                } else if (paymentApiBaseUrl.isBlank()) {
+                    "الدفع مهيأ داخل التطبيق، وباقي فقط ربط عنوان خادم الدفع وإضافة مفاتيح ZainCash بعد الموافقة."
+                } else {
+                    "سيتم تحويلك إلى بوابة ZainCash لإكمال الدفع بشكل آمن."
+                },
                 Modifier.padding(14.dp)
             )
         }
@@ -1852,28 +1882,60 @@ private fun PromotionScreen(
                     onMessage("سجّل الدخول أولاً")
                     return@Button
                 }
+                if (paymentApiBaseUrl.isBlank()) {
+                    onMessage("خادم الدفع غير مربوط بعد")
+                    return@Button
+                }
+
+                val user = FirebaseAuth.getInstance().currentUser
+                if (user == null) {
+                    onMessage("سجّل الدخول أولاً")
+                    return@Button
+                }
 
                 submitting = true
-                val orderId = job.id + "_" + userUid + "_" + System.currentTimeMillis()
-                db.collection("promotionOrders").document(orderId)
-                    .set(
-                        mapOf(
-                            "jobId" to job.id,
-                            "ownerUid" to userUid,
-                            "planId" to selectedPlan.first,
-                            "amountIqd" to selectedPlan.third,
-                            "status" to "pending_payment",
-                            "requestedAt" to System.currentTimeMillis()
-                        )
-                    )
-                    .addOnSuccessListener {
-                        submitting = false
-                        onMessage("تم تجهيز طلب الترقية. الدفع غير مفعّل حالياً.")
-                        onDone()
+                paymentStatus = "payment_initializing"
+                user.getIdToken(false)
+                    .addOnSuccessListener { tokenResult ->
+                        val idToken = tokenResult.token
+                        if (idToken.isNullOrBlank()) {
+                            submitting = false
+                            paymentStatus = "payment_init_failed"
+                            onMessage("تعذر التحقق من جلسة الحساب")
+                            return@addOnSuccessListener
+                        }
+
+                        scope.launch {
+                            try {
+                                val result = startForsaPayment(
+                                    baseUrl = paymentApiBaseUrl,
+                                    idToken = idToken,
+                                    jobId = job.id,
+                                    planId = selectedPlan.first
+                                )
+                                activeOrderId = result.orderId
+                                paymentStatus = "pending_payment"
+                                context.startActivity(
+                                    Intent(Intent.ACTION_VIEW, Uri.parse(result.redirectUrl))
+                                )
+                            } catch (exception: Exception) {
+                                submitting = false
+                                paymentStatus = "payment_init_failed"
+                                val message = exception.message.orEmpty()
+                                onMessage(
+                                    if (message == "PAYMENT_API_NOT_CONFIGURED") {
+                                        "خادم الدفع غير مربوط بعد"
+                                    } else {
+                                        "تعذر بدء عملية الدفع"
+                                    }
+                                )
+                            }
+                        }
                     }
                     .addOnFailureListener {
                         submitting = false
-                        onMessage("تعذر إنشاء طلب الترقية")
+                        paymentStatus = "payment_init_failed"
+                        onMessage("تعذر التحقق من جلسة الحساب")
                     }
             },
             enabled = !submitting,
@@ -1887,7 +1949,7 @@ private fun PromotionScreen(
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             } else {
-                Text("إنشاء طلب الترقية", fontSize = 16.sp)
+                Text("الدفع عبر ZainCash", fontSize = 16.sp)
             }
         }
     }
