@@ -3,14 +3,40 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    function currentUser() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isEmployer() {
+      return request.auth != null
+        && currentUser().role == "صاحب عمل"
+        && currentUser().roleConfirmed == true;
+    }
+
+    function isVerifiedEmployer() {
+      return isEmployer() && currentUser().verificationStatus == "verified";
+    }
+
+    function jobIsOpen(job) {
+      return job.isActive == true
+        && (
+          ("expiresAt" in job && job.expiresAt > request.time.toMillis())
+          || (
+            !("expiresAt" in job)
+            && ("createdAt" in job)
+            && job.createdAt is int
+            && job.createdAt + 30 * 24 * 60 * 60 * 1000 > request.time.toMillis()
+          )
+        );
+    }
+
     match /jobs/{jobId} {
       allow read: if request.auth != null;
 
-      allow create: if request.auth != null
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
+      allow create: if isVerifiedEmployer()
         && request.resource.data.keys().hasOnly([
           "title", "company", "city", "type", "description",
-          "ownerUid", "createdAt", "isActive"
+          "ownerUid", "createdAt", "expiresAt", "isActive"
         ])
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.title is string
@@ -19,19 +45,28 @@ service cloud.firestore {
         && request.resource.data.type is string
         && request.resource.data.description is string
         && request.resource.data.createdAt is int
+        && request.resource.data.expiresAt is int
+        && request.resource.data.expiresAt > request.time.toMillis()
+        && request.resource.data.expiresAt <= request.time.toMillis() + 90 * 24 * 60 * 60 * 1000
         && request.resource.data.isActive == true;
 
-      allow update: if request.auth != null
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
+      allow update: if isEmployer()
         && resource.data.ownerUid == request.auth.uid
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
           "title", "company", "city", "type", "description", "isActive"
         ])
-        && (!("isActive" in request.resource.data) || request.resource.data.isActive == true || request.resource.data.isActive == false);
+        && (!("isActive" in request.resource.data) || request.resource.data.isActive == true || request.resource.data.isActive == false)
+        && (
+          ("expiresAt" in resource.data && resource.data.expiresAt > request.time.toMillis())
+          || (!("expiresAt" in resource.data)
+              && ("createdAt" in resource.data)
+              && resource.data.createdAt is int
+              && resource.data.createdAt + 30 * 24 * 60 * 60 * 1000 > request.time.toMillis())
+          || request.resource.data.isActive == false
+        );
 
-      allow delete: if request.auth != null
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
+      allow delete: if isEmployer()
         && resource.data.ownerUid == request.auth.uid;
     }
 
@@ -52,7 +87,8 @@ service cloud.firestore {
 
     match /applications/{applicationId} {
       allow create: if request.auth != null
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "باحث عن عمل"
+        && currentUser().role == "باحث عن عمل"
+        && currentUser().roleConfirmed == true
         && applicationId == request.resource.data.jobId + "_" + request.auth.uid
         && request.resource.data.keys().hasOnly([
           "jobId", "jobTitle", "company", "applicantUid", "applicantName",
@@ -79,10 +115,7 @@ service cloud.firestore {
         && request.resource.data.cvCity is string
         && request.resource.data.employerUid ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.ownerUid
-        && (
-          !("isActive" in get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data)
-          || get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.isActive == true
-        )
+        && jobIsOpen(get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data)
         && request.resource.data.jobTitle ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.title
         && request.resource.data.company ==
@@ -205,20 +238,41 @@ service cloud.firestore {
       allow create: if request.auth != null
         && request.auth.uid == userId
         && request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
-        && request.resource.data.roleConfirmed == true;
+        && request.resource.data.roleConfirmed == true
+        && (
+          !("verificationStatus" in request.resource.data)
+          || request.resource.data.verificationStatus == "unverified"
+        );
 
       allow update: if request.auth != null
         && request.auth.uid == userId
         && request.resource.data.keys().hasOnly([
           "displayName", "email", "phone", "city", "role", "roleConfirmed",
-          "companyName", "companyAbout", "companyCity"
+          "companyName", "companyAbout", "companyCity",
+          "verificationStatus", "verificationRequestedAt", "verificationUpdatedAt", "verificationNote"
         ])
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.roleConfirmed == resource.data.roleConfirmed
         && (
-          !("role" in request.resource.data)
+          (
+            (!("verificationStatus" in request.resource.data) && !("verificationStatus" in resource.data))
+            || (
+              ("verificationStatus" in request.resource.data)
+              && ("verificationStatus" in resource.data)
+              && request.resource.data.verificationStatus == resource.data.verificationStatus
+              && !request.resource.data.diff(resource.data).affectedKeys().hasAny([
+                "verificationRequestedAt", "verificationUpdatedAt", "verificationNote"
+              ])
+            )
+          )
           || (
-            request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
-            && request.resource.data.roleConfirmed == true
-            && resource.data.roleConfirmed != true
+            (!("verificationStatus" in resource.data)
+              || resource.data.verificationStatus in ["unverified", "rejected"])
+            && request.resource.data.verificationStatus == "pending"
+            && request.resource.data.verificationRequestedAt is int
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+              "verificationStatus", "verificationRequestedAt"
+            ])
           )
         );
 
@@ -227,5 +281,3 @@ service cloud.firestore {
     }
   }
 }
-
-// sync probe
