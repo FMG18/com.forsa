@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -95,6 +96,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import java.util.UUID
 import kotlinx.coroutines.launch
 
@@ -384,37 +386,33 @@ private fun ForsaApp() {
                 message("ما تقدر تقدم على إعلانك")
             } else {
                 val applicationId = job.id + "_" + user.uid
-                db.collection("applications").document(applicationId).get()
-                    .addOnSuccessListener { existing ->
-                        if (existing.exists()) {
-                            appliedJobIds = appliedJobIds + job.id
-                            message("أنت مقدم على هذه الوظيفة مسبقاً")
-                        } else {
-                            db.collection("applications").document(applicationId).set(
-                                mapOf(
-                                    "jobId" to job.id,
-                                    "jobTitle" to job.title,
-                                    "company" to job.company,
-                                    "applicantUid" to user.uid,
-                                    "applicantName" to user.displayName.orEmpty(),
-                                    "applicantEmail" to user.email.orEmpty(),
-                                    "employerUid" to job.ownerUid,
-                                    "note" to note.trim(),
-                                    "status" to "pending",
-                                    "createdAt" to System.currentTimeMillis()
-                                )
-                            ).addOnSuccessListener {
-                                appliedJobIds = appliedJobIds + job.id
-                                message("تم إرسال طلب التقديم بنجاح")
-                                selectedJob = null
-                            }.addOnFailureListener {
-                                message("تعذر إرسال طلب التقديم")
-                            }
-                        }
+                db.collection("applications").document(applicationId).create(
+                    mapOf(
+                        "jobId" to job.id,
+                        "jobTitle" to job.title,
+                        "company" to job.company,
+                        "applicantUid" to user.uid,
+                        "applicantName" to user.displayName.orEmpty(),
+                        "applicantEmail" to user.email.orEmpty(),
+                        "employerUid" to job.ownerUid,
+                        "note" to note.trim(),
+                        "status" to "pending",
+                        "createdAt" to System.currentTimeMillis()
+                    )
+                ).addOnSuccessListener {
+                    appliedJobIds = appliedJobIds + job.id
+                    message("تم إرسال طلب التقديم بنجاح")
+                    selectedJob = null
+                }.addOnFailureListener { exception ->
+                    if (exception is FirebaseFirestoreException &&
+                        exception.code == FirebaseFirestoreException.Code.ALREADY_EXISTS
+                    ) {
+                        appliedJobIds = appliedJobIds + job.id
+                        message("أنت مقدم على هذه الوظيفة مسبقاً")
+                    } else {
+                        message("تعذر إرسال طلب التقديم")
                     }
-                    .addOnFailureListener {
-                        message("تعذر التحقق من حالة طلب التقديم")
-                    }
+                }
             }
         },
         onTab = { tab = it },
@@ -1046,6 +1044,7 @@ private fun JobDetailsScreen(
     onApply: (Job, String) -> Unit
 ) {
     var note by remember(job.id) { mutableStateOf("") }
+    var submitting by remember(job.id) { mutableStateOf(false) }
 
     Column(
         Modifier
@@ -1142,11 +1141,25 @@ private fun JobDetailsScreen(
                 )
 
                 Button(
-                    onClick = { onApply(job, note) },
+                    onClick = {
+                        if (!submitting) {
+                            submitting = true
+                            onApply(job, note)
+                        }
+                    },
+                    enabled = !submitting,
                     modifier = Modifier.fillMaxWidth().height(54.dp),
                     shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("إرسال طلب التقديم", fontSize = 16.sp)
+                    if (submitting) {
+                        CircularProgressIndicator(
+                            Modifier.size(22.dp),
+                            strokeWidth = 2.dp,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Text("إرسال طلب التقديم", fontSize = 16.sp)
+                    }
                 }
             }
         }
@@ -1788,6 +1801,14 @@ private fun EmployerApplicationsScreen(
     onMessage: (String) -> Unit
 ) {
     var applications by remember { mutableStateOf<List<ApplicationItem>>(emptyList()) }
+    var statusFilter by remember { mutableStateOf("الكل") }
+
+    val filteredApplications = applications.filter { app ->
+        statusFilter == "الكل" || app.status == statusFilter
+    }
+    val pendingCount = applications.count { it.status == "pending" }
+    val acceptedCount = applications.count { it.status == "accepted" }
+    val rejectedCount = applications.count { it.status == "rejected" }
 
     DisposableEffect(userUid) {
         if (userUid.isBlank()) {
@@ -1842,13 +1863,44 @@ private fun EmployerApplicationsScreen(
             Text("طلبات التقديم", fontSize = 25.sp, fontWeight = FontWeight.Bold)
         }
 
+        if (applications.isNotEmpty()) {
+            Text(
+                "الإجمالي ${applications.size}  •  قيد المراجعة ${pendingCount}  •  مقبول ${acceptedCount}  •  مرفوض ${rejectedCount}",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 13.sp
+            )
+
+            Row(
+                Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                listOf(
+                    "الكل" to "الكل",
+                    "pending" to "قيد المراجعة",
+                    "accepted" to "مقبول",
+                    "rejected" to "مرفوض"
+                ).forEach { (value, label) ->
+                    FilterChip(
+                        selected = statusFilter == value,
+                        onClick = { statusFilter = value },
+                        label = { Text(label) }
+                    )
+                }
+            }
+        }
+
         if (applications.isEmpty()) {
             Text(
                 "ما وصلت طلبات تقديم حالياً.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        } else if (filteredApplications.isEmpty()) {
+            Text(
+                "ماكو طلبات ضمن هذا الفلتر.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         } else {
-            applications.forEach { app ->
+            filteredApplications.forEach { app ->
                 Card(
                     Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(18.dp)
@@ -1904,6 +1956,20 @@ private fun EmployerApplicationsScreen(
                                     Text("رفض")
                                 }
                             }
+                        } else {
+                            OutlinedButton(
+                                onClick = {
+                                    db.collection("applications").document(app.id)
+                                        .update("status", "pending")
+                                        .addOnFailureListener {
+                                            onMessage("تعذر إعادة الطلب للمراجعة")
+                                        }
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text("إعادة للمراجعة")
+                            }
                         }
                     }
                 }
@@ -1921,6 +1987,14 @@ private fun MyApplicationsScreen(
 ) {
     var applications by remember { mutableStateOf<List<ApplicationItem>>(emptyList()) }
     var deleteTarget by remember { mutableStateOf<ApplicationItem?>(null) }
+    var statusFilter by remember { mutableStateOf("الكل") }
+
+    val filteredApplications = applications.filter { app ->
+        statusFilter == "الكل" || app.status == statusFilter
+    }
+    val pendingCount = applications.count { it.status == "pending" }
+    val acceptedCount = applications.count { it.status == "accepted" }
+    val rejectedCount = applications.count { it.status == "rejected" }
 
     DisposableEffect(userUid) {
         if (userUid.isBlank()) {
@@ -1974,13 +2048,44 @@ private fun MyApplicationsScreen(
             Text("طلباتي", fontSize = 25.sp, fontWeight = FontWeight.Bold)
         }
 
+        if (applications.isNotEmpty()) {
+            Text(
+                "الإجمالي ${applications.size}  •  قيد المراجعة ${pendingCount}  •  مقبول ${acceptedCount}  •  مرفوض ${rejectedCount}",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 13.sp
+            )
+
+            Row(
+                Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                listOf(
+                    "الكل" to "الكل",
+                    "pending" to "قيد المراجعة",
+                    "accepted" to "مقبول",
+                    "rejected" to "مرفوض"
+                ).forEach { (value, label) ->
+                    FilterChip(
+                        selected = statusFilter == value,
+                        onClick = { statusFilter = value },
+                        label = { Text(label) }
+                    )
+                }
+            }
+        }
+
         if (applications.isEmpty()) {
             Text(
                 "بعدك ما قدمت على وظائف.",
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+        } else if (filteredApplications.isEmpty()) {
+            Text(
+                "ماكو طلبات ضمن هذا الفلتر.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         } else {
-            applications.forEach { app ->
+            filteredApplications.forEach { app ->
                 Card(
                     Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(18.dp)
