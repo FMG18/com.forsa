@@ -8,8 +8,18 @@ service cloud.firestore {
 
       allow create: if request.auth != null
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
+        && request.resource.data.keys().hasOnly([
+          "title", "company", "city", "type", "description",
+          "ownerUid", "createdAt", "isActive"
+        ])
         && request.resource.data.ownerUid == request.auth.uid
-        && (!("isActive" in request.resource.data) || request.resource.data.isActive == true);
+        && request.resource.data.title is string
+        && request.resource.data.company is string
+        && request.resource.data.city is string
+        && request.resource.data.type is string
+        && request.resource.data.description is string
+        && request.resource.data.createdAt is int
+        && request.resource.data.isActive == true;
 
       allow update: if request.auth != null
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
@@ -145,6 +155,10 @@ service cloud.firestore {
 
       allow update: if request.auth != null
         && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          "displayName", "email", "phone", "city", "role",
+          "companyName", "companyAbout", "companyCity"
+        ])
         && (
           !("role" in request.resource.data)
           || request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
