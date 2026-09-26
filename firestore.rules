@@ -54,9 +54,29 @@ service cloud.firestore {
       allow create: if request.auth != null
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "باحث عن عمل"
         && applicationId == request.resource.data.jobId + "_" + request.auth.uid
-        && request.resource.data.applicantUid == request.auth.uid
-        && request.resource.data.status == "pending"
+        && request.resource.data.keys().hasOnly([
+          "jobId", "jobTitle", "company", "applicantUid", "applicantName",
+          "applicantEmail", "employerUid", "note", "status", "createdAt",
+          "cvHeadline", "cvAbout", "cvEducation", "cvExperience",
+          "cvSkills", "cvLanguages", "cvPhone", "cvCity"
+        ])
         && request.resource.data.jobId is string
+        && request.resource.data.jobId.size() > 0
+        && request.resource.data.applicantUid == request.auth.uid
+        && request.resource.data.applicantName is string
+        && request.resource.data.applicantEmail is string
+        && request.resource.data.employerUid is string
+        && request.resource.data.note is string
+        && request.resource.data.status == "pending"
+        && request.resource.data.createdAt is int
+        && request.resource.data.cvHeadline is string
+        && request.resource.data.cvAbout is string
+        && request.resource.data.cvEducation is string
+        && request.resource.data.cvExperience is string
+        && request.resource.data.cvSkills is string
+        && request.resource.data.cvLanguages is string
+        && request.resource.data.cvPhone is string
+        && request.resource.data.cvCity is string
         && request.resource.data.employerUid ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.ownerUid
         && (
@@ -66,7 +86,32 @@ service cloud.firestore {
         && request.resource.data.jobTitle ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.title
         && request.resource.data.company ==
-          get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.company;
+          get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.company
+        && request.resource.data.applicantName ==
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.displayName
+        && request.resource.data.applicantEmail ==
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.email
+        && request.resource.data.cvPhone ==
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.phone
+        && request.resource.data.cvCity ==
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.city
+        && (
+          !exists(/databases/$(database)/documents/cvProfiles/$(request.auth.uid))
+          || (
+            request.resource.data.cvHeadline ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.headline
+            && request.resource.data.cvAbout ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.about
+            && request.resource.data.cvEducation ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.education
+            && request.resource.data.cvExperience ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.experience
+            && request.resource.data.cvSkills ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.skills
+            && request.resource.data.cvLanguages ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.languages
+          )
+        );
 
       allow read: if request.auth != null
         && (
@@ -98,11 +143,19 @@ service cloud.firestore {
 
     match /notifications/{notificationId} {
       allow create: if request.auth != null
+        && request.resource.data.keys().hasOnly([
+          "targetUid", "actorUid", "type", "title", "body",
+          "jobId", "applicationId", "status", "read", "createdAt"
+        ])
         && request.resource.data.actorUid == request.auth.uid
         && request.resource.data.targetUid is string
+        && request.resource.data.type in ["new_application", "application_status"]
+        && request.resource.data.title is string
+        && request.resource.data.body is string
         && request.resource.data.applicationId is string
         && request.resource.data.jobId is string
-        && request.resource.data.type in ["new_application", "application_status"]
+        && request.resource.data.status is string
+        && request.resource.data.createdAt is int
         && request.resource.data.read == false
         && (
           (
