@@ -32,6 +32,7 @@ import androidx.compose.material.icons.filled.BusinessCenter
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -502,6 +503,28 @@ private fun ForsaApp() {
                         message("تعذر حذف الوظيفة")
                     }
             }
+        },
+        onEditJob = { job ->
+            if (profileRole != "صاحب عمل" || job.ownerUid != auth.currentUser?.uid) {
+                message("ما عندك صلاحية لتعديل هذا الإعلان")
+            } else {
+                db.collection("jobs").document(job.id)
+                    .update(
+                        mapOf(
+                            "title" to job.title,
+                            "company" to job.company,
+                            "city" to job.city,
+                            "type" to job.type,
+                            "description" to job.description
+                        )
+                    )
+                    .addOnSuccessListener {
+                        message("تم تحديث الوظيفة بنجاح")
+                    }
+                    .addOnFailureListener {
+                        message("تعذر تحديث الوظيفة")
+                    }
+            }
         }
     )
 }
@@ -611,7 +634,8 @@ private fun MainScaffold(
     onProfileNameChanged: (String) -> Unit,
     onRoleChanged: (String) -> Unit,
     onPublish: (Job) -> Unit,
-    onDeleteJob: (Job) -> Unit
+    onDeleteJob: (Job) -> Unit,
+    onEditJob: (Job) -> Unit
 ) {
     val userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
     val canPublish = role == "صاحب عمل"
@@ -693,6 +717,7 @@ private fun MainScaffold(
                     onRoleChanged = onRoleChanged,
                     onLogout = onLogout,
                     onDeleteJob = onDeleteJob,
+                    onEditJob = onEditJob,
                     onMessage = onMessage
                 )
             }
@@ -1311,11 +1336,26 @@ private fun ProfileTab(
     onRoleChanged: (String) -> Unit,
     onLogout: () -> Unit,
     onDeleteJob: (Job) -> Unit,
+    onEditJob: (Job) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var editing by remember { mutableStateOf(false) }
     var draftName by remember(userName) { mutableStateOf(userName) }
     var section by remember { mutableStateOf("main") }
+    var editingJob by remember { mutableStateOf<Job?>(null) }
+
+    if (editingJob != null) {
+        EditJobScreen(
+            job = editingJob!!,
+            onBack = { editingJob = null },
+            onSave = { updatedJob ->
+                onEditJob(updatedJob)
+                editingJob = null
+            },
+            onMessage = onMessage
+        )
+        return
+    }
 
     when (section) {
         "employerJobs" -> EmployerJobsScreen(
@@ -1325,6 +1365,7 @@ private fun ProfileTab(
             onBack = { section = "main" },
             onApplications = { section = "employerApps" },
             onDeleteJob = onDeleteJob,
+            onEditJob = { editingJob = it },
             onMessage = onMessage
         )
 
@@ -1504,6 +1545,7 @@ private fun EmployerJobsScreen(
     onBack: () -> Unit,
     onApplications: () -> Unit,
     onDeleteJob: (Job) -> Unit,
+    onEditJob: (Job) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var applicationCounts by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
@@ -1577,12 +1619,21 @@ private fun EmployerJobsScreen(
                             maxLines = 3
                         )
                         Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            OutlinedButton(
+                                onClick = { onEditJob(job) },
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Icon(Icons.Default.Edit, null)
+                                Spacer(Modifier.width(6.dp))
+                                Text("تعديل")
+                            }
                             Button(
                                 onClick = onApplications,
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(14.dp)
                             ) {
-                                Text("طلبات التقديم")
+                                Text("الطلبات")
                             }
                             OutlinedButton(
                                 onClick = { deleteTarget = job },
@@ -1621,6 +1672,111 @@ private fun EmployerJobsScreen(
                 }
             }
         )
+    }
+}
+
+@Composable
+private fun EditJobScreen(
+    job: Job,
+    onBack: () -> Unit,
+    onSave: (Job) -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var title by remember(job.id) { mutableStateOf(job.title) }
+    var company by remember(job.id) { mutableStateOf(job.company) }
+    var city by remember(job.id) { mutableStateOf(job.city) }
+    var type by remember(job.id) { mutableStateOf(job.type) }
+    var description by remember(job.id) { mutableStateOf(job.description) }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, "رجوع")
+            }
+            Text("تعديل الوظيفة", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        OutlinedTextField(
+            value = title,
+            onValueChange = { title = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("المسمى الوظيفي") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = company,
+            onValueChange = { company = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("اسم الشركة أو الجهة") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = city,
+            onValueChange = { city = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("المدينة") },
+            singleLine = true
+        )
+
+        Text("نوع الوظيفة", fontWeight = FontWeight.SemiBold)
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf("دوام كامل", "دوام جزئي", "عن بُعد").forEach { option ->
+                FilterChip(
+                    selected = type == option,
+                    onClick = { type = option },
+                    label = { Text(option) }
+                )
+            }
+        }
+
+        OutlinedTextField(
+            value = description,
+            onValueChange = { description = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("وصف الوظيفة") },
+            minLines = 5
+        )
+
+        Button(
+            onClick = {
+                val cleanTitle = title.trim()
+                val cleanCompany = company.trim()
+                val cleanCity = city.trim()
+                val cleanDescription = description.trim()
+                when {
+                    cleanTitle.length < 2 -> onMessage("اكتب المسمى الوظيفي")
+                    cleanCompany.length < 2 -> onMessage("اكتب اسم الشركة أو الجهة")
+                    cleanCity.length < 2 -> onMessage("اكتب المدينة")
+                    cleanDescription.length < 5 -> onMessage("اكتب وصفاً أوضح للوظيفة")
+                    type !in listOf("دوام كامل", "دوام جزئي", "عن بُعد") -> onMessage("اختر نوع الوظيفة")
+                    else -> onSave(
+                        job.copy(
+                            title = cleanTitle,
+                            company = cleanCompany,
+                            city = cleanCity,
+                            type = type,
+                            description = cleanDescription
+                        )
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text("حفظ التعديلات", fontSize = 16.sp)
+        }
     }
 }
 
