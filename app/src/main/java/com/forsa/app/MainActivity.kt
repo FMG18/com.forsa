@@ -124,7 +124,24 @@ private data class ApplicationItem(
     val applicantEmail: String,
     val note: String,
     val status: String,
-    val createdAt: Long
+    val createdAt: Long,
+    val cvHeadline: String = "",
+    val cvAbout: String = "",
+    val cvEducation: String = "",
+    val cvExperience: String = "",
+    val cvSkills: String = "",
+    val cvLanguages: String = "",
+    val cvPhone: String = "",
+    val cvCity: String = ""
+)
+
+private data class CvProfile(
+    val headline: String = "",
+    val about: String = "",
+    val education: String = "",
+    val experience: String = "",
+    val skills: String = "",
+    val languages: String = ""
 )
 
 class MainActivity : ComponentActivity() {
@@ -176,6 +193,7 @@ private fun ForsaApp() {
     var selectedJob by remember { mutableStateOf<Job?>(null) }
     var appliedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var savedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var cvProfile by remember { mutableStateOf(CvProfile()) }
     val db = remember { FirebaseFirestore.getInstance() }
 
     fun message(text: String) {
@@ -189,6 +207,7 @@ private fun ForsaApp() {
             jobs = emptyList()
             appliedJobIds = emptySet()
             savedJobIds = emptySet()
+            cvProfile = CvProfile()
             onDispose { }
         } else {
             profileRole = "باحث عن عمل"
@@ -240,6 +259,18 @@ private fun ForsaApp() {
                         ?.mapNotNull { it.getString("jobId") }
                         ?.toSet()
                         ?: emptySet()
+                }
+
+            db.collection("cvProfiles").document(currentUid).get()
+                .addOnSuccessListener { document ->
+                    cvProfile = CvProfile(
+                        headline = document.getString("headline").orEmpty(),
+                        about = document.getString("about").orEmpty(),
+                        education = document.getString("education").orEmpty(),
+                        experience = document.getString("experience").orEmpty(),
+                        skills = document.getString("skills").orEmpty(),
+                        languages = document.getString("languages").orEmpty()
+                    )
                 }
 
             db.collection("users").document(currentUid).get()
@@ -344,6 +375,7 @@ private fun ForsaApp() {
             profileRole = "باحث عن عمل"
             appliedJobIds = emptySet()
             savedJobIds = emptySet()
+            cvProfile = CvProfile()
             selectedJob = null
             authScreen = AuthScreen.Welcome
         }
@@ -403,6 +435,7 @@ private fun ForsaApp() {
         selectedJob = selectedJob,
         appliedJobIds = appliedJobIds,
         savedJobIds = savedJobIds,
+        cvProfile = cvProfile,
         onToggleSaved = { job ->
             val user = auth.currentUser
             if (user == null) {
@@ -741,6 +774,7 @@ private fun MainScaffold(
     selectedJob: Job?,
     appliedJobIds: Set<String>,
     savedJobIds: Set<String>,
+    cvProfile: CvProfile,
     onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
     onClearSelectedJob: () -> Unit,
@@ -834,6 +868,7 @@ private fun MainScaffold(
                     role = role,
                     jobs = jobs,
                     savedJobIds = savedJobIds,
+                    cvProfile = cvProfile,
                     userUid = userUid,
                     db = db,
                     onProfileSaved = onProfileSaved,
@@ -1513,6 +1548,7 @@ private fun ProfileTab(
     role: String,
     jobs: List<Job>,
     savedJobIds: Set<String>,
+    cvProfile: CvProfile,
     userUid: String,
     db: FirebaseFirestore,
     onProfileSaved: (String, String, String) -> Unit,
@@ -1524,6 +1560,7 @@ private fun ProfileTab(
     onToggleJobActive: (Job) -> Unit,
     onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
+    onCvSaved: (CvProfile) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var editing by remember { mutableStateOf(false) }
@@ -1580,6 +1617,15 @@ private fun ProfileTab(
             onBack = { section = "main" },
             onToggleSaved = onToggleSaved,
             onOpen = onSelectJob
+        )
+
+        "cv" -> CvProfileScreen(
+            profile = cvProfile,
+            userUid = userUid,
+            db = db,
+            onBack = { section = "main" },
+            onSaved = onCvSaved,
+            onMessage = onMessage
         )
 
         else -> {
@@ -1705,6 +1751,13 @@ private fun ProfileTab(
                     description = "الوظائف اللي حفظتها حتى ترجع لها لاحقاً.",
                     actionLabel = "فتح المحفوظة",
                     onClick = { section = "savedJobs" }
+                )
+
+                ProfileActionCard(
+                    title = "السيرة الذاتية",
+                    description = cvCompletionText(cvProfile),
+                    actionLabel = "إدارة السيرة الذاتية",
+                    onClick = { section = "cv" }
                 )
 
                 Text("نوع الحساب", fontWeight = FontWeight.SemiBold)
@@ -2456,6 +2509,202 @@ private fun StatusBadge(status: String) {
             Spacer(Modifier.width(7.dp))
             Text(label, fontWeight = FontWeight.SemiBold)
         }
+    }
+}
+
+@Composable
+private fun CvProfileScreen(
+    profile: CvProfile,
+    userUid: String,
+    db: FirebaseFirestore,
+    onBack: () -> Unit,
+    onSaved: (CvProfile) -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var headline by remember(profile) { mutableStateOf(profile.headline) }
+    var about by remember(profile) { mutableStateOf(profile.about) }
+    var education by remember(profile) { mutableStateOf(profile.education) }
+    var experience by remember(profile) { mutableStateOf(profile.experience) }
+    var skills by remember(profile) { mutableStateOf(profile.skills) }
+    var languages by remember(profile) { mutableStateOf(profile.languages) }
+    var saving by remember { mutableStateOf(false) }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+            Text("السيرة الذاتية", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Text(
+            "اكتب معلوماتك الأساسية حتى تكون جاهزة عند التقديم.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        OutlinedTextField(
+            value = headline,
+            onValueChange = { headline = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("المسمى المهني") },
+            placeholder = { Text("مثال: مطور Android") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = about,
+            onValueChange = { about = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("نبذة عنك") },
+            minLines = 4
+        )
+
+        OutlinedTextField(
+            value = education,
+            onValueChange = { education = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("التعليم") },
+            minLines = 3
+        )
+
+        OutlinedTextField(
+            value = experience,
+            onValueChange = { experience = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("الخبرة") },
+            minLines = 4
+        )
+
+        OutlinedTextField(
+            value = skills,
+            onValueChange = { skills = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("المهارات") },
+            placeholder = { Text("مثال: Kotlin، Excel، مبيعات") },
+            minLines = 2
+        )
+
+        OutlinedTextField(
+            value = languages,
+            onValueChange = { languages = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("اللغات") },
+            minLines = 2
+        )
+
+        Button(
+            onClick = {
+                if (userUid.isBlank()) {
+                    onMessage("سجّل الدخول أولاً")
+                    return@Button
+                }
+
+                val finalProfile = CvProfile(
+                    headline = headline.trim(),
+                    about = about.trim(),
+                    education = education.trim(),
+                    experience = experience.trim(),
+                    skills = skills.trim(),
+                    languages = languages.trim()
+                )
+
+                if (
+                    finalProfile.headline.isEmpty() &&
+                    finalProfile.about.isEmpty() &&
+                    finalProfile.education.isEmpty() &&
+                    finalProfile.experience.isEmpty() &&
+                    finalProfile.skills.isEmpty() &&
+                    finalProfile.languages.isEmpty()
+                ) {
+                    onMessage("أضف معلومة واحدة على الأقل إلى السيرة")
+                    return@Button
+                }
+
+                saving = true
+                db.collection("cvProfiles").document(userUid)
+                    .set(
+                        mapOf(
+                            "headline" to finalProfile.headline,
+                            "about" to finalProfile.about,
+                            "education" to finalProfile.education,
+                            "experience" to finalProfile.experience,
+                            "skills" to finalProfile.skills,
+                            "languages" to finalProfile.languages,
+                            "updatedAt" to System.currentTimeMillis()
+                        ),
+                        com.google.firebase.firestore.SetOptions.merge()
+                    )
+                    .addOnSuccessListener {
+                        saving = false
+                        onSaved(finalProfile)
+                        onMessage("تم حفظ السيرة الذاتية")
+                    }
+                    .addOnFailureListener {
+                        saving = false
+                        onMessage("تعذر حفظ السيرة الذاتية")
+                    }
+            },
+            enabled = !saving,
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            if (saving) {
+                CircularProgressIndicator(
+                    Modifier.size(22.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Text("حفظ السيرة الذاتية", fontSize = 16.sp)
+            }
+        }
+
+        Surface(
+            Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            val currentProfile = CvProfile(
+                headline = headline.trim(),
+                about = about.trim(),
+                education = education.trim(),
+                experience = experience.trim(),
+                skills = skills.trim(),
+                languages = languages.trim()
+            )
+            Text(
+                cvCompletionText(currentProfile),
+                Modifier.padding(14.dp)
+            )
+        }
+    }
+}
+
+private fun cvCompletionText(profile: CvProfile): String {
+    val filled = listOf(
+        profile.headline,
+        profile.about,
+        profile.education,
+        profile.experience,
+        profile.skills,
+        profile.languages
+    ).count { it.isNotBlank() }
+
+    return when {
+        filled == 0 -> "السيرة الذاتية غير مكتملة — أضف بياناتك"
+        filled < 3 -> "السيرة الذاتية جزئية — أضف المزيد من المعلومات"
+        filled < 6 -> "السيرة الذاتية جيدة — بقيت بعض المعلومات"
+        else -> "السيرة الذاتية مكتملة"
     }
 }
 
