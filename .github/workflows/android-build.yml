@@ -68,11 +68,10 @@ jobs:
           script: |
             mkdir -p ci
             adb start-server
-            apk_path="${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
-            echo "Checking APK at: ${apk_path}"
-            test -f "${apk_path}"
-            ls -lh "${apk_path}"
-            adb install -r "${apk_path}"
+            echo "Checking APK at: ${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
+            test -f "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
+            ls -lh "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
+            adb install -r "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
             adb shell am force-stop com.forsa.app
             adb shell am start -W -n com.forsa.app/.MainActivity
             sleep 8
