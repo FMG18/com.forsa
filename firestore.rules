@@ -78,6 +78,11 @@ service cloud.firestore {
         && resource.data.applicantUid == request.auth.uid;
     }
 
+    match /cvProfiles/{userId} {
+      allow read, write: if request.auth != null
+        && request.auth.uid == userId;
+    }
+
     match /users/{userId} {
       allow read: if request.auth != null
         && request.auth.uid == userId;
