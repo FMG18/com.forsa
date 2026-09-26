@@ -1,6 +1,6 @@
 status=FAIL
-commit=f420ec2809124b8db0ae72e48d8e626dda460ac0
-run=36275372406
+commit=767ecf5a5e01e62572f72cb2d06f329afe25f950
+run=36275612612
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -32,27 +32,27 @@ Daemon will be stopped at the end of the build
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
+> Task :app:processDebugManifestForPackage
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
-> Task :app:processDebugManifestForPackage
 > Task :app:checkDebugDuplicateClasses
-> Task :app:mergeLibDexDebug
 > Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
+> Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
 > Task :app:compileDebugKotlin FAILED
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2128:17 Unresolved reference 'job'.
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2740:33 Unresolved reference 'onRequestEmployerVerification'.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790460631838.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790460882213.json
 
 FAILURE: Build failed with an exception.
 
@@ -67,127 +67,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 35s
+BUILD FAILED in 29s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
-09-26 22:12:46.108  1006  2234 D NetworkMonitor: Starting on network 100 with capport HTTPS URL [https://www.google.com/generate_204] and HTTP URL [http://connectivitycheck.gstatic.com/generate_204]
-09-26 22:12:46.110   556   556 V ConditionProviders: Not registering ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.azr.impl.AzrConditionProviderService} is already bound
-09-26 22:12:46.127   556   556 V ConditionProviders: enabling condition provider for 0: ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.azr.impl.AzrConditionProviderService}
-09-26 22:12:46.127   556   556 V ConditionProviders: Not registering ComponentInfo{com.google.android.apps.wellbeing/com.google.android.apps.wellbeing.azr.impl.AzrConditionProviderService} is already bound
-09-26 22:12:46.128  1569  2166 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-163' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
-09-26 22:12:46.131   556  1134 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-163' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
-09-26 22:12:46.174  2239  2239 D CompatChangeReporter: Compat change id reported: 202956589; UID 10176; state: ENABLED
-09-26 22:12:46.175   556   556 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.gSCMFU(a)@AEY🔒
-09-26 22:12:46.197  1523  1856 I ApaPinning: (REDACTED) Lifecycle instances have been resolved: %s.
-09-26 22:12:46.202  2200  2200 I VoiceDataManager: Explicitly adding voicepack to downloads: en-us-x-multi
-09-26 22:12:46.204  2221  2221 V GraphicsEnvironment: Currently set values for:
-09-26 22:12:46.204  2221  2221 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
-09-26 22:12:46.204  2221  2221 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
-09-26 22:12:46.204  2221  2221 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
-09-26 22:12:46.205  2221  2221 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
-09-26 22:12:46.205  2200  2200 I VoiceDataDownloader: voicesToFetch en-us
-09-26 22:12:46.211  1569  1569 I BgTaskExecutorImpl: (REDACTED) Starting %s background task %s.
-09-26 22:12:46.216  2200  2200 I VoiceDataDownloader: fetchVoiceInternal en-us
-09-26 22:12:46.221  1231  1255 D nativeloader: Load /data/user_de/0/com.google.android.gms/app_chimera/m/00000001/CronetDynamite.uncompressed.apk!/lib/x86_64/libcronet.126.0.6452.4.so using isolated ns clns-10 (caller=/data/user_de/0/com.google.android.gms/app_chimera/m/00000001/CronetDynamite.uncompressed.apk): ok
-09-26 22:12:46.223  2200  2291 I VoiceDataDownloader: Not already initialized. Initializing Superpacks.
-09-26 22:12:46.238  1569  2166 I SodaSilentEnrollment: (REDACTED) Executing HotwordSilentEnrollment, updateOnly: %b
-09-26 22:12:46.240  2200  2200 I GoogleTTSServiceImpl: currentLocale = en-US
-09-26 22:12:46.244  1523  1856 I ApaPinning: (REDACTED) Running '%s' over %s.
-09-26 22:12:46.251  2221  2221 I LoadedApk: No resource references to update in package com.google.android.gms
-09-26 22:12:46.253   556   556 D TextToSpeechManagerPerUserService: Connected successfully to TTS engine: com.google.android.tts
-09-26 22:12:46.253   556   556 W Looper  : Drained
-09-26 22:12:46.261  1195  1624 W SurfaceSyncGroup: Adding transaction to a completed SurfaceSyncGroup(VRI[NexusLauncherActivity]#6).  Applying immediately
-09-26 22:12:46.267  1096  1096 I Telephony: TelecomAccountRegistry$AccountEntry: registerPstnPhoneAccount: Registering account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with Telecom. subId=1
-09-26 22:12:46.268   556  1873 I Telecom : TelecomServiceImpl$1: registerPhoneAccount: account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AEc🔒
-09-26 22:12:46.270   556  1873 I Telecom : PhoneAccountRegistrar: Modify account: [ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}]: TSI.rPA(cap)@AEc🔒
-09-26 22:12:46.275  1569  2166 I SodaEnrollmentClient: #enroll
-09-26 22:12:46.275   556   575 D FileUtils: Rounded bytes from 4110737408 to 8000000000
-09-26 22:12:46.276  1195  1195 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
-09-26 22:12:46.278  1496  1961 I TextToSpeech: Connected to TTS engine
-09-26 22:12:46.290  1195  1206 I HWUI    : Davey! duration=705ms; Flags=1, FrameTimelineVsyncId=2384, IntendedVsync=42225768557, Vsync=42225768557, InputEventId=0, HandleInputStart=42237014957, AnimationStart=42237015368, PerformTraversalsStart=42237070892, DrawStart=42245633410, FrameDeadline=42242435223, FrameInterval=42237012974, FrameStartTime=16666666, SyncQueued=42246801927, SyncStart=42247285078, IssueDrawCommandsStart=42249370775, SwapBuffers=42681844614, FrameCompleted=42931939453, DequeueBufferDuration=5721, QueueBufferDuration=1383689, GpuCompleted=42931939453, SwapBuffersCompleted=42924343854, DisplayPresentTime=0, CommandSubmissionCompleted=42681844614, 
-09-26 22:12:46.295  2200  2291 I VoiceDataDownloader: Superpack object built.
-09-26 22:12:46.295  2200  2291 I VoiceDataDownloader: Superpack slicing strategy registered
-09-26 22:12:46.296  2200  2291 I VoiceDataDownloader: Superpack quota set for all voices.
-09-26 22:12:46.309  2200  2291 I VoiceDataDownloader: Got bundled voice en-us-x-multi-r70
-09-26 22:12:46.322   556  1065 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-26 22:12:46.322   556  1065 D PackageManager: Clear ephemeral installer activity
-09-26 22:12:46.343   556  1873 I Telecom : CallsManager: handlePhoneAccountChanged: phoneAccount=[[X] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AEc🔒
-09-26 22:12:46.355  1454  1707 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.learning#com.google.android.gms, using defaults.
-09-26 22:12:46.362  2239  2239 V GraphicsEnvironment: Currently set values for:
-09-26 22:12:46.362  2239  2239 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
-09-26 22:12:46.362  2239  2239 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
-09-26 22:12:46.362  2239  2239 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
-09-26 22:12:46.362  2239  2239 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
-09-26 22:12:46.364   556   578 I ActivityTaskManager: Displayed com.google.android.apps.nexuslauncher/.NexusLauncherActivity for user 0: +5s812ms
-09-26 22:12:46.366  1523  1856 I ApaPinning: (REDACTED) Running '%s' over %s.
-09-26 22:12:46.373  2265  2265 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/CalendarProvider/CalendarProvider.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/CalendarProvider/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.providers.calendar:/system/priv-app/CalendarProvider:/system/lib64:/system_ext/lib64
-09-26 22:12:46.412   556  1873 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.rPA(cap)@AEc🔒
-09-26 22:12:46.424  1523  1856 I Ma-Entry-Triggering-Pinning: #onCreate
-09-26 22:12:46.427   556  1873 I Telecom : PhoneAccountRegistrar: Notifying telephony of voice service override change for 1 SIMs, hasService = false: TSI.rPA(cap)@AEc🔒
-09-26 22:12:46.430  1195  1624 D EGL_emulation: app_time_stats: avg=323.84ms min=1.04ms max=1932.25ms count=6
-09-26 22:12:46.433  1454  2261 I MlBenchmarkInstaller: Intent: com.google.android.gms.chimera.container.CONTAINER_UPDATED [CONTEXT service_id=340 ]
-09-26 22:12:46.435  2265  2265 D CompatChangeReporter: Compat change id reported: 202956589; UID 10100; state: ENABLED
-09-26 22:12:46.469  1195  1224 D LoaderTask: step 1 complete
-09-26 22:12:46.479  1096  1096 I PhoneInterfaceManager: setVoiceServiceStateOverride: subId=1, phone=Handler (com.android.internal.telephony.GsmCdmaPhone) {ffb0664}, hasService=false, callingPackage=com.android.server.telecom
-09-26 22:12:46.566  1195  1213 I HWUI    : Davey! duration=866ms; Flags=1, FrameTimelineVsyncId=2384, IntendedVsync=42225768557, Vsync=42225768557, InputEventId=0, HandleInputStart=42237014957, AnimationStart=42237015368, PerformTraversalsStart=42237070892, DrawStart=42931948356, FrameDeadline=42242435223, FrameInterval=42237012974, FrameStartTime=16666666, SyncQueued=42932287148, SyncStart=42932801917, IssueDrawCommandsStart=42932875394, SwapBuffers=42940349463, FrameCompleted=43092710885, DequeueBufferDuration=5391, QueueBufferDuration=774563, GpuCompleted=43091880107, SwapBuffersCompleted=43092710885, DisplayPresentTime=0, CommandSubmissionCompleted=42940349463, 
-09-26 22:12:46.568   556   684 I ImeTracker: com.google.android.apps.nexuslauncher:9db62d88: onRequestHide at ORIGIN_SERVER reason HIDE_UNSPECIFIED_WINDOW fromUser false
-09-26 22:12:46.570   556   684 I ImeTracker: com.google.android.apps.nexuslauncher:9db62d88: onCancelled at PHASE_SERVER_SHOULD_HIDE
-09-26 22:12:46.572   920  1045 D EGL_emulation: app_time_stats: avg=3172.17ms min=2513.39ms max=3830.95ms count=2
-09-26 22:12:46.576  1096  1096 I Telephony: TelecomAccountRegistry$AccountEntry: Registered phoneAccount: [[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with handle: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}
-09-26 22:12:46.580  1096  1096 I Telephony: PstnIncomingCallNotifier: Registering: [0]
-09-26 22:12:46.582  1195  1195 E VRI[NexusLauncherActivity]: Timedout waiting to unpause for sync
-09-26 22:12:46.584  1195  1202 I s.nexuslauncher: NativeAlloc concurrent mark compact GC freed 6020KB AllocSpace bytes, 22(1228KB) LOS objects, 49% free, 5860KB/11MB, paused 394us,697us total 314.863ms
-09-26 22:12:46.585   556  1246 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-26 22:12:46.585   556  1246 D PackageManager: Clear ephemeral installer activity
-09-26 22:12:46.585  1231  1231 I NearbySharing: ReceiveSurfaceService created with vendorMetadata null [CONTEXT service_id=194 ]
-09-26 22:12:46.586  2221  2221 I GmsApplication: Using GservicesReaderQueryDelegate
-09-26 22:12:46.591  1345  1345 I GoogleInputMethodService: GoogleInputMethodService.onFinishInput():3157 
-09-26 22:12:46.591  1096  1096 D Telephony: Registering: Handler (com.android.internal.telephony.GsmCdmaPhone) {ffb0664}
-09-26 22:12:46.600  1345  1345 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2248 repeatCheckTimes = 0, locked = false
-09-26 22:12:46.600  1345  1345 I GoogleInputMethodService: GoogleInputMethodService.onStartInput():1986 onStartInput(EditorInfo{EditorInfo{packageName=com.google.android.apps.nexuslauncher, inputType=0, inputTypeString=NULL, enableLearning=false, autoCorrection=false, autoComplete=false, imeOptions=0, privateImeOptions=null, actionName=UNSPECIFIED, actionLabel=null, initialSelStart=-1, initialSelEnd=-1, initialCapsMode=0, label=null, fieldId=0, fieldName=null, extras=null, hintText=null, hintLocales=[]}}, false)
-09-26 22:12:46.608  1345  1345 I GoogleInputMethodService: GoogleInputMethodService.updateDeviceLockedStatus():2248 repeatCheckTimes = 1, locked = false
-09-26 22:12:46.609  1345  1345 I AndroidIME: InputBundleManager.loadActiveInputBundleId():450 loadActiveInputBundleId: und-Latn-x-password, password
-09-26 22:12:46.609   556  1065 W PackageConfigPersister: App-specific configuration not found for packageName: com.google.android.apps.nexuslauncher and userId: 0
-09-26 22:12:46.610  1523  1862 I ApaPinning: (REDACTED) Running '%s' over %s.
-09-26 22:12:46.611  1523  1862 I ApaPinning: (REDACTED) Running '%s' over %s.
-09-26 22:12:46.635  1231  1231 I NearbySharing: ReceiveSurfaceService started [CONTEXT service_id=194 ]
-09-26 22:12:46.656   556  1040 I RoleControllerServiceImpl: Package is already a role holder, package: com.google.android.apps.nexuslauncher, role: android.app.role.HOME
-09-26 22:12:46.664  1523  1856 I Ma-Entry-Triggering-Pinning: (REDACTED) Connect Request %s
-09-26 22:12:46.664  1096  1096 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
-09-26 22:12:46.664  1096  1096 W Telephony: registerImsRegistrationCallback: registration failed, no ImsService available. Exception: code: 1
-09-26 22:12:46.664  1096  1096 D Telephony: Finished registering mSimultaneousCallingTrackerListener for phoneId = 0; subId = 1
-09-26 22:12:46.679   359   397 I netd    : setProcSysNet(4, 2, wlan0, retrans_time_ms, 750) <0.14ms>
-09-26 22:12:46.711  1496  1939 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=8dd0d57d-a500-47e7-82b4-8155c73d4c1d, tags={ com.google.android.apps.miphone.aiai.chronicle.integration.BlobStoreMaintenanceWorker,BlobStoreMaintenanceWorker } ]
-09-26 22:12:46.712  1096  1096 D MultiSimSettingController: onSubscriptionsChanged
-09-26 22:12:46.747  1195  1204 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
-09-26 22:12:46.748  1195  1204 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleDialer/GoogleDialer.apk' with 1 weak references
-09-26 22:12:46.753  1195  1204 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltBugle/PrebuiltBugle.apk' with 1 weak references
-09-26 22:12:46.755  1195  1204 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~YmsiI8FKNF-G_BwG9fHSyA==/com.android.chrome-bC_bti0k8Jy14tGwZ7ylFg==/Chrome.apk' with 1 weak references
-09-26 22:12:46.756  1195  1204 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~MJTuumPpZF19_H-GHD0Vbg==/com.google.android.trichromelibrary_636771938-ryklOg9uQQnsh4K75SQFDw==/TrichromeLibrary.apk' with 1 weak references
-09-26 22:12:46.756  1195  1204 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Camera2/Camera2.apk' with 1 weak references
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.760  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
-09-26 22:12:46.761  2200  2225 W LegacyVoicePolicyManage: The requested voice is not available for this app identifier
