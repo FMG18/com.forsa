@@ -4,6 +4,11 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+    paths-ignore:
+      - "ci/build-status.txt"
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -25,10 +30,64 @@ jobs:
           gradle-version: "8.10.2"
 
       - name: Build debug APK
-        run: gradle --no-daemon :app:assembleDebug
+        id: build
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p ci
+          gradle --no-daemon :app:assembleDebug 2>&1 | tee ci/build.log
+          code=${PIPESTATUS[0]}
+          echo "BUILD_EXIT_CODE=$code" >> "$GITHUB_ENV"
+          exit "$code"
 
-      - name: Upload debug APK
+      - name: Collect build status
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p ci
+          code="${BUILD_EXIT_CODE:-1}"
+          if [ "$code" = "0" ]; then
+            status="PASS"
+            summary="Android debug APK build completed successfully."
+          else
+            status="FAIL"
+            summary="Android debug APK build failed with exit code $code."
+          fi
+          {
+            echo "status=$status"
+            echo "commit=$GITHUB_SHA"
+            echo "run=$GITHUB_RUN_ID"
+            echo "attempt=$GITHUB_RUN_ATTEMPT"
+            echo "summary=$summary"
+            echo
+            echo "--- tail of build log ---"
+            tail -n 120 ci/build.log 2>/dev/null || true
+          } > ci/build-status.txt
+
+      - name: Upload build artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: forsa-android-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: forsa-android-build-${{ github.run_number }}
+          path: |
+            app/build/outputs/apk/debug/app-debug.apk
+            ci/build.log
+            ci/build-status.txt
+          if-no-files-found: warn
+
+      - name: Commit build status
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ci/build-status.txt
+          git diff --cached --quiet && exit 0
+          git commit -m "ci: record Android build status [skip ci]"
+          git push
+
+      - name: Fail workflow when build failed
+        if: always() && env.BUILD_EXIT_CODE != '0'
+        shell: bash
+        run: exit "${BUILD_EXIT_CODE:-1}"
