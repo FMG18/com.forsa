@@ -1,11 +1,11 @@
-status=FAIL
-commit=bcc3700d7f293239de6cd15c45111dc2ac6f7d4a
-run=36273918752
+status=PASS
+commit=f3a2c527b55dc914bcab5520ab5a968498f6ca2b
+run=36274137665
 attempt=1
 build_exit_code=0
-smoke_exit_code=1
-smoke_outcome=failure
-summary=APK built, but runtime smoke test failed.
+smoke_exit_code=0
+smoke_outcome=success
+summary=APK built successfully and launched on Android Emulator without a detected crash.
 
 --- build log tail ---
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
@@ -21,19 +21,19 @@ Daemon will be stopped at the end of the build
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
+> Task :app:mergeDebugResources
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
-> Task :app:processDebugManifestForPackage
 > Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
+> Task :app:processDebugManifestForPackage
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
@@ -48,7 +48,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
-
 > Task :app:compileDebugKotlin
 w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1792:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1825:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
@@ -74,9 +73,129 @@ w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790459040486.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790459282404.json
 
-BUILD SUCCESSFUL in 52s
+BUILD SUCCESSFUL in 58s
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.gsm.AutoSelectPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.gsm.OpenNetworkSelectPagePreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.SatelliteSettingPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.ApnPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.CarrierPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.Enable2gPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.NullAlgorithmsPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.NrAdvancedCallingPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.ConvertToEsimPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.TransferEsimPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.DeleteSimProfilePreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.DisableSimFooterPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.NrDisabledInDsdsFooterPreferenceController
+09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.slices.SlicePreferenceController
+09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
+09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
+09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
+09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
+09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
+09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
+09-26 21:50:42.139  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AddDevicePreferenceController
+09-26 21:50:42.139  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.PreviouslyConnectedDevicePreferenceController
+09-26 21:50:42.139  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.fastpair.FastPairDevicePreferenceController
+09-26 21:50:42.140  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AdvancedConnectedDeviceController
+09-26 21:50:42.140  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.DiscoverableFooterPreferenceController
+09-26 21:50:42.140  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AddDevicePreferenceController
+09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.PreviouslyConnectedDevicePreferenceController
+09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.fastpair.FastPairDevicePreferenceController
+09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AdvancedConnectedDeviceController
+09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.DiscoverableFooterPreferenceController
+09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageSelectionPreferenceController
+09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageUsageProgressBarPreferenceController
+09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.AutomaticStorageManagementSwitchPreferenceController
+09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.ManageStoragePreferenceController
+09-26 21:50:42.145  1073  1073 D CarrierConfigLoader: EVENT_FETCH_DEFAULT_DONE phoneId: 0
+09-26 21:50:42.146  1073  1073 D CarrierConfigLoader: updateSubscriptionDatabase: phoneId=0
+09-26 21:50:42.147  3123  3177 I cr_LibraryLoader: Successfully loaded native library
+09-26 21:50:42.150  3123  3177 I cr_CachingUmaRecorder: Flushed 18 samples from 17 histograms, 0 samples were dropped.
+09-26 21:50:42.151  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.TemperatureUnitController
+09-26 21:50:42.151  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.FirstDayOfWeekController
+09-26 21:50:42.151  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.NumberingSystemController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageSelectionPreferenceController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageUsageProgressBarPreferenceController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.AutomaticStorageManagementSwitchPreferenceController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.ManageStoragePreferenceController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.TemperatureUnitController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.FirstDayOfWeekController
+09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.NumberingSystemController
+09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.DefaultAppsPreferenceController
+09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.ClonedAppsPreferenceController
+09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.HibernatedAppsPreferenceController
+09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.AppBatteryUsagePreferenceController
+09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.appcompat.UserAspectRatioAppsPreferenceController
+09-26 21:50:42.154  1076  1347 W SettingsPrefController: Skipping updateNonIndexableKeys, key already in list. com.android.settings.applications.AppsPreferenceController@89e26ed
+09-26 21:50:42.161   497   497 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
+09-26 21:50:42.181  1076  1101 D CompatChangeReporter: Compat change id reported: 291868760; UID 1000; state: ENABLED
+09-26 21:50:42.181  1527  3026 I Icing   : Indexing com.google.android.gms-internal.3p:MobileApplication from com.google.android.gms
+09-26 21:50:42.187  1076  1083 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.extservices/priv-app/GoogleExtServices@350820300/GoogleExtServices.apk' with 1 weak references
+09-26 21:50:42.187  1076  1083 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk' with 1 weak references
+09-26 21:50:42.190  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.development.graphicsdriver.GraphicsDriverTopIntroPreferenceController
+09-26 21:50:42.190  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.development.graphicsdriver.GraphicsDriverEnableForAllAppsPreferenceController
+09-26 21:50:42.196  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.development.graphicsdriver.GraphicsDriverAppPreferenceController
+09-26 21:50:42.206  1226  1690 I FontLog : Received query Google Sans, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
+09-26 21:50:42.206  1226  1690 I FontLog : Query [Google Sans] resolved to {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+09-26 21:50:42.208  1073  1073 D MultiSimSettingController: notifySubscriptionInfoChanged
+09-26 21:50:42.208  1159  1184 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.devicelockcontroller]
+09-26 21:50:42.209  1071  1249 I HeadsetPhoneState: stopListenForPhoneState(), no listener indicates nothing is listening
+09-26 21:50:42.212  1071  1249 W HeadsetPhoneState: startListenForPhoneState, no event to listen
+09-26 21:50:42.226   357   357 I netd    : tetherGetStats() -> {[]} <0.30ms>
+09-26 21:50:42.230  1159  1184 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.devicelockcontroller
+09-26 21:50:42.231  1076  1347 V SettingsSearchProvider: com.android.settings.development.graphicsdriver.GraphicsDriverDashboard$1@4b4522b tried to add an empty non-indexable key
+09-26 21:50:42.232  1527  3026 I Icing   : Indexing done com.google.android.gms-internal.3p:MobileApplication
+09-26 21:50:42.239  1159  1184 D PackageUpdatedTask: OP_UPDATE: package com.google.android.devicelockcontroller is disabled, removing package.
+09-26 21:50:42.239  1159  1184 D ModelWriter: removing items from db . Reason: [removed because the corresponding package or component is removed. mOp=2 removedPackages=[com.google.android.devicelockcontroller] removedComponents=[]]
+09-26 21:50:42.240  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.gestures.TapScreenGesturePreferenceController
+09-26 21:50:42.243  1159  1184 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.healthconnect.controller]
+09-26 21:50:42.244   556   556 I AS.AudioService: onSubscriptionsChanged()
+09-26 21:50:42.244  1226  1672 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
+09-26 21:50:42.245  1226  1672 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
+09-26 21:50:42.245  1226  1672 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+09-26 21:50:42.258   556   842 E AppOps  : attributionTag VCN not declared in manifest of android
+09-26 21:50:42.261  1159  1184 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.healthconnect.controller
+09-26 21:50:42.261  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.gestures.SwipeToNotificationPreferenceController
+09-26 21:50:42.270  1073  1304 D CellBroadcastConfigTracker-0: IdleState message:5
+--------- beginning of kernel
+09-26 21:50:42.452     0     0 I logd    : logdr: UID=2000 GID=2000 PID=3185 n tail=400 logMask=99 pid=0 start=0ns deadline=0ns
+09-26 21:50:42.270  1073  1304 D CellBroadcastConfigTracker-0: DefaultState message:5
+09-26 21:50:42.272  1226  1690 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+09-26 21:50:42.272  1226  1690 I FontLog : Fetch {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+09-26 21:50:42.273  1159  1184 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.settings.intelligence]
+09-26 21:50:42.280  1073  1073 D CarrierConfigLoader: EVENT_SUBSCRIPTION_INFO_UPDATED phoneId: 0
+09-26 21:50:42.280   556  2334 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.280  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.281  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.281  1073  1473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.281  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.281  1073  2473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  1116 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  1473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  2040 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  2473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  2068 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.282  1073  1116 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.283  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.284   556   567 I system_server: Background concurrent mark compact GC freed 24MB AllocSpace bytes, 51(1152KB) LOS objects, 48% free, 25MB/49MB, paused 617us,1.959ms total 166.427ms
+09-26 21:50:42.285  1073  2068 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.286  1073  2068 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.286  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.286  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.290  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.290  1073  1473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.290  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.291  1073  2040 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.292   556   842 E AppOps  : attributionTag VCN not declared in manifest of android
+09-26 21:50:42.293  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.293  1073  2384 D com.android.ons.ONSProfileActivator: ERR_AUTO_PROVISIONING_DISABLED
+09-26 21:50:42.293  1073  2040 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
+09-26 21:50:42.295  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.security.SecurityAdvancedSettingsController
