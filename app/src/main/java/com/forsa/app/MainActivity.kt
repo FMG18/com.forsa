@@ -891,7 +891,7 @@ private fun ForsaApp() {
                 message("سجّل الدخول أولاً")
             } else if (profileRole != "باحث عن عمل") {
                 message("بدّل نوع الحساب إلى باحث عن عمل حتى تقدر تقدم")
-            } else if (job.isExpired) {
+            } else if (job.expiresAt > 0L && job.expiresAt <= System.currentTimeMillis()) {
                 message("انتهت مدة هذا الإعلان والتقديم عليه مغلق")
             } else if (job.ownerUid == user.uid) {
                 message("ما تقدر تقدم على إعلانك")
@@ -1500,6 +1500,7 @@ private fun MainScaffold(
                     db = db,
                     onProfileSaved = onProfileSaved,
                     onCompanyProfileSaved = onCompanyProfileSaved,
+                    onRequestEmployerVerification = onRequestEmployerVerification,
                     onPasswordReset = onPasswordReset,
                     onLogout = onLogout,
                     onDeleteJob = onDeleteJob,
@@ -1645,13 +1646,21 @@ private fun JobsTab(
     }
 
     if (selectedJob != null) {
+        val selectedJobExpiredNow = selectedJob.expiresAt > 0L &&
+            selectedJob.expiresAt <= now
+        val selectedJobForDetails = if (selectedJobExpiredNow) {
+            selectedJob.copy(isExpired = true, isActive = false)
+        } else {
+            selectedJob
+        }
+
         JobDetailsScreen(
-            job = selectedJob,
-            isOwner = selectedJob.ownerUid == currentUserJobUid,
-            alreadyApplied = selectedJob.id in appliedJobIds,
+            job = selectedJobForDetails,
+            isOwner = selectedJobForDetails.ownerUid == currentUserJobUid,
+            alreadyApplied = selectedJobForDetails.id in appliedJobIds,
             canApply = role == "باحث عن عمل",
-            isSaved = selectedJob.id in savedJobIds,
-            onToggleSaved = { onToggleSaved(selectedJob) },
+            isSaved = selectedJobForDetails.id in savedJobIds,
+            onToggleSaved = { onToggleSaved(selectedJobForDetails) },
             onBack = onClearSelectedJob,
             onApply = onApply
         )
@@ -2124,16 +2133,6 @@ private fun PublishTab(
             minLines = 5
         )
 
-        Text(
-            if (job.isExpired) {
-                "هذا الإعلان منتهي ولا يمكن تمديد مدته من التعديل."
-            } else {
-                "تاريخ الانتهاء محفوظ من وقت النشر ولا يتغير عند تعديل الإعلان."
-            },
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 12.sp
-        )
-
         Button(
             onClick = {
                 val cleanTitle = title.trim()
@@ -2443,6 +2442,7 @@ private fun ProfileTab(
     db: FirebaseFirestore,
     onProfileSaved: (String, String, String) -> Unit,
     onCompanyProfileSaved: (String, String, String) -> Unit,
+    onRequestEmployerVerification: () -> Unit,
     onPasswordReset: () -> Unit,
     onLogout: () -> Unit,
     onDeleteJob: (Job) -> Unit,
@@ -2734,10 +2734,10 @@ private fun ProfileTab(
                             else -> "طلب التوثيق"
                         },
                         onClick = {
-                            if (verificationStatus == "verified") {
-                                onMessage("حساب صاحب العمل موثّق")
-                            } else {
-                                onRequestEmployerVerification()
+                            when (verificationStatus) {
+                                "verified" -> onMessage("حساب صاحب العمل موثّق")
+                                "pending" -> onMessage("طلب التوثيق قيد المراجعة")
+                                else -> onRequestEmployerVerification()
                             }
                         }
                     )
