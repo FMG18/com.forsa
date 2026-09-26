@@ -888,6 +888,7 @@ private fun MainScaffold(
                     onToggleJobActive = onToggleJobActive,
                     onToggleSaved = onToggleSaved,
                     onSelectJob = onSelectJob,
+                    onCvSaved = { cvProfile = it },
                     onMessage = onMessage
                 )
             }
@@ -2350,8 +2351,6 @@ private fun EmployerApplicationsScreen(
             }
         }
     }
-}
-
     selectedCv?.let { app ->
         CvSnapshotDialog(
             app = app,
