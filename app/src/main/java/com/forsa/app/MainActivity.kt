@@ -549,6 +549,7 @@ private fun ForsaApp() {
         )
         if (role != null) {
             baseData["role"] = role
+            baseData["roleConfirmed"] = true
             baseData["city"] = ""
             baseData["companyName"] = ""
             baseData["companyAbout"] = ""
@@ -563,13 +564,13 @@ private fun ForsaApp() {
             }
             .addOnFailureListener {
                 loading = false
-                message(
-                    if (role == null) {
-                        "تعذر حفظ بيانات الحساب، حاول مرة أخرى"
-                    } else {
-                        "تعذر حفظ نوع الحساب، حاول مرة أخرى"
-                    }
-                )
+                if (role == null) {
+                    // نجاح Firebase Auth كافٍ لفتح الحساب؛ مزامنة البيانات الشخصية يمكن أن تكمل لاحقاً.
+                    message("تم تسجيل الدخول، ويمكن إكمال مزامنة الملف لاحقاً")
+                    onDone()
+                } else {
+                    message("تعذر حفظ نوع الحساب، حاول مرة أخرى")
+                }
             }
     }
 
@@ -584,7 +585,11 @@ private fun ForsaApp() {
         db.collection("users").document(user.uid).get()
             .addOnSuccessListener { document ->
                 val storedRole = document.getString("role")
-                if (storedRole == "باحث عن عمل" || storedRole == "صاحب عمل") {
+                val roleConfirmed = document.getBoolean("roleConfirmed") == true
+                if (
+                    (storedRole == "باحث عن عمل" || storedRole == "صاحب عمل") &&
+                    roleConfirmed
+                ) {
                     profileRole = storedRole
                     persistUserBasics(onDone = ::signedIn)
                 } else {
