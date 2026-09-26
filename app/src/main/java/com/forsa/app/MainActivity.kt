@@ -281,6 +281,7 @@ private fun ForsaApp() {
     }
     var tab by remember { mutableStateOf(MainTab.Home) }
     var loading by remember { mutableStateOf(false) }
+    var profileLoaded by remember { mutableStateOf(false) }
     var userName by remember { mutableStateOf(auth.currentUser?.displayName.orEmpty()) }
     var profilePhone by remember { mutableStateOf("") }
     var profileCity by remember { mutableStateOf("") }
@@ -305,6 +306,7 @@ private fun ForsaApp() {
 
     DisposableEffect(currentUid) {
         if (currentUid == null) {
+            profileLoaded = true
             jobs = emptyList()
             appliedJobIds = emptySet()
             savedJobIds = emptySet()
@@ -312,6 +314,7 @@ private fun ForsaApp() {
             unreadNotificationsCount = 0
             onDispose { }
         } else {
+            profileLoaded = false
             profileRole = "باحث عن عمل"
             profilePhone = ""
             profileCity = ""
@@ -435,10 +438,18 @@ private fun ForsaApp() {
                             "email" to (user?.email ?: document.getString("email").orEmpty()),
                             "phone" to document.getString("phone").orEmpty(),
                             "city" to document.getString("city").orEmpty(),
-                            "role" to finalRole
+                            "role" to finalRole,
+                            "companyName" to document.getString("companyName").orEmpty(),
+                            "companyAbout" to document.getString("companyAbout").orEmpty(),
+                            "companyCity" to document.getString("companyCity").orEmpty()
                         ),
                         com.google.firebase.firestore.SetOptions.merge()
-                    )
+                    ).addOnCompleteListener {
+                        profileLoaded = true
+                    }
+                }.addOnFailureListener {
+                    profileLoaded = true
+                    message("تعذر تحميل ملف الحساب، استخدم الإعدادات لإكمال بياناتك")
                 }
 
             onDispose {
@@ -638,6 +649,23 @@ private fun ForsaApp() {
                 onBack = { authScreen = AuthScreen.Login },
                 onMessage = ::message
             )
+        }
+        return
+    }
+
+    if (!profileLoaded) {
+        Surface(Modifier.fillMaxSize()) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator()
+                Spacer(Modifier.height(16.dp))
+                Text("جارٍ تحميل ملف الحساب…")
+            }
         }
         return
     }
