@@ -483,6 +483,51 @@ private fun ForsaApp() {
         tab = MainTab.Home
     }
 
+    fun persistAuthenticatedUser(onDone: () -> Unit) {
+        val user = auth.currentUser
+        if (user == null) {
+            loading = false
+            message("تعذر إنشاء جلسة المستخدم")
+            return
+        }
+
+        val userRef = db.collection("users").document(user.uid)
+        userRef.get()
+            .addOnSuccessListener { document ->
+                val storedRole = document.getString("role")
+                val role = if (
+                    storedRole == "باحث عن عمل" || storedRole == "صاحب عمل"
+                ) {
+                    storedRole
+                } else {
+                    "باحث عن عمل"
+                }
+
+                userRef.set(
+                    mapOf(
+                        "displayName" to user.displayName.orEmpty(),
+                        "email" to user.email.orEmpty(),
+                        "phone" to document.getString("phone").orEmpty(),
+                        "city" to document.getString("city").orEmpty(),
+                        "role" to role,
+                        "companyName" to document.getString("companyName").orEmpty(),
+                        "companyAbout" to document.getString("companyAbout").orEmpty(),
+                        "companyCity" to document.getString("companyCity").orEmpty()
+                    ),
+                    com.google.firebase.firestore.SetOptions.merge()
+                ).addOnSuccessListener {
+                    onDone()
+                }.addOnFailureListener {
+                    loading = false
+                    message("تم تسجيل الدخول لكن تعذر حفظ ملف الحساب")
+                }
+            }
+            .addOnFailureListener {
+                loading = false
+                message("تعذر قراءة ملف الحساب")
+            }
+    }
+
     suspend fun googleSignIn() {
         if (activity == null) {
             message("تعذر فتح تسجيل Google")
@@ -511,8 +556,9 @@ private fun ForsaApp() {
                     GoogleAuthProvider.getCredential(googleCredential.idToken, null)
 
                 auth.signInWithCredential(firebaseCredential).addOnCompleteListener { task ->
-                    if (task.isSuccessful) signedIn()
-                    else {
+                    if (task.isSuccessful) {
+                        persistAuthenticatedUser(::signedIn)
+                    } else {
                         loading = false
                         message(firebaseError(task.exception))
                     }
@@ -4290,13 +4336,16 @@ private fun tabIcon(tab: MainTab) = when (tab) {
 private fun firebaseError(exception: Exception?): String {
     return when ((exception as? com.google.firebase.auth.FirebaseAuthException)?.errorCode) {
         "ERROR_INVALID_EMAIL" -> "البريد الإلكتروني غير صحيح"
-        "ERROR_WRONG_PASSWORD" -> "كلمة المرور غير صحيحة"
+        "ERROR_WRONG_PASSWORD",
+        "ERROR_INVALID_LOGIN_CREDENTIALS",
+        "ERROR_INVALID_CREDENTIAL" -> "البريد الإلكتروني أو كلمة المرور غير صحيحة"
         "ERROR_USER_NOT_FOUND" -> "لا يوجد حساب بهذا البريد"
+        "ERROR_USER_DISABLED" -> "هذا الحساب معطّل"
         "ERROR_EMAIL_ALREADY_IN_USE" -> "هذا البريد مستخدم مسبقاً"
-        "ERROR_WEAK_PASSWORD" -> "كلمة المرور ضعيفة"
-        "ERROR_INVALID_CREDENTIAL" -> "بيانات الدخول غير صحيحة"
-        "ERROR_OPERATION_NOT_ALLOWED" -> "تسجيل البريد وكلمة المرور غير مفعّل في Firebase حالياً"
+        "ERROR_WEAK_PASSWORD" -> "كلمة المرور ضعيفة — استخدم 6 أحرف أو أكثر"
+        "ERROR_OPERATION_NOT_ALLOWED" -> "طريقة تسجيل الدخول هذه غير مفعّلة في Firebase حالياً"
         "ERROR_NETWORK_REQUEST_FAILED" -> "تأكد من اتصال الإنترنت وحاول مرة أخرى"
+        "ERROR_TOO_MANY_REQUESTS" -> "محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى"
         "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> "هذا البريد مرتبط بطريقة تسجيل دخول أخرى"
         else -> exception?.localizedMessage ?: "حدث خطأ، حاول مرة أخرى"
     }
