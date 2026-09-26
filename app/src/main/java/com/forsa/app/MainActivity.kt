@@ -3,6 +3,8 @@ package com.forsa.app
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -98,8 +100,77 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.UUID
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+
+private data class PaymentStartResponse(
+    val orderId: String,
+    val redirectUrl: String,
+    val amountIqd: Int
+)
+
+private suspend fun startForsaPayment(
+    baseUrl: String,
+    idToken: String,
+    jobId: String,
+    planId: String
+): PaymentStartResponse = withContext(Dispatchers.IO) {
+    val cleanBaseUrl = baseUrl.trim().trimEnd('/')
+    if (cleanBaseUrl.isBlank()) throw IllegalStateException("PAYMENT_API_NOT_CONFIGURED")
+
+    val connection = (URL(cleanBaseUrl + "/api/payment/create").openConnection() as HttpURLConnection).apply {
+        requestMethod = "POST"
+        connectTimeout = 15_000
+        readTimeout = 20_000
+        doOutput = true
+        setRequestProperty("Authorization", "Bearer " + idToken)
+        setRequestProperty("Content-Type", "application/json")
+        setRequestProperty("Accept", "application/json")
+    }
+
+    try {
+        val requestBody = JSONObject()
+            .put("jobId", jobId)
+            .put("planId", planId)
+            .toString()
+        connection.outputStream.use { output ->
+            output.write(requestBody.toByteArray(Charsets.UTF_8))
+        }
+
+        val code = connection.responseCode
+        val stream = if (code in 200..299) connection.inputStream else connection.errorStream
+        val text = stream?.let { input ->
+            BufferedReader(InputStreamReader(input, Charsets.UTF_8)).use { reader -> reader.readText() }
+        }.orEmpty()
+        val json = if (text.isBlank()) JSONObject() else JSONObject(text)
+
+        if (code !in 200..299 || !json.optBoolean("success", false)) {
+            throw IllegalStateException(json.optString("error").ifBlank { "PAYMENT_START_FAILED" })
+        }
+
+        val data = json.optJSONObject("data") ?: throw IllegalStateException("PAYMENT_START_FAILED")
+        val orderId = data.optString("orderId")
+        val redirectUrl = data.optString("redirectUrl")
+        if (orderId.isBlank() || redirectUrl.isBlank()) {
+            throw IllegalStateException("PAYMENT_START_FAILED")
+        }
+
+        PaymentStartResponse(
+            orderId = orderId,
+            redirectUrl = redirectUrl,
+            amountIqd = data.optInt("amountIqd", 0)
+        )
+    } finally {
+        connection.disconnect()
+    }
+}
 
 private enum class AuthScreen { Welcome, Login, Register, ResetPassword }
 private enum class MainTab { Home, Jobs, Publish, Profile }
