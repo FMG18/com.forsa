@@ -446,10 +446,6 @@ private fun ForsaApp() {
         },
         onRoleChanged = { role ->
             if (role == "باحث عن عمل" || role == "صاحب عمل") {
-                profileRole = role
-                if (role != "صاحب عمل" && tab == MainTab.Publish) {
-                    tab = MainTab.Home
-                }
                 auth.currentUser?.let { user ->
                     db.collection("users").document(user.uid)
                         .set(
@@ -460,6 +456,15 @@ private fun ForsaApp() {
                             ),
                             com.google.firebase.firestore.SetOptions.merge()
                         )
+                        .addOnSuccessListener {
+                            profileRole = role
+                            if (role != "صاحب عمل" && tab == MainTab.Publish) {
+                                tab = MainTab.Home
+                            }
+                        }
+                        .addOnFailureListener {
+                            message("تعذر حفظ نوع الحساب")
+                        }
                 }
             }
         },
@@ -2064,8 +2069,13 @@ private fun RegisterScreen(
                                                     ),
                                                     com.google.firebase.firestore.SetOptions.merge()
                                                 )
-                                                .addOnCompleteListener {
-                                                    onSuccess()
+                                                .addOnCompleteListener { saveTask ->
+                                                    if (saveTask.isSuccessful) {
+                                                        onSuccess()
+                                                    } else {
+                                                        onLoading(false)
+                                                        onMessage("تم إنشاء الحساب لكن تعذر حفظ الملف الشخصي")
+                                                    }
                                                 }
                                         }
                                     }
