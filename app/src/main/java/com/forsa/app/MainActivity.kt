@@ -148,6 +148,14 @@ private data class CvProfile(
     val languages: String = ""
 )
 
+private data class DashboardApplication(
+    val jobId: String,
+    val jobTitle: String,
+    val applicantName: String,
+    val status: String,
+    val createdAt: Long
+)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -1791,6 +1799,16 @@ private fun ProfileTab(
     }
 
     when (section) {
+        "dashboard" -> EmployerDashboardScreen(
+            jobs = jobs,
+            userUid = userUid,
+            db = db,
+            onBack = { section = "main" },
+            onJobs = { section = "employerJobs" },
+            onApplications = { section = "employerApps" },
+            onMessage = onMessage
+        )
+
         "employerJobs" -> EmployerJobsScreen(
             jobs = jobs,
             userUid = userUid,
@@ -1980,6 +1998,12 @@ private fun ProfileTab(
 
                 if (role == "صاحب عمل") {
                     ProfileActionCard(
+                        title = "لوحة صاحب العمل",
+                        description = "ملخص سريع لإعلاناتك وطلبات المتقدمين وحالاتها.",
+                        actionLabel = "فتح اللوحة",
+                        onClick = { section = "dashboard" }
+                    )
+                    ProfileActionCard(
                         title = "إعلاناتي",
                         description = "شوف الوظائف اللي نشرتها وإدارتها.",
                         actionLabel = "فتح الإعلانات",
@@ -2060,6 +2084,212 @@ private fun ProfileActionCard(
             ) {
                 Text(actionLabel)
             }
+        }
+    }
+}
+
+@Composable
+private fun EmployerDashboardScreen(
+    jobs: List<Job>,
+    userUid: String,
+    db: FirebaseFirestore,
+    onBack: () -> Unit,
+    onJobs: () -> Unit,
+    onApplications: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var applications by remember { mutableStateOf<List<DashboardApplication>>(emptyList()) }
+
+    DisposableEffect(userUid) {
+        if (userUid.isBlank()) {
+            onDispose { }
+        } else {
+            val registration = db.collection("applications")
+                .whereEqualTo("employerUid", userUid)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        applications = emptyList()
+                        onMessage("تعذر تحميل إحصائيات لوحة صاحب العمل")
+                        return@addSnapshotListener
+                    }
+
+                    applications = snapshot?.documents
+                        ?.mapNotNull { doc ->
+                            val jobId = doc.getString("jobId").orEmpty()
+                            if (jobId.isBlank()) return@mapNotNull null
+
+                            DashboardApplication(
+                                jobId = jobId,
+                                jobTitle = doc.getString("jobTitle").orEmpty(),
+                                applicantName = doc.getString("applicantName").orEmpty().ifBlank { "متقدم" },
+                                status = doc.getString("status").orEmpty().ifBlank { "pending" },
+                                createdAt = doc.getLong("createdAt") ?: 0L
+                            )
+                        }
+                        ?.sortedByDescending { it.createdAt }
+                        ?: emptyList()
+                }
+
+            onDispose { registration.remove() }
+        }
+    }
+
+    val myJobs = jobs.filter { it.ownerUid == userUid }
+    val activeJobs = myJobs.count { it.isActive }
+    val pausedJobs = myJobs.size - activeJobs
+    val totalApplications = applications.size
+    val pendingApplications = applications.count { it.status == "pending" }
+    val acceptedApplications = applications.count { it.status == "accepted" }
+    val rejectedApplications = applications.count { it.status == "rejected" }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+            Text(
+                "لوحة صاحب العمل",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Text(
+            "ملخص حسابك في مكان واحد.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            DashboardStatCard(
+                title = "إجمالي الوظائف",
+                value = myJobs.size.toString(),
+                modifier = Modifier.weight(1f)
+            )
+            DashboardStatCard(
+                title = "نشطة",
+                value = activeJobs.toString(),
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            DashboardStatCard(
+                title = "موقوفة",
+                value = pausedJobs.toString(),
+                modifier = Modifier.weight(1f)
+            )
+            DashboardStatCard(
+                title = "إجمالي الطلبات",
+                value = totalApplications.toString(),
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Card(
+            Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+            Column(
+                Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text("حالات الطلبات", fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                Text("قيد المراجعة: $pendingApplications")
+                Text("مقبول: $acceptedApplications")
+                Text("مرفوض: $rejectedApplications")
+            }
+        }
+
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            Button(
+                onClick = onJobs,
+                modifier = Modifier.weight(1f).height(50.dp),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("إعلاناتي")
+            }
+            OutlinedButton(
+                onClick = onApplications,
+                modifier = Modifier.weight(1f).height(50.dp),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("الطلبات")
+            }
+        }
+
+        Text("آخر الطلبات", fontSize = 19.sp, fontWeight = FontWeight.Bold)
+
+        if (applications.isEmpty()) {
+            Surface(
+                Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text(
+                    "ماكو طلبات تقديم حالياً. أول ما يتقدم شخص راح يظهر هنا.",
+                    Modifier.padding(14.dp),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            applications.take(5).forEach { application ->
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Column(
+                        Modifier.padding(14.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Text(
+                            application.jobTitle.ifBlank { "وظيفة" },
+                            fontSize = 17.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(application.applicantName)
+                        StatusBadge(application.status)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun DashboardStatCard(
+    title: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier,
+        shape = RoundedCornerShape(18.dp)
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            Text(value, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+            Text(
+                title,
+                fontSize = 12.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }
