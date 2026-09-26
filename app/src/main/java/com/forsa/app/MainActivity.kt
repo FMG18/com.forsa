@@ -181,6 +181,9 @@ private suspend fun startForsaPayment(
 private enum class AuthScreen { Welcome, Login, Register, Phone, RoleSelection, ResetPassword }
 private enum class MainTab { Home, Jobs, Publish, Profile }
 
+private const val JOB_DEFAULT_EXPIRY_DAYS = 30L
+private const val MILLIS_PER_DAY = 24L * 60L * 60L * 1000L
+
 private data class Job(
     val id: String,
     val title: String,
@@ -189,6 +192,8 @@ private data class Job(
     val type: String,
     val description: String,
     val ownerUid: String,
+    val expiresAt: Long = 0L,
+    val isExpired: Boolean = false,
     val isActive: Boolean = true,
     val isFeatured: Boolean = false,
     val promotionType: String = "",
@@ -291,7 +296,9 @@ private fun ForsaApp() {
     var userName by remember { mutableStateOf(auth.currentUser?.displayName.orEmpty()) }
     var profilePhone by remember { mutableStateOf("") }
     var profileCity by remember { mutableStateOf("") }
-    var profileRole by remember { mutableStateOf("باحث عن عمل") }
+    var profileRole by remember { mutableStateOf("") }
+    var verificationStatus by remember { mutableStateOf("unverified") }
+    var verificationNote by remember { mutableStateOf("") }
     var companyName by remember { mutableStateOf("") }
     var companyAbout by remember { mutableStateOf("") }
     var companyCity by remember { mutableStateOf("") }
@@ -346,6 +353,10 @@ private fun ForsaApp() {
                         roleConfirmed
                     ) {
                         profileRole = storedRole
+                        verificationStatus = document.getString("verificationStatus")
+                            .orEmpty()
+                            .ifBlank { "unverified" }
+                        verificationNote = document.getString("verificationNote").orEmpty()
                         profilePhone = document.getString("phone").orEmpty()
                             .ifBlank { auth.currentUser?.phoneNumber.orEmpty() }
                         profileCity = document.getString("city").orEmpty()
@@ -378,8 +389,17 @@ private fun ForsaApp() {
                                             jobDocument.getString("ownerUid") ?: ""
                                         if (ownerUid.isBlank()) return@mapNotNull null
 
-                                        val isActive =
+                                        val storedIsActive =
                                             jobDocument.getBoolean("isActive") ?: true
+                                        val createdAt =
+                                            jobDocument.getLong("createdAt") ?: 0L
+                                        val expiresAt = jobDocument.getLong("expiresAt")
+                                            ?: if (createdAt > 0L) {
+                                                createdAt + JOB_DEFAULT_EXPIRY_DAYS * MILLIS_PER_DAY
+                                            } else 0L
+                                        val isExpired = expiresAt > 0L &&
+                                            expiresAt <= System.currentTimeMillis()
+                                        val isActive = storedIsActive && !isExpired
                                         val isFeatured =
                                             jobDocument.getBoolean("isFeatured") ?: false
                                         val promotionType =
@@ -401,6 +421,8 @@ private fun ForsaApp() {
                                             type = type,
                                             description = description,
                                             ownerUid = ownerUid,
+                                            expiresAt = expiresAt,
+                                            isExpired = isExpired,
                                             isActive = isActive,
                                             isFeatured = featuredNow,
                                             promotionType = promotionType,
@@ -553,6 +575,7 @@ private fun ForsaApp() {
         if (role != null) {
             baseData["role"] = role
             baseData["roleConfirmed"] = true
+            baseData["verificationStatus"] = "unverified"
             baseData["city"] = ""
             baseData["companyName"] = ""
             baseData["companyAbout"] = ""
@@ -615,6 +638,49 @@ private fun ForsaApp() {
         loading = true
         profileLoaded = true
         persistUserBasics(role = role, onDone = ::signedIn)
+    }
+
+    fun requestEmployerVerification() {
+        val user = auth.currentUser
+        if (user == null) {
+            message("سجّل الدخول أولاً")
+            return
+        }
+        if (profileRole != "صاحب عمل") {
+            message("التوثيق متاح لحساب صاحب العمل فقط")
+            return
+        }
+        if (verificationStatus == "verified") {
+            message("حساب صاحب العمل موثّق مسبقاً")
+            return
+        }
+
+        when {
+            companyName.trim().length < 2 -> message("أضف اسم الشركة أو الجهة أولاً")
+            companyCity.trim().length < 2 -> message("أضف مدينة الشركة أولاً")
+            companyAbout.trim().length < 10 -> message("أضف نبذة واضحة عن الشركة أولاً")
+            else -> {
+                loading = true
+                db.collection("users").document(user.uid)
+                    .set(
+                        mapOf(
+                            "verificationStatus" to "pending",
+                            "verificationRequestedAt" to System.currentTimeMillis()
+                        ),
+                        com.google.firebase.firestore.SetOptions.merge()
+                    )
+                    .addOnSuccessListener {
+                        verificationStatus = "pending"
+                        verificationNote = ""
+                        loading = false
+                        message("تم إرسال طلب توثيق صاحب العمل للمراجعة")
+                    }
+                    .addOnFailureListener {
+                        loading = false
+                        message("تعذر إرسال طلب التوثيق، حاول مرة أخرى")
+                    }
+            }
+        }
     }
 
     fun persistAuthenticatedUser(onDone: () -> Unit) {
@@ -681,7 +747,9 @@ private fun ForsaApp() {
             userName = ""
             profilePhone = ""
             profileCity = ""
-            profileRole = "باحث عن عمل"
+            profileRole = ""
+            verificationStatus = "unverified"
+            verificationNote = ""
             companyName = ""
             companyAbout = ""
             companyCity = ""
@@ -776,6 +844,8 @@ private fun ForsaApp() {
         phone = profilePhone,
         city = profileCity,
         role = profileRole,
+        verificationStatus = verificationStatus,
+        verificationNote = verificationNote,
         companyName = companyName,
         companyAbout = companyAbout,
         companyCity = companyCity,
@@ -821,6 +891,8 @@ private fun ForsaApp() {
                 message("سجّل الدخول أولاً")
             } else if (profileRole != "باحث عن عمل") {
                 message("بدّل نوع الحساب إلى باحث عن عمل حتى تقدر تقدم")
+            } else if (job.isExpired) {
+                message("انتهت مدة هذا الإعلان والتقديم عليه مغلق")
             } else if (job.ownerUid == user.uid) {
                 message("ما تقدر تقدم على إعلانك")
             } else {
@@ -935,6 +1007,7 @@ private fun ForsaApp() {
                 }
             }
         },
+        onRequestEmployerVerification = ::requestEmployerVerification,
         onCompanyProfileSaved = { newCompanyName, newCompanyAbout, newCompanyCity ->
             val user = auth.currentUser
             if (user == null) {
@@ -989,38 +1062,11 @@ private fun ForsaApp() {
                     }
             }
         },
-        onRoleChanged = { role ->
-            if (role == "باحث عن عمل" || role == "صاحب عمل") {
-                auth.currentUser?.let { user ->
-                    db.collection("users").document(user.uid)
-                        .set(
-                            mapOf(
-                                "displayName" to user.displayName.orEmpty(),
-                                "email" to user.email.orEmpty(),
-                                "phone" to profilePhone,
-                                "city" to profileCity,
-                                "role" to role,
-                                "companyName" to companyName,
-                                "companyAbout" to companyAbout,
-                                "companyCity" to companyCity
-                            ),
-                            com.google.firebase.firestore.SetOptions.merge()
-                        )
-                        .addOnSuccessListener {
-                            profileRole = role
-                            if (role != "صاحب عمل" && tab == MainTab.Publish) {
-                                tab = MainTab.Home
-                            }
-                        }
-                        .addOnFailureListener {
-                            message("تعذر حفظ نوع الحساب")
-                        }
-                }
-            }
-        },
         onPublish = { job ->
             if (profileRole != "صاحب عمل") {
                 message("نشر الوظائف متاح لحساب صاحب العمل")
+            } else if (verificationStatus != "verified") {
+                message("لازم توثّق حساب صاحب العمل قبل نشر الوظائف")
             } else {
                 db.collection("jobs").document(job.id).set(
                     mapOf(
@@ -1031,6 +1077,7 @@ private fun ForsaApp() {
                         "description" to job.description,
                         "ownerUid" to job.ownerUid,
                         "createdAt" to System.currentTimeMillis(),
+                        "expiresAt" to job.expiresAt,
                         "isActive" to true
                     )
                 ).addOnSuccessListener {
@@ -1079,6 +1126,8 @@ private fun ForsaApp() {
         onToggleJobActive = { job ->
             if (profileRole != "صاحب عمل" || job.ownerUid != auth.currentUser?.uid) {
                 message("ما عندك صلاحية لتغيير حالة هذا الإعلان")
+            } else if (job.isExpired) {
+                message("هذا الإعلان منتهي وما يقدر يرجع نشط")
             } else {
                 db.collection("jobs").document(job.id)
                     .update("isActive", !job.isActive)
@@ -1303,6 +1352,8 @@ private fun MainScaffold(
     phone: String,
     city: String,
     role: String,
+    verificationStatus: String,
+    verificationNote: String,
     companyName: String,
     companyAbout: String,
     companyCity: String,
@@ -1326,8 +1377,8 @@ private fun MainScaffold(
     onLogout: () -> Unit,
     onProfileSaved: (String, String, String) -> Unit,
     onCompanyProfileSaved: (String, String, String) -> Unit,
+    onRequestEmployerVerification: () -> Unit,
     onPasswordReset: () -> Unit,
-    onRoleChanged: (String) -> Unit,
     onPublish: (Job) -> Unit,
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
@@ -1335,8 +1386,9 @@ private fun MainScaffold(
     onPromoteJob: (Job) -> Unit
 ) {
     val userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
-    val canPublish = role == "صاحب عمل"
-    val visibleTabs = MainTab.values().filter { it != MainTab.Publish || canPublish }
+    val employerAccount = role == "صاحب عمل"
+    val canPublish = employerAccount && verificationStatus == "verified"
+    val visibleTabs = MainTab.values().filter { it != MainTab.Publish || employerAccount }
 
     if (promotionTarget != null && role == "صاحب عمل") {
         PromotionScreen(
@@ -1410,10 +1462,20 @@ private fun MainScaffold(
                             onCancel = { onTab(MainTab.Home) },
                             onMessage = onMessage
                         )
+                    } else if (employerAccount) {
+                        RoleRequiredScreen(
+                            title = "توثيق صاحب العمل مطلوب",
+                            description = when (verificationStatus) {
+                                "pending" -> "طلب التوثيق قيد المراجعة. بعد الموافقة راح تقدر تنشر الوظائف."
+                                "rejected" -> "طلب التوثيق مرفوض حالياً. حدّث بيانات الشركة وأرسل الطلب من جديد."
+                                else -> "أكمل بيانات الشركة من الملف الشخصي ثم أرسل طلب التوثيق."
+                            },
+                            onBack = { onTab(MainTab.Profile) }
+                        )
                     } else {
                         RoleRequiredScreen(
                             title = "النشر متاح لصاحب العمل",
-                            description = "بدّل نوع الحساب من الملف الشخصي حتى تقدر تنشر وظائف.",
+                            description = "ميزة نشر الوظائف متاحة لحساب صاحب العمل.",
                             onBack = { onTab(MainTab.Home) }
                         )
                     }
@@ -1428,6 +1490,8 @@ private fun MainScaffold(
                     companyAbout = companyAbout,
                     companyCity = companyCity,
                     role = role,
+                    verificationStatus = verificationStatus,
+                    verificationNote = verificationNote,
                     jobs = jobs,
                     savedJobIds = savedJobIds,
                     cvProfile = cvProfile,
@@ -1437,7 +1501,6 @@ private fun MainScaffold(
                     onProfileSaved = onProfileSaved,
                     onCompanyProfileSaved = onCompanyProfileSaved,
                     onPasswordReset = onPasswordReset,
-                    onRoleChanged = onRoleChanged,
                     onLogout = onLogout,
                     onDeleteJob = onDeleteJob,
                     onEditJob = onEditJob,
@@ -1573,6 +1636,14 @@ private fun JobsTab(
     onApply: (Job, String) -> Unit,
     onDelete: (Job) -> Unit
 ) {
+    var now by remember { mutableStateOf(System.currentTimeMillis()) }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        while (true) {
+            kotlinx.coroutines.delay(60_000L)
+            now = System.currentTimeMillis()
+        }
+    }
+
     if (selectedJob != null) {
         JobDetailsScreen(
             job = selectedJob,
@@ -1591,7 +1662,8 @@ private fun JobsTab(
     var typeFilter by remember { mutableStateOf("الكل") }
 
     val filteredJobs = jobs.filter { job ->
-        val visibleToUser = job.isActive || (role == "صاحب عمل" && job.ownerUid == currentUserJobUid)
+        val currentlyOpen = job.isActive && (job.expiresAt == 0L || job.expiresAt > now)
+        val visibleToUser = currentlyOpen || (role == "صاحب عمل" && job.ownerUid == currentUserJobUid)
         if (!visibleToUser) return@filter false
 
         val q = query.trim()
@@ -1759,7 +1831,9 @@ private fun JobCard(
                 if (job.isFeatured) {
                     AssistChip(onClick = {}, label = { Text("مميز") })
                 }
-                if (!job.isActive) {
+                if (job.isExpired) {
+                    AssistChip(onClick = {}, label = { Text("منتهي") })
+                } else if (!job.isActive) {
                     AssistChip(onClick = {}, label = { Text("موقوف") })
                 }
             }
@@ -1880,7 +1954,20 @@ private fun JobDetailsScreen(
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
-                        "التقديم متاح من حساب الباحث عن عمل. تقدر تبدّل نوع الحساب من الملف الشخصي.",
+                        "التقديم متاح من حساب الباحث عن عمل. نوع الحساب ثابت بعد تأكيد التسجيل.",
+                        Modifier.padding(16.dp)
+                    )
+                }
+            }
+
+            job.isExpired -> {
+                Surface(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant
+                ) {
+                    Text(
+                        "انتهت مدة هذا الإعلان، لذلك التقديم عليه مغلق.",
                         Modifier.padding(16.dp)
                     )
                 }
@@ -1953,6 +2040,7 @@ private fun PublishTab(
     var company by remember(defaultCompanyName) { mutableStateOf(defaultCompanyName) }
     var city by remember(defaultCompanyCity) { mutableStateOf(defaultCompanyCity) }
     var type by remember { mutableStateOf("دوام كامل") }
+    var durationDays by remember { mutableStateOf(JOB_DEFAULT_EXPIRY_DAYS) }
     var description by remember { mutableStateOf("") }
 
     Column(
@@ -2014,12 +2102,36 @@ private fun PublishTab(
             }
         }
 
+        Text("مدة نشر الإعلان", fontWeight = FontWeight.SemiBold)
+        Row(
+            Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            listOf(7L, 14L, 30L, 60L).forEach { days ->
+                FilterChip(
+                    selected = durationDays == days,
+                    onClick = { durationDays = days },
+                    label = { Text("$days يوم") }
+                )
+            }
+        }
+
         OutlinedTextField(
             value = description,
             onValueChange = { description = it },
             modifier = Modifier.fillMaxWidth(),
             label = { Text("وصف الوظيفة") },
             minLines = 5
+        )
+
+        Text(
+            if (job.isExpired) {
+                "هذا الإعلان منتهي ولا يمكن تمديد مدته من التعديل."
+            } else {
+                "تاريخ الانتهاء محفوظ من وقت النشر ولا يتغير عند تعديل الإعلان."
+            },
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 12.sp
         )
 
         Button(
@@ -2044,6 +2156,7 @@ private fun PublishTab(
                             type = type,
                             description = cleanDescription,
                             ownerUid = userUid,
+                            expiresAt = System.currentTimeMillis() + durationDays * MILLIS_PER_DAY,
                             isActive = true
                         )
                     )
@@ -2320,6 +2433,8 @@ private fun ProfileTab(
     companyAbout: String,
     companyCity: String,
     role: String,
+    verificationStatus: String,
+    verificationNote: String,
     jobs: List<Job>,
     savedJobIds: Set<String>,
     cvProfile: CvProfile,
@@ -2329,7 +2444,6 @@ private fun ProfileTab(
     onProfileSaved: (String, String, String) -> Unit,
     onCompanyProfileSaved: (String, String, String) -> Unit,
     onPasswordReset: () -> Unit,
-    onRoleChanged: (String) -> Unit,
     onLogout: () -> Unit,
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
@@ -2603,6 +2717,30 @@ private fun ProfileTab(
                 }
 
                 if (role == "صاحب عمل") {
+                    val verificationDescription = when (verificationStatus) {
+                        "verified" -> "حساب صاحب العمل موثّق وتقدر تنشر الوظائف."
+                        "pending" -> "طلب التوثيق قيد المراجعة."
+                        "rejected" -> "تم رفض الطلب. راجع بيانات الشركة وأرسل الطلب من جديد."
+                        else -> "حساب صاحب العمل غير موثّق بعد. أكمل بيانات الشركة ثم اطلب التوثيق."
+                    }
+                    ProfileActionCard(
+                        title = "توثيق صاحب العمل",
+                        description = verificationDescription +
+                            if (verificationNote.isNotBlank()) "\nملاحظة: $verificationNote" else "",
+                        actionLabel = when (verificationStatus) {
+                            "verified" -> "موثّق ✓"
+                            "pending" -> "قيد المراجعة"
+                            "rejected" -> "إعادة طلب التوثيق"
+                            else -> "طلب التوثيق"
+                        },
+                        onClick = {
+                            if (verificationStatus == "verified") {
+                                onMessage("حساب صاحب العمل موثّق")
+                            } else {
+                                onRequestEmployerVerification()
+                            }
+                        }
+                    )
                     ProfileActionCard(
                         title = "ملف الشركة",
                         description = if (companyName.isBlank()) {
@@ -3083,7 +3221,11 @@ private fun EmployerJobsScreen(
                             }
                         ) {
                             Text(
-                                if (job.isActive) "الإعلان ظاهر للباحثين" else "الإعلان موقوف",
+                                when {
+                                    job.isExpired -> "الإعلان منتهي"
+                                    job.isActive -> "الإعلان ظاهر للباحثين"
+                                    else -> "الإعلان موقوف"
+                                },
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
                                 fontWeight = FontWeight.SemiBold
                             )
@@ -3136,10 +3278,17 @@ private fun EmployerJobsScreen(
                             }
                             OutlinedButton(
                                 onClick = { onToggleJobActive(job) },
+                                enabled = !job.isExpired,
                                 modifier = Modifier.weight(1f),
                                 shape = RoundedCornerShape(14.dp)
                             ) {
-                                Text(if (job.isActive) "إيقاف الإعلان" else "تفعيل الإعلان")
+                                Text(
+                                    when {
+                                        job.isExpired -> "منتهي"
+                                        job.isActive -> "إيقاف الإعلان"
+                                        else -> "تفعيل الإعلان"
+                                    }
+                                )
                             }
                             OutlinedButton(
                                 onClick = { deleteTarget = job },
@@ -4396,6 +4545,7 @@ private fun RegisterScreen(
                                                         "city" to "",
                                                         "role" to role.orEmpty(),
                                                         "roleConfirmed" to true,
+                                                        "verificationStatus" to "unverified",
                                                         "companyName" to "",
                                                         "companyAbout" to "",
                                                         "companyCity" to ""
