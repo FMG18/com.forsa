@@ -799,6 +799,7 @@ private fun MainScaffold(
                     onLogout = onLogout,
                     onDeleteJob = onDeleteJob,
                     onEditJob = onEditJob,
+                    onToggleJobActive = onToggleJobActive,
                     onMessage = onMessage
                 )
             }
