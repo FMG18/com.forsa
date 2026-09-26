@@ -481,7 +481,15 @@ private fun ForsaApp() {
                     "employerUid" to job.ownerUid,
                     "note" to note.trim(),
                     "status" to "pending",
-                    "createdAt" to System.currentTimeMillis()
+                    "createdAt" to System.currentTimeMillis(),
+                    "cvHeadline" to cvProfile.headline,
+                    "cvAbout" to cvProfile.about,
+                    "cvEducation" to cvProfile.education,
+                    "cvExperience" to cvProfile.experience,
+                    "cvSkills" to cvProfile.skills,
+                    "cvLanguages" to cvProfile.languages,
+                    "cvPhone" to profilePhone,
+                    "cvCity" to profileCity
                 )
 
                 db.runTransaction { transaction ->
@@ -2140,6 +2148,7 @@ private fun EmployerApplicationsScreen(
 ) {
     var applications by remember { mutableStateOf<List<ApplicationItem>>(emptyList()) }
     var statusFilter by remember { mutableStateOf("الكل") }
+    var selectedCv by remember { mutableStateOf<ApplicationItem?>(null) }
 
     val filteredApplications = applications.filter { app ->
         statusFilter == "الكل" || app.status == statusFilter
@@ -2173,7 +2182,15 @@ private fun EmployerApplicationsScreen(
                                 applicantEmail = doc.getString("applicantEmail").orEmpty(),
                                 note = doc.getString("note").orEmpty(),
                                 status = doc.getString("status") ?: "pending",
-                                createdAt = doc.getLong("createdAt") ?: 0L
+                                createdAt = doc.getLong("createdAt") ?: 0L,
+                                cvHeadline = doc.getString("cvHeadline").orEmpty(),
+                                cvAbout = doc.getString("cvAbout").orEmpty(),
+                                cvEducation = doc.getString("cvEducation").orEmpty(),
+                                cvExperience = doc.getString("cvExperience").orEmpty(),
+                                cvSkills = doc.getString("cvSkills").orEmpty(),
+                                cvLanguages = doc.getString("cvLanguages").orEmpty(),
+                                cvPhone = doc.getString("cvPhone").orEmpty(),
+                                cvCity = doc.getString("cvCity").orEmpty()
                             )
                         }
                         ?.sortedByDescending { it.createdAt }
@@ -2263,6 +2280,25 @@ private fun EmployerApplicationsScreen(
                             Text(app.note, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
 
+                        val hasCv = app.cvHeadline.isNotBlank() ||
+                            app.cvAbout.isNotBlank() ||
+                            app.cvEducation.isNotBlank() ||
+                            app.cvExperience.isNotBlank() ||
+                            app.cvSkills.isNotBlank() ||
+                            app.cvLanguages.isNotBlank() ||
+                            app.cvPhone.isNotBlank() ||
+                            app.cvCity.isNotBlank()
+
+                        if (hasCv) {
+                            OutlinedButton(
+                                onClick = { selectedCv = app },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text("عرض السيرة الذاتية")
+                            }
+                        }
+
                         StatusBadge(app.status)
 
                         if (app.status == "pending") {
@@ -2316,6 +2352,59 @@ private fun EmployerApplicationsScreen(
     }
 }
 
+    selectedCv?.let { app ->
+        CvSnapshotDialog(
+            app = app,
+            onClose = { selectedCv = null }
+        )
+    }
+}
+
+@Composable
+private fun CvSnapshotDialog(
+    app: ApplicationItem,
+    onClose: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onClose,
+        title = {
+            Text("السيرة — " + app.applicantName.ifBlank { "متقدم" })
+        },
+        text = {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(top = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                CvSnapshotField("المسمى المهني", app.cvHeadline)
+                CvSnapshotField("المدينة", app.cvCity)
+                CvSnapshotField("الهاتف", app.cvPhone)
+                CvSnapshotField("نبذة", app.cvAbout)
+                CvSnapshotField("التعليم", app.cvEducation)
+                CvSnapshotField("الخبرة", app.cvExperience)
+                CvSnapshotField("المهارات", app.cvSkills)
+                CvSnapshotField("اللغات", app.cvLanguages)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onClose) {
+                Text("إغلاق")
+            }
+        }
+    )
+}
+
+@Composable
+private fun CvSnapshotField(label: String, value: String) {
+    if (value.isNotBlank()) {
+        Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(label, fontWeight = FontWeight.SemiBold)
+            Text(value, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
 @Composable
 private fun MyApplicationsScreen(
     db: FirebaseFirestore,
@@ -2358,7 +2447,15 @@ private fun MyApplicationsScreen(
                                 applicantEmail = doc.getString("applicantEmail").orEmpty(),
                                 note = doc.getString("note").orEmpty(),
                                 status = doc.getString("status") ?: "pending",
-                                createdAt = doc.getLong("createdAt") ?: 0L
+                                createdAt = doc.getLong("createdAt") ?: 0L,
+                                cvHeadline = doc.getString("cvHeadline").orEmpty(),
+                                cvAbout = doc.getString("cvAbout").orEmpty(),
+                                cvEducation = doc.getString("cvEducation").orEmpty(),
+                                cvExperience = doc.getString("cvExperience").orEmpty(),
+                                cvSkills = doc.getString("cvSkills").orEmpty(),
+                                cvLanguages = doc.getString("cvLanguages").orEmpty(),
+                                cvPhone = doc.getString("cvPhone").orEmpty(),
+                                cvCity = doc.getString("cvCity").orEmpty()
                             )
                         }
                         ?.sortedByDescending { it.createdAt }
