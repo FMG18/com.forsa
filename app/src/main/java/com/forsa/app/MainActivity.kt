@@ -310,7 +310,12 @@ private fun ForsaApp() {
 
     val currentUid = auth.currentUser?.uid
 
-    DisposableEffect(currentUid) {
+    DisposableEffect(currentUid to profileRole) {
+        var jobsRegistration: com.google.firebase.firestore.ListenerRegistration? = null
+        var applicationsRegistration: com.google.firebase.firestore.ListenerRegistration? = null
+        var savedJobsRegistration: com.google.firebase.firestore.ListenerRegistration? = null
+        var notificationsRegistration: com.google.firebase.firestore.ListenerRegistration? = null
+
         if (currentUid == null) {
             profileLoaded = true
             jobs = emptyList()
@@ -318,12 +323,11 @@ private fun ForsaApp() {
             savedJobIds = emptySet()
             cvProfile = CvProfile()
             unreadNotificationsCount = 0
-            onDispose { }
         } else {
+            val uid = currentUid
             val authenticatedUser = auth.currentUser
 
-            // نوع الحساب هو جزء من الصلاحيات، لذلك نتحقق منه قبل فتح الواجهة الرئيسية.
-            // لا نفترض "باحث عن عمل" عند غياب الدور أو عند الحسابات القديمة غير المؤكدة.
+            // لا نفتح الصلاحيات الرئيسية قبل التحقق من الدور المحفوظ.
             profileLoaded = false
             profilePhone = authenticatedUser?.phoneNumber.orEmpty()
             profileCity = ""
@@ -332,43 +336,167 @@ private fun ForsaApp() {
             companyCity = ""
             userName = authenticatedUser?.displayName.orEmpty()
 
-            // مزامنة بيانات الملف في الخلفية، لكن من دون لمس role أو roleConfirmed.
-            // قرار الدور تم حسمه في فحص الصلاحيات أعلاه.
-            db.collection("users").document(currentUid).get()
+            db.collection("users").document(uid).get()
                 .addOnSuccessListener { document ->
-                    val user = auth.currentUser
-                    profilePhone = document.getString("phone").orEmpty()
-                        .ifBlank { user?.phoneNumber.orEmpty() }
-                    profileCity = document.getString("city").orEmpty()
-                    companyName = document.getString("companyName").orEmpty()
-                    companyAbout = document.getString("companyAbout").orEmpty()
-                    companyCity = document.getString("companyCity").orEmpty()
-                    userName = user?.displayName
-                        ?: document.getString("displayName").orEmpty()
+                    val storedRole = document.getString("role")
+                    val roleConfirmed = document.getBoolean("roleConfirmed") == true
 
-                    db.collection("users").document(currentUid).set(
-                        mapOf(
-                            "displayName" to userName,
-                            "email" to (user?.email ?: document.getString("email").orEmpty()),
-                            "phone" to profilePhone,
-                            "city" to profileCity,
-                            "companyName" to companyName,
-                            "companyAbout" to companyAbout,
-                            "companyCity" to companyCity
-                        ),
-                        com.google.firebase.firestore.SetOptions.merge()
-                    ).addOnFailureListener {
-                        // المزامنة ثانوية ولا تمنع فتح الحساب.
+                    if (
+                        (storedRole == "باحث عن عمل" || storedRole == "صاحب عمل") &&
+                        roleConfirmed
+                    ) {
+                        profileRole = storedRole
+                        profilePhone = document.getString("phone").orEmpty()
+                            .ifBlank { auth.currentUser?.phoneNumber.orEmpty() }
+                        profileCity = document.getString("city").orEmpty()
+                        companyName = document.getString("companyName").orEmpty()
+                        companyAbout = document.getString("companyAbout").orEmpty()
+                        companyCity = document.getString("companyCity").orEmpty()
+                        userName = auth.currentUser?.displayName
+                            ?: document.getString("displayName").orEmpty()
+
+                        jobsRegistration = db.collection("jobs")
+                            .addSnapshotListener { snapshot, error ->
+                                if (error != null) {
+                                    message("تعذر تحميل الوظائف من قاعدة البيانات")
+                                    return@addSnapshotListener
+                                }
+
+                                jobs = snapshot?.documents
+                                    ?.sortedByDescending { it.getLong("createdAt") ?: 0L }
+                                    ?.mapNotNull { jobDocument ->
+                                        val title = jobDocument.getString("title")
+                                            ?: return@mapNotNull null
+                                        val company = jobDocument.getString("company")
+                                            ?: return@mapNotNull null
+                                        val city = jobDocument.getString("city")
+                                            ?: return@mapNotNull null
+                                        val type = jobDocument.getString("type") ?: "دوام كامل"
+                                        val description =
+                                            jobDocument.getString("description") ?: ""
+                                        val ownerUid =
+                                            jobDocument.getString("ownerUid") ?: ""
+                                        if (ownerUid.isBlank()) return@mapNotNull null
+
+                                        val isActive =
+                                            jobDocument.getBoolean("isActive") ?: true
+                                        val isFeatured =
+                                            jobDocument.getBoolean("isFeatured") ?: false
+                                        val promotionType =
+                                            jobDocument.getString("promotionType").orEmpty()
+                                        val promotionStatus =
+                                            jobDocument.getString("promotionStatus").orEmpty()
+                                        val promotionExpiresAt =
+                                            jobDocument.getLong("promotionExpiresAt") ?: 0L
+                                        val featuredNow = isFeatured && (
+                                            promotionExpiresAt == 0L ||
+                                                promotionExpiresAt > System.currentTimeMillis()
+                                            )
+
+                                        Job(
+                                            id = jobDocument.id,
+                                            title = title,
+                                            company = company,
+                                            city = city,
+                                            type = type,
+                                            description = description,
+                                            ownerUid = ownerUid,
+                                            isActive = isActive,
+                                            isFeatured = featuredNow,
+                                            promotionType = promotionType,
+                                            promotionStatus = promotionStatus,
+                                            promotionExpiresAt = promotionExpiresAt
+                                        )
+                                    }
+                                    ?: emptyList()
+                            }
+
+                        savedJobsRegistration = db.collection("savedJobs")
+                            .whereEqualTo("userUid", uid)
+                            .addSnapshotListener { snapshot, _ ->
+                                savedJobIds = snapshot?.documents
+                                    ?.mapNotNull { it.getString("jobId") }
+                                    ?.toSet()
+                                    ?: emptySet()
+                            }
+
+                        notificationsRegistration = db.collection("notifications")
+                            .whereEqualTo("targetUid", uid)
+                            .addSnapshotListener { snapshot, error ->
+                                if (error != null) {
+                                    unreadNotificationsCount = 0
+                                    return@addSnapshotListener
+                                }
+
+                                unreadNotificationsCount = snapshot?.documents
+                                    ?.count { !(it.getBoolean("read") ?: false) }
+                                    ?: 0
+                            }
+
+                        applicationsRegistration = db.collection("applications")
+                            .whereEqualTo("applicantUid", uid)
+                            .addSnapshotListener { snapshot, error ->
+                                if (error != null) {
+                                    appliedJobIds = emptySet()
+                                    return@addSnapshotListener
+                                }
+
+                                appliedJobIds = snapshot?.documents
+                                    ?.mapNotNull { it.getString("jobId") }
+                                    ?.toSet()
+                                    ?: emptySet()
+                            }
+
+                        db.collection("cvProfiles").document(uid).get()
+                            .addOnSuccessListener { cvDocument ->
+                                cvProfile = CvProfile(
+                                    headline = cvDocument.getString("headline").orEmpty(),
+                                    about = cvDocument.getString("about").orEmpty(),
+                                    education = cvDocument.getString("education").orEmpty(),
+                                    experience = cvDocument.getString("experience").orEmpty(),
+                                    skills = cvDocument.getString("skills").orEmpty(),
+                                    languages = cvDocument.getString("languages").orEmpty()
+                                )
+                            }
+
+                        // المزامنة لا تلمس role أو roleConfirmed حتى يبقى الدور مقفلاً.
+                        db.collection("users").document(uid).set(
+                            mapOf(
+                                "displayName" to userName,
+                                "email" to (
+                                    auth.currentUser?.email
+                                        ?: document.getString("email").orEmpty()
+                                    ),
+                                "phone" to profilePhone,
+                                "city" to profileCity,
+                                "companyName" to companyName,
+                                "companyAbout" to companyAbout,
+                                "companyCity" to companyCity
+                            ),
+                            com.google.firebase.firestore.SetOptions.merge()
+                        ).addOnFailureListener {
+                            // المزامنة ثانوية ولا تمنع استخدام التطبيق.
+                        }
+
+                        profileLoaded = true
+                    } else {
+                        profileLoaded = true
+                        authScreen = AuthScreen.RoleSelection
                     }
                 }
+                .addOnFailureListener {
+                    auth.signOut()
+                    profileLoaded = true
+                    authScreen = AuthScreen.Welcome
+                    message("تعذر التحقق من نوع الحساب. سجّل الدخول مرة أخرى")
+                }
+        }
 
-
-            onDispose {
-                jobsRegistration.remove()
-                applicationsRegistration.remove()
-                savedJobsRegistration.remove()
-                notificationsRegistration.remove()
-            }
+        onDispose {
+            jobsRegistration?.remove()
+            applicationsRegistration?.remove()
+            savedJobsRegistration?.remove()
+            notificationsRegistration?.remove()
         }
     }
 
@@ -405,12 +533,6 @@ private fun ForsaApp() {
         tab = MainTab.Home
     }
 
-    fun signedIn() {
-        loading = false
-        userName = auth.currentUser?.displayName.orEmpty()
-        authScreen = null
-        tab = MainTab.Home
-    }
 
     fun persistUserBasics(
         role: String? = null,
