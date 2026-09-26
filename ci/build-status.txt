@@ -1,6 +1,6 @@
 status=FAIL
-commit=0b8ebd25941c7789e27ad943b890022013d36d08
-run=36273312687
+commit=cbadf356e1d05d1dd77e70792e227ab22ad9b3f2
+run=36273477937
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -30,22 +30,22 @@ Daemon will be stopped at the end of the build
 > Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
-> Task :app:processDebugManifestForPackage
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
-> Task :app:mergeDebugJniLibFolders
+> Task :app:processDebugManifestForPackage
 > Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeLibDexDebug
 > Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
-> Task :app:mergeLibDexDebug
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
@@ -67,7 +67,7 @@ fun signedIn(): Unit
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:604:31 Overload resolution ambiguity between candidates:
 fun signedIn(): Unit
 fun signedIn(): Unit
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790458398256.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790458563134.json
 
 FAILURE: Build failed with an exception.
 
@@ -82,7 +82,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 36s
+BUILD FAILED in 22s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
