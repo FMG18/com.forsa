@@ -1,6 +1,6 @@
 status=FAIL
-commit=cbadf356e1d05d1dd77e70792e227ab22ad9b3f2
-run=36273477937
+commit=19d165c32a396ae428fdff1146781b5d9f8d2389
+run=36273656429
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -34,19 +34,19 @@ Daemon will be stopped at the end of the build
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
+> Task :app:mergeDebugJniLibFolders
 > Task :app:processDebugManifestForPackage
 > Task :app:checkDebugDuplicateClasses
-> Task :app:mergeDebugJniLibFolders
 > Task :app:mergeLibDexDebug
 > Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
 > Task :app:validateSigningDebug
 > Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
 > Task :app:compileDebugKotlin FAILED
@@ -67,7 +67,7 @@ fun signedIn(): Unit
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:604:31 Overload resolution ambiguity between candidates:
 fun signedIn(): Unit
 fun signedIn(): Unit
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790458563134.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790458768674.json
 
 FAILURE: Build failed with an exception.
 
@@ -82,7 +82,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 22s
+BUILD FAILED in 38s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
