@@ -209,17 +209,15 @@ service cloud.firestore {
       allow update: if request.auth != null
         && request.auth.uid == userId
         && request.resource.data.keys().hasOnly([
-          "displayName", "email", "phone", "city", "role",
+          "displayName", "email", "phone", "city", "role", "roleConfirmed",
           "companyName", "companyAbout", "companyCity"
         ])
         && (
           !("role" in request.resource.data)
           || (
             request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
-            && (
-              !("role" in resource.data)
-              || request.resource.data.role == resource.data.role
-            )
+            && request.resource.data.roleConfirmed == true
+            && resource.data.roleConfirmed != true
           )
         );
 
