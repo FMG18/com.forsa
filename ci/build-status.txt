@@ -1,11 +1,11 @@
-status=FAIL
-commit=767ecf5a5e01e62572f72cb2d06f329afe25f950
-run=36275612612
+status=PASS
+commit=f79daf5ef0234a1555821f2bc46e4edccf9f322a
+run=36275844779
 attempt=1
-build_exit_code=1
-smoke_exit_code=1
-smoke_outcome=failure
-summary=APK build failed with exit code 1.
+build_exit_code=0
+smoke_exit_code=0
+smoke_outcome=success
+summary=APK built successfully and launched on Android Emulator without a detected crash.
 
 --- build log tail ---
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
@@ -27,12 +27,12 @@ Daemon will be stopped at the end of the build
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
 > Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
-> Task :app:processDebugManifestForPackage
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
@@ -49,25 +49,154 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
-> Task :app:compileDebugKotlin FAILED
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2128:17 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2740:33 Unresolved reference 'onRequestEmployerVerification'.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790460882213.json
+> Task :app:compileDebugKotlin
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1875:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1908:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2068:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2264:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2871:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3005:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3193:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3359:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3513:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3810:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3959:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4120:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4310:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4402:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
-FAILURE: Build failed with an exception.
+> Task :app:compileDebugJavaWithJavac
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:processDebugJavaRes
+> Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790461139629.json
 
-* What went wrong:
-Execution failed for task ':app:compileDebugKotlin'.
-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-   > Compilation error. See log for more details
-
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
-> Run with --scan to get full insights.
-> Get more help at https://help.gradle.org.
-
-BUILD FAILED in 29s
-30 actionable tasks: 30 executed
+BUILD SUCCESSFUL in 49s
+38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
+09-26 22:21:41.199   504   504 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
+09-26 22:21:41.201  1096  1096 I ImsExternalCallTracker: handleVideoCapabilitiesChanged : isVideoCapable = false
+09-26 22:21:41.201  1096  1096 D ImsExternalCallTracker: refreshCallPullState
+09-26 22:21:41.201  1096  1096 I Telephony: handleVideoCapabilitesChanged. Video capability - false
+09-26 22:21:41.201  1096  1096 D Telephony: isEmergencyPreferredAccount: subId=1, activeData=-1
+09-26 22:21:41.201  1096  1096 D Telephony: isEmergencyPreferredAccount: Device does not require preference.
+09-26 22:21:41.201  1096  1096 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
+09-26 22:21:41.201  1096  1096 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
+09-26 22:21:41.201  1096  1096 I Telephony:  isRttSupported: false
+09-26 22:21:41.201  1096  1096 I Telephony:  alwaysAllowWhileRoaming: false
+09-26 22:21:41.201  1096  1096 I Telephony:  isRoaming: false
+09-26 22:21:41.201  1096  1096 I Telephony:  isOnWfc: false
+09-26 22:21:41.209   374   374 D Zygote  : Forked child process 2920
+09-26 22:21:41.212  1448  2208 I AiAiTextClassifier: [VisualCortexAdapter]: provideRegistration: Registered Prominent Screen Entities for updates.
+09-26 22:21:41.213  1565  1565 I o       : processValidityUpdateForAllData
+09-26 22:21:41.218  1565  2171 W SearchServiceCore: Abort, client detached.
+09-26 22:21:41.218  1565  2171 W SearchServiceCore: Abort, client detached.
+09-26 22:21:41.218  1565  2171 W SearchServiceCore: Abort, client detached.
+09-26 22:21:41.218  1565  2171 W SearchServiceCore: Abort, client detached.
+09-26 22:21:41.218  1565  2171 W SearchServiceCore: Abort, client detached.
+09-26 22:21:41.218   566   597 I ActivityManager: Start proc 2920:com.google.android.ondevicepersonalization.services/u0a188 for broadcast {com.google.android.ondevicepersonalization.services/com.android.ondevicepersonalization.services.OnDevicePersonalizationBroadcastReceiver}
+09-26 22:21:41.219  1565  1565 I NTF.BroadcastReceiver: (REDACTED) #onReceive:%s %d
+09-26 22:21:41.222   566   582 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-26 22:21:41.222  1565  1565 I GeofenceRecovery: #onReceive GeofenceRecoveryReceiver
+09-26 22:21:41.225   566   582 D PackageManager: Clear ephemeral installer activity
+09-26 22:21:41.227  1565  1565 I GnpSdk  : (REDACTED) Intent received for action [%s] package [%s].
+09-26 22:21:41.227  1565  1565 I GnpSdk  : Phenotype initialized.
+09-26 22:21:41.227  1565  1565 I GnpSdk  : (REDACTED) Validation OK for action [%s].
+09-26 22:21:41.227  1565  1565 I GnpSdk  : (REDACTED) Submitting Broadcast execution [%d] to tiktok executor.
+09-26 22:21:41.233   566   582 I AppsFilter: interaction: PackageSetting{e264099 com.android.microdroid.empty_payload/10199} -> PackageSetting{52bfc59 com.google.android.healthconnect.controller/10196} BLOCKED
+09-26 22:21:41.233   566   582 I AppsFilter: interaction: PackageSetting{d4e4f5e com.forsa.app/10209} -> PackageSetting{52bfc59 com.google.android.healthconnect.controller/10196} BLOCKED
+09-26 22:21:41.242   566   582 D SafetySourceDataValidat: No cert check requested for package com.google.android.healthconnect.controller
+--------- beginning of kernel
+09-26 22:21:41.387     0     0 I binder  : 566:620 ioctl 400c620e 78345faf0284 returned -11
+09-26 22:21:41.246  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleContacts/GoogleContacts.apk' with 1 weak references
+09-26 22:21:41.246  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk' with 1 weak references
+09-26 22:21:41.247  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~GXKFXtsvrIeTwCJ4UpFsww==/com.android.chrome-P7yAKqks4sFJ2L3qOMQDsw==/Chrome.apk' with 1 weak references
+09-26 22:21:41.247  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~9mJDwkRXaCXwOGGw_3ws5g==/com.google.android.trichromelibrary_636771938-cBH-94wcAXtvqBvZ81uGSg==/TrichromeLibrary.apk' with 1 weak references
+09-26 22:21:41.247  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltBugle/PrebuiltBugle.apk' with 1 weak references
+09-26 22:21:41.247  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleDialer/GoogleDialer.apk' with 1 weak references
+09-26 22:21:41.247  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGmail/PrebuiltGmail.apk' with 1 weak references
+09-26 22:21:41.247  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTube/YouTube.apk' with 1 weak references
+09-26 22:21:41.250  1565  2066 I GnpSdk  : (REDACTED) Executing action in BroadcastReceiver [%s].
+09-26 22:21:41.257  1565  1728 E A       : (REDACTED) Failed to recover geofences for LBT Routines using Geller data
+09-26 22:21:41.257  1565  1728 E A       : com.google.android.libraries.geller.portable.GellerException: Code: INVALID_ARGUMENT, Message: Account name is null.
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.android.libraries.search.l.t.a(PG:25)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.apps.tiktok.tracing.fe.a(PG:13)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.common.util.concurrent.ba.a(PG:3)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.common.util.concurrent.cu.run(PG:21)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.android.libraries.k.x.run(PG:3)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.common.n.c.c.run(PG:50)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.android.libraries.k.e.run(PG:8)
+09-26 22:21:41.257  1565  1728 E A       : 	at java.lang.Thread.run(Thread.java:1012)
+09-26 22:21:41.257  1565  1728 E A       : 	at com.google.android.libraries.k.d.b.run(PG:74)
+09-26 22:21:41.257  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Photos/Photos.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Maps/Maps.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_vendor.apk' with 1 weak references
+09-26 22:21:41.258  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+09-26 22:21:41.259  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTubeMusicPrebuilt/YouTubeMusicPrebuilt.apk' with 1 weak references
+09-26 22:21:41.259  1234  1241 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SettingsIntelligenceGooglePrebuilt/SettingsIntelligenceGooglePrebuilt.apk' with 1 weak references
+09-26 22:21:41.269  1096  1096 I Telephony: TelecomAccountRegistry$AccountEntry: registerPstnPhoneAccount: Registering account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with Telecom. subId=1
+09-26 22:21:41.309  1234  1274 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.settings.intelligence]
+09-26 22:21:41.310  1415  1856 I IntentFilterIntentOp: Verification 3 complete. Success:true. Failed hosts:. [CONTEXT service_id=244 ]
+09-26 22:21:41.317  1415  1856 I IntentFilterIntentOp: Verifying IntentFilter. verificationId:4 scheme:"https" hosts:"gmail.app.goo.gl dynamite-autopush.sandbox.google.com tel.meet d.meet chat.google.com t.meet dynamite-preprod.sandbox.google.com enterprise.google.com stream.meet.google.com client-side-encryption.google.com dial.meet meet.google.com krahsc.google.com" package:"com.google.android.gm". [CONTEXT service_id=244 ]
+09-26 22:21:41.319  1415  1856 I AppLinksUtilsV1: Legacy cross-profile verification enabled [CONTEXT service_id=244 ]
+09-26 22:21:41.332   566   595 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+09-26 22:21:41.332   566   566 W IPCThreadState: Sending oneway calls to frozen process.
+09-26 22:21:41.333  1234  1274 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.settings.intelligence
+09-26 22:21:41.337   566  1751 I Telecom : TelecomServiceImpl$1: registerPhoneAccount: account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AKg🔒
+09-26 22:21:41.338   566  1751 I Telecom : PhoneAccountRegistrar: Modify account: [ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}]: TSI.rPA(cap)@AKg🔒
+09-26 22:21:41.338   566  1751 I Telecom : CallsManager: handlePhoneAccountChanged: phoneAccount=[[X] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AKg🔒
+09-26 22:21:41.350   566  1751 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.rPA(cap)@AKg🔒
+09-26 22:21:41.350   566  1751 I Telecom : PhoneAccountRegistrar: Notifying telephony of voice service override change for 1 SIMs, hasService = false: TSI.rPA(cap)@AKg🔒
+09-26 22:21:41.352  1096  1096 I PhoneInterfaceManager: setVoiceServiceStateOverride: subId=1, phone=Handler (com.android.internal.telephony.GsmCdmaPhone) {f88e74f}, hasService=false, callingPackage=com.android.server.telecom
+09-26 22:21:41.352  1096  1096 D CarrierSvcBindHelper: onPackageModified: com.google.android.settings.intelligence
+09-26 22:21:41.353  1096  1096 D CarrierSvcBindHelper: No carrier app for: 0
+09-26 22:21:41.359  1096  1096 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-26 22:21:41.359   566  1253 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10135, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.360  1096  1096 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-26 22:21:41.361   566  1790 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.362  1565  1565 I A       : Start work
+09-26 22:21:41.362   566  1751 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.363   566  1790 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.363   566  1790 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.363   566  1790 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.369  1096  1096 D CarrierSvcBindHelper: onPackageModified: com.google.android.settings.intelligence
+09-26 22:21:41.369  1096  1096 D CarrierSvcBindHelper: No carrier app for: 0
+09-26 22:21:41.370  1096  1290 D ImsResolver: maybeAddedImsService, packageName: com.google.android.settings.intelligence
+09-26 22:21:41.372  1096  1096 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-26 22:21:41.372   566   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10135, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.377  1096  1096 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-26 22:21:41.377   566   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.377   566   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.377   566   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.377   566   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.377   566   583 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-26 22:21:41.377  1192  2490 W .gms.persistent: Long monitor contention with owner lowpool[10] (2467) at void dbyt.n(dbus, dbus, int)(:com.google.android.gms@242335041@24.23.35 (190800-646585959):49) waiters=0 in int dbyt.l(dbyf, bcsk) for 310ms
+09-26 22:21:41.379  1096  1096 I CallNotifier: onCallForwardingIndicatorChanged(): subId=1, visible=N
+09-26 22:21:41.379  1096  1290 D ImsResolver: maybeAddedImsService, packageName: com.google.android.settings.intelligence
+09-26 22:21:41.379  1096  1096 D CallNotifier: updatePhoneStateListeners: update CF notifications.
+09-26 22:21:41.380  1096  1096 I NotificationMgr: updateCfi: subId= 1, visible=N
+09-26 22:21:41.380  1096  1096 I NotificationMgr: updateMwi(): subId 1 update to false
+09-26 22:21:41.390  1234  1274 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.settings.intelligence]
+09-26 22:21:41.391  1234  1274 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.settings.intelligence
+09-26 22:21:41.399  1565  1732 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=c6a72674-b9ba-444f-bb74-794b7b94738c, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker,TikTokWorker#com.google.android.apps.gsa.staticplugins.opa.worker.nudgeui.ResetOpaNgaQueryCounterTask } ]
+09-26 22:21:41.408  1448  1448 I AiAiEcho: AppFetcherImpl onPackageChanged com.google.android.settings.intelligence.
+09-26 22:21:41.408  1448  2536 I AiAiEcho: AppIndexer Package:[com.google.android.settings.intelligence] UserProfile:[0] Enabled:[true].
+09-26 22:21:41.408  1448  2536 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.google.android.settings.intelligence], userId:[0], reason:[package is updated.].
+09-26 22:21:41.413  2920  2920 I zation.services: Using CollectorTypeCMC GC.
+09-26 22:21:41.414  1448  2020 I TrainerClient: Preparing to schedule training for population:aiai/playstore/smartselect/prod/train/en/all-pasted-to-none-messaging-apps session_name:smartselect/prod/train/en/all-pasted-to-none-messaging-apps
+09-26 22:21:41.414  2920  2920 W zation.services: Unexpected CPU variant for x86: x86_64.
+09-26 22:21:41.414  2920  2920 W zation.services: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+09-26 22:21:41.422  2920  2920 E zation.services: Not starting debugger since process cannot load the jdwp agent.
+09-26 22:21:41.424  2920  2920 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+09-26 22:21:41.424   566   620 I ActivityManager: Killing 2898:com.google.android.healthconnect.controller/u0a196 (adj 0): change com.google.android.healthconnect.controller
