@@ -4236,11 +4236,13 @@ private fun ProfileInfo(label: String, value: String) {
 private fun AuthHeader(
     title: String,
     subtitle: String,
-    onBack: () -> Unit
+    onBack: (() -> Unit)?
 ) {
     Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        IconButton(onClick = onBack) {
-            Icon(Icons.Default.ArrowForward, "رجوع")
+        if (onBack != null) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, "رجوع")
+            }
         }
         Column(Modifier.weight(1f)) {
             Text(title, fontSize = 28.sp, fontWeight = FontWeight.Bold)
