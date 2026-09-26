@@ -156,6 +156,18 @@ private data class DashboardApplication(
     val createdAt: Long
 )
 
+private data class NotificationItem(
+    val id: String,
+    val type: String,
+    val title: String,
+    val body: String,
+    val jobId: String,
+    val applicationId: String,
+    val status: String,
+    val read: Boolean,
+    val createdAt: Long
+)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -210,6 +222,7 @@ private fun ForsaApp() {
     var appliedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var savedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var cvProfile by remember { mutableStateOf(CvProfile()) }
+    var unreadNotificationsCount by remember { mutableStateOf(0) }
     val db = remember { FirebaseFirestore.getInstance() }
 
     fun message(text: String) {
@@ -224,6 +237,7 @@ private fun ForsaApp() {
             appliedJobIds = emptySet()
             savedJobIds = emptySet()
             cvProfile = CvProfile()
+            unreadNotificationsCount = 0
             onDispose { }
         } else {
             profileRole = "باحث عن عمل"
@@ -286,6 +300,19 @@ private fun ForsaApp() {
                         ?: emptySet()
                 }
 
+            val notificationsRegistration = db.collection("notifications")
+                .whereEqualTo("targetUid", currentUid)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        unreadNotificationsCount = 0
+                        return@addSnapshotListener
+                    }
+
+                    unreadNotificationsCount = snapshot?.documents
+                        ?.count { !(it.getBoolean("read") ?: false) }
+                        ?: 0
+                }
+
             val applicationsRegistration = db.collection("applications")
                 .whereEqualTo("applicantUid", currentUid)
                 .addSnapshotListener { snapshot, error ->
@@ -346,8 +373,35 @@ private fun ForsaApp() {
                 jobsRegistration.remove()
                 applicationsRegistration.remove()
                 savedJobsRegistration.remove()
+                notificationsRegistration.remove()
             }
         }
+    }
+
+    fun createNotification(
+        targetUid: String,
+        type: String,
+        title: String,
+        body: String,
+        jobId: String,
+        applicationId: String,
+        status: String
+    ) {
+        if (targetUid.isBlank()) return
+        db.collection("notifications").document(UUID.randomUUID().toString()).set(
+            mapOf(
+                "targetUid" to targetUid,
+                "actorUid" to auth.currentUser?.uid.orEmpty(),
+                "type" to type,
+                "title" to title,
+                "body" to body,
+                "jobId" to jobId,
+                "applicationId" to applicationId,
+                "status" to status,
+                "read" to false,
+                "createdAt" to System.currentTimeMillis()
+            )
+        )
     }
 
     fun signedIn() {
@@ -421,6 +475,7 @@ private fun ForsaApp() {
             appliedJobIds = emptySet()
             savedJobIds = emptySet()
             cvProfile = CvProfile()
+            unreadNotificationsCount = 0
             selectedJob = null
             promotionTarget = null
             authScreen = AuthScreen.Welcome
@@ -488,6 +543,7 @@ private fun ForsaApp() {
         appliedJobIds = appliedJobIds,
         savedJobIds = savedJobIds,
         cvProfile = cvProfile,
+        unreadNotificationsCount = unreadNotificationsCount,
         onCvSaved = { cvProfile = it },
         onToggleSaved = { job ->
             val user = auth.currentUser
@@ -553,6 +609,15 @@ private fun ForsaApp() {
                     null
                 }.addOnSuccessListener {
                     appliedJobIds = appliedJobIds + job.id
+                    createNotification(
+                        targetUid = job.ownerUid,
+                        type = "new_application",
+                        title = "طلب تقديم جديد",
+                        body = user.displayName.orEmpty().ifBlank { "باحث عن عمل" } + " قدّم على وظيفة " + job.title,
+                        jobId = job.id,
+                        applicationId = applicationId,
+                        status = "pending"
+                    )
                     message("تم إرسال طلب التقديم بنجاح")
                     selectedJob = null
                 }.addOnFailureListener { exception ->
@@ -895,6 +960,7 @@ private fun MainScaffold(
     appliedJobIds: Set<String>,
     savedJobIds: Set<String>,
     cvProfile: CvProfile,
+    unreadNotificationsCount: Int,
     onCvSaved: (CvProfile) -> Unit,
     onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
@@ -1009,6 +1075,7 @@ private fun MainScaffold(
                     jobs = jobs,
                     savedJobIds = savedJobIds,
                     cvProfile = cvProfile,
+                    unreadNotificationsCount = unreadNotificationsCount,
                     userUid = userUid,
                     db = db,
                     onProfileSaved = onProfileSaved,
@@ -1838,6 +1905,7 @@ private fun ProfileTab(
     jobs: List<Job>,
     savedJobIds: Set<String>,
     cvProfile: CvProfile,
+    unreadNotificationsCount: Int,
     userUid: String,
     db: FirebaseFirestore,
     onProfileSaved: (String, String, String) -> Unit,
@@ -1908,6 +1976,13 @@ private fun ProfileTab(
             onEditJob = { editingJob = it },
             onToggleJobActive = onToggleJobActive,
             onPromoteJob = onPromoteJob,
+            onMessage = onMessage
+        )
+
+        "notifications" -> NotificationsScreen(
+            db = db,
+            userUid = userUid,
+            onBack = { section = "main" },
             onMessage = onMessage
         )
 
@@ -2059,6 +2134,17 @@ private fun ProfileTab(
                         Text("تغيير كلمة المرور")
                     }
                 }
+
+                ProfileActionCard(
+                    title = "الإشعارات",
+                    description = if (unreadNotificationsCount > 0) {
+                        "عندك " + unreadNotificationsCount + " إشعار غير مقروء."
+                    } else {
+                        "ما عندك إشعارات غير مقروءة حالياً."
+                    },
+                    actionLabel = "فتح الإشعارات",
+                    onClick = { section = "notifications" }
+                )
 
                 ProfileActionCard(
                     title = "المحفوظة",
@@ -2806,6 +2892,7 @@ private fun EmployerApplicationsScreen(
                             ApplicationItem(
                                 id = doc.id,
                                 jobId = jobId,
+                                applicantUid = doc.getString("applicantUid").orEmpty(),
                                 jobTitle = doc.getString("jobTitle").orEmpty(),
                                 company = doc.getString("company").orEmpty(),
                                 applicantName = doc.getString("applicantName").orEmpty(),
@@ -2937,6 +3024,22 @@ private fun EmployerApplicationsScreen(
                                     onClick = {
                                         db.collection("applications").document(app.id)
                                             .update("status", "accepted")
+                                            .addOnSuccessListener {
+                                                db.collection("notifications").document(UUID.randomUUID().toString()).set(
+                                                    mapOf(
+                                                        "targetUid" to app.applicantUid,
+                                                        "actorUid" to userUid,
+                                                        "type" to "application_status",
+                                                        "title" to "تم قبول طلبك",
+                                                        "body" to "تم قبول طلبك على وظيفة " + app.jobTitle,
+                                                        "jobId" to app.jobId,
+                                                        "applicationId" to app.id,
+                                                        "status" to "accepted",
+                                                        "read" to false,
+                                                        "createdAt" to System.currentTimeMillis()
+                                                    )
+                                                )
+                                            }
                                             .addOnFailureListener {
                                                 onMessage("تعذر قبول الطلب")
                                             }
@@ -2950,6 +3053,22 @@ private fun EmployerApplicationsScreen(
                                     onClick = {
                                         db.collection("applications").document(app.id)
                                             .update("status", "rejected")
+                                            .addOnSuccessListener {
+                                                db.collection("notifications").document(UUID.randomUUID().toString()).set(
+                                                    mapOf(
+                                                        "targetUid" to app.applicantUid,
+                                                        "actorUid" to userUid,
+                                                        "type" to "application_status",
+                                                        "title" to "تم رفض طلبك",
+                                                        "body" to "تم رفض طلبك على وظيفة " + app.jobTitle,
+                                                        "jobId" to app.jobId,
+                                                        "applicationId" to app.id,
+                                                        "status" to "rejected",
+                                                        "read" to false,
+                                                        "createdAt" to System.currentTimeMillis()
+                                                    )
+                                                )
+                                            }
                                             .addOnFailureListener {
                                                 onMessage("تعذر رفض الطلب")
                                             }
@@ -2964,8 +3083,24 @@ private fun EmployerApplicationsScreen(
                             OutlinedButton(
                                 onClick = {
                                     db.collection("applications").document(app.id)
-                                        .update("status", "pending")
-                                        .addOnFailureListener {
+                                            .update("status", "pending")
+                                            .addOnSuccessListener {
+                                                db.collection("notifications").document(UUID.randomUUID().toString()).set(
+                                                    mapOf(
+                                                        "targetUid" to app.applicantUid,
+                                                        "actorUid" to userUid,
+                                                        "type" to "application_status",
+                                                        "title" to "عاد طلبك للمراجعة",
+                                                        "body" to "تمت إعادة طلبك للمراجعة على وظيفة " + app.jobTitle,
+                                                        "jobId" to app.jobId,
+                                                        "applicationId" to app.id,
+                                                        "status" to "pending",
+                                                        "read" to false,
+                                                        "createdAt" to System.currentTimeMillis()
+                                                    )
+                                                )
+                                            }
+                                            .addOnFailureListener {
                                             onMessage("تعذر إعادة الطلب للمراجعة")
                                         }
                                 },
@@ -3034,6 +3169,140 @@ private fun CvSnapshotField(label: String, value: String) {
 }
 
 @Composable
+private fun NotificationsScreen(
+    db: FirebaseFirestore,
+    userUid: String,
+    onBack: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var notifications by remember { mutableStateOf<List<NotificationItem>>(emptyList()) }
+
+    DisposableEffect(userUid) {
+        if (userUid.isBlank()) {
+            onDispose { }
+        } else {
+            val registration = db.collection("notifications")
+                .whereEqualTo("targetUid", userUid)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        notifications = emptyList()
+                        onMessage("تعذر تحميل الإشعارات")
+                        return@addSnapshotListener
+                    }
+
+                    notifications = snapshot?.documents
+                        ?.mapNotNull { doc ->
+                            val title = doc.getString("title").orEmpty()
+                            val body = doc.getString("body").orEmpty()
+                            if (title.isBlank() && body.isBlank()) return@mapNotNull null
+                            NotificationItem(
+                                id = doc.id,
+                                type = doc.getString("type").orEmpty(),
+                                title = title,
+                                body = body,
+                                jobId = doc.getString("jobId").orEmpty(),
+                                applicationId = doc.getString("applicationId").orEmpty(),
+                                status = doc.getString("status").orEmpty(),
+                                read = doc.getBoolean("read") ?: false,
+                                createdAt = doc.getLong("createdAt") ?: 0L
+                            )
+                        }
+                        ?.sortedByDescending { it.createdAt }
+                        ?: emptyList()
+                }
+
+            onDispose { registration.remove() }
+        }
+    }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+            Text("الإشعارات", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        if (notifications.isEmpty()) {
+            Surface(
+                Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(18.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant
+            ) {
+                Text("ماكو إشعارات حالياً.", Modifier.padding(16.dp))
+            }
+        } else {
+            notifications.forEach { notification ->
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(7.dp)
+                    ) {
+                        Text(
+                            notification.title,
+                            fontSize = 18.sp,
+                            fontWeight = if (notification.read) FontWeight.SemiBold else FontWeight.Bold
+                        )
+                        Text(notification.body)
+                        if (notification.status.isNotBlank()) {
+                            StatusBadge(notification.status)
+                        }
+                        if (!notification.read) {
+                            TextButton(
+                                onClick = {
+                                    db.collection("notifications").document(notification.id)
+                                        .update("read", true)
+                                        .addOnFailureListener {
+                                            onMessage("تعذر تحديث حالة الإشعار")
+                                        }
+                                }
+                            ) {
+                                Text("تحديد كمقروء")
+                            }
+                        }
+                    }
+                }
+            }
+
+            val unread = notifications.filterNot { it.read }
+            if (unread.isNotEmpty()) {
+                OutlinedButton(
+                    onClick = {
+                        val batch = db.batch()
+                        unread.forEach { item ->
+                            batch.update(
+                                db.collection("notifications").document(item.id),
+                                "read",
+                                true
+                            )
+                        }
+                        batch.commit().addOnFailureListener {
+                            onMessage("تعذر تحديد الإشعارات كمقروءة")
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
+                ) {
+                    Text("تحديد الكل كمقروء")
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun MyApplicationsScreen(
     db: FirebaseFirestore,
     userUid: String,
@@ -3069,6 +3338,7 @@ private fun MyApplicationsScreen(
                             ApplicationItem(
                                 id = doc.id,
                                 jobId = doc.getString("jobId").orEmpty(),
+                                applicantUid = doc.getString("applicantUid").orEmpty(),
                                 jobTitle = doc.getString("jobTitle").orEmpty(),
                                 company = doc.getString("company").orEmpty(),
                                 applicantName = doc.getString("applicantName").orEmpty(),
