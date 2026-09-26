@@ -37,7 +37,7 @@ jobs:
           set -o pipefail
           mkdir -p ci
           gradle --no-daemon :app:assembleDebug 2>&1 | tee ci/build.log
-          code=${PIPESTATUS[0]}
+          code=\${PIPESTATUS[0]}
           echo "BUILD_EXIT_CODE=$code" >> "$GITHUB_ENV"
           exit "$code"
 
@@ -63,9 +63,14 @@ jobs:
             adb shell am force-stop com.forsa.app
             adb shell am start -W -n com.forsa.app/.MainActivity
             sleep 8
-            adb shell pidof com.forsa.app
-            adb logcat -d -t 250 > ci/smoke-logcat.txt
-            if grep -E "FATAL EXCEPTION|Process: com\.forsa\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then
+            pid=\$(adb shell pidof com.forsa.app | tr -d '\\r' || true)
+            if [ -z "$pid" ]; then
+              echo "Application process is not running."
+              adb logcat -d -t 400 > ci/smoke-logcat.txt
+              exit 1
+            fi
+            adb logcat -d -t 400 > ci/smoke-logcat.txt
+            if grep -E "FATAL EXCEPTION|Process: com\\.forsa\\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then
               echo "Runtime crash detected."
               exit 1
             fi
@@ -76,17 +81,20 @@ jobs:
         shell: bash
         run: |
           mkdir -p ci
-          build_code="${BUILD_EXIT_CODE:-1}"
-          smoke_code="${{ steps.smoke.outcome == 'success' && '0' || '1' }}"
-          if [ "$build_code" = "0" ] && [ "$smoke_code" = "0" ]; then
+          build_code="\${BUILD_EXIT_CODE:-1}"
+          smoke_ok="\${{ steps.smoke.outcome == 'success' }}"
+          if [ "$build_code" = "0" ] && [ "$smoke_ok" = "true" ]; then
             status="PASS"
             summary="APK built successfully and launched on Android Emulator without a detected crash."
+            smoke_code=0
           elif [ "$build_code" != "0" ]; then
             status="FAIL"
             summary="APK build failed with exit code $build_code."
+            smoke_code=1
           else
             status="FAIL"
             summary="APK built, but runtime smoke test failed."
+            smoke_code=1
           fi
           {
             echo "status=$status"
@@ -95,6 +103,7 @@ jobs:
             echo "attempt=$GITHUB_RUN_ATTEMPT"
             echo "build_exit_code=$build_code"
             echo "smoke_exit_code=$smoke_code"
+            echo "smoke_outcome=$smoke_ok"
             echo "summary=$summary"
             echo
             echo "--- build log tail ---"
@@ -108,7 +117,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: forsa-android-build-${{ github.run_number }}
+          name: forsa-android-build-\${{ github.run_number }}
           path: |
             app/build/outputs/apk/debug/app-debug.apk
             ci/build.log
@@ -131,7 +140,8 @@ jobs:
         if: always()
         shell: bash
         run: |
-          build_code="${BUILD_EXIT_CODE:-1}"
-          if [ "$build_code" != "0" ] || [ "${{ steps.smoke.outcome }}" != "success" ]; then
+          build_code="\${BUILD_EXIT_CODE:-1}"
+          smoke_outcome="\${{ steps.smoke.outcome }}"
+          if [ "$build_code" != "0" ] || [ "$smoke_outcome" != "success" ]; then
             exit 1
           fi
