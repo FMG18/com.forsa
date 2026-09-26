@@ -37,8 +37,6 @@ android {
         .gradleProperty("FORSA_PAYMENT_API_BASE_URL")
         .orElse("")
         .get()
-        .replace("\\", "\\\\")
-        .replace(""", "\\"")
 
     buildConfigField(
         "String",
