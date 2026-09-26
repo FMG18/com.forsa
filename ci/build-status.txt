@@ -1,6 +1,6 @@
 status=FAIL
-commit=ac987cba7d921e6f63e4a05e599ff91ea74a5661
-run=36272928884
+commit=74c4ac2140e92c91e371447ec48376f754a5503c
+run=36273125471
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -16,14 +16,14 @@ Daemon will be stopped at the end of the build
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
 > Task :app:generateDebugResValues
-> Task :app:checkDebugAarMetadata
 > Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
+> Task :app:mergeDebugResources
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
@@ -37,15 +37,15 @@ Daemon will be stopped at the end of the build
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
-> Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
-> Task :app:validateSigningDebug
+> Task :app:mergeDebugNativeLibs
 > Task :app:mergeLibDexDebug
-> Task :app:writeDebugAppMetadata
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
@@ -67,7 +67,7 @@ fun signedIn(): Unit
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:604:31 Overload resolution ambiguity between candidates:
 fun signedIn(): Unit
 fun signedIn(): Unit
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790458005296.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790458217379.json
 
 FAILURE: Build failed with an exception.
 
@@ -82,7 +82,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 35s
+BUILD FAILED in 28s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
