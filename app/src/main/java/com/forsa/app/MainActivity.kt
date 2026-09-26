@@ -436,6 +436,7 @@ private fun ForsaApp() {
         appliedJobIds = appliedJobIds,
         savedJobIds = savedJobIds,
         cvProfile = cvProfile,
+        onCvSaved = { cvProfile = it },
         onToggleSaved = { job ->
             val user = auth.currentUser
             if (user == null) {
@@ -783,6 +784,7 @@ private fun MainScaffold(
     appliedJobIds: Set<String>,
     savedJobIds: Set<String>,
     cvProfile: CvProfile,
+    onCvSaved: (CvProfile) -> Unit,
     onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
     onClearSelectedJob: () -> Unit,
@@ -888,7 +890,7 @@ private fun MainScaffold(
                     onToggleJobActive = onToggleJobActive,
                     onToggleSaved = onToggleSaved,
                     onSelectJob = onSelectJob,
-                    onCvSaved = { cvProfile = it },
+                    onCvSaved = onCvSaved,
                     onMessage = onMessage
                 )
             }
