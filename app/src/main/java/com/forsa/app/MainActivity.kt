@@ -178,7 +178,7 @@ private suspend fun startForsaPayment(
     }
 }
 
-private enum class AuthScreen { Welcome, Login, Register, Phone, ResetPassword }
+private enum class AuthScreen { Welcome, Login, Register, Phone, RoleSelection, ResetPassword }
 private enum class MainTab { Home, Jobs, Publish, Profile }
 
 private data class Job(
@@ -524,7 +524,17 @@ private fun ForsaApp() {
         tab = MainTab.Home
     }
 
-    fun persistAuthenticatedUser(onDone: () -> Unit) {
+    fun signedIn() {
+        loading = false
+        userName = auth.currentUser?.displayName.orEmpty()
+        authScreen = null
+        tab = MainTab.Home
+    }
+
+    fun persistUserBasics(
+        role: String? = null,
+        onDone: () -> Unit
+    ) {
         val user = auth.currentUser
         if (user == null) {
             loading = false
@@ -532,40 +542,75 @@ private fun ForsaApp() {
             return
         }
 
-        val userRef = db.collection("users").document(user.uid)
-        val baseData = mapOf(
+        val baseData = mutableMapOf<String, Any>(
             "displayName" to user.displayName.orEmpty(),
             "email" to user.email.orEmpty(),
             "phone" to user.phoneNumber.orEmpty()
         )
+        if (role != null) {
+            baseData["role"] = role
+            baseData["city"] = ""
+            baseData["companyName"] = ""
+            baseData["companyAbout"] = ""
+            baseData["companyCity"] = ""
+        }
 
-        // لا نجعل نجاح تسجيل الدخول معتمداً على قراءة ملف Firestore.
-        // التحديث المباشر يحافظ على الدور وباقي الحقول الموجودة بواسطة merge.
-        userRef.set(
-            baseData,
-            com.google.firebase.firestore.SetOptions.merge()
-        ).addOnSuccessListener {
-            onDone()
-        }.addOnFailureListener {
-            // إذا لم يكن مستند المستخدم موجوداً، ننشئه بالحد الأدنى المطلوب.
-            // وإذا تعذر Firestore مؤقتاً، يبقى تسجيل الدخول ناجحاً ولا نعلّق المستخدم.
-            userRef.set(
-                baseData + mapOf(
-                    "role" to "باحث عن عمل",
-                    "city" to "",
-                    "companyName" to "",
-                    "companyAbout" to "",
-                    "companyCity" to ""
-                ),
-                com.google.firebase.firestore.SetOptions.merge()
-            ).addOnSuccessListener {
-                onDone()
-            }.addOnFailureListener {
-                loading = false
-                message("تم تسجيل الدخول، ويمكن إكمال الملف الشخصي لاحقاً")
+        db.collection("users").document(user.uid)
+            .set(baseData, com.google.firebase.firestore.SetOptions.merge())
+            .addOnSuccessListener {
+                if (role != null) profileRole = role
                 onDone()
             }
+            .addOnFailureListener {
+                loading = false
+                message(
+                    if (role == null) {
+                        "تعذر حفظ بيانات الحساب، حاول مرة أخرى"
+                    } else {
+                        "تعذر حفظ نوع الحساب، حاول مرة أخرى"
+                    }
+                )
+            }
+    }
+
+    fun continueAuthenticatedUser() {
+        val user = auth.currentUser
+        if (user == null) {
+            loading = false
+            message("تعذر إنشاء جلسة المستخدم")
+            return
         }
+
+        db.collection("users").document(user.uid).get()
+            .addOnSuccessListener { document ->
+                val storedRole = document.getString("role")
+                if (storedRole == "باحث عن عمل" || storedRole == "صاحب عمل") {
+                    profileRole = storedRole
+                    persistUserBasics(onDone = ::signedIn)
+                } else {
+                    loading = false
+                    authScreen = AuthScreen.RoleSelection
+                }
+            }
+            .addOnFailureListener {
+                loading = false
+                message("تعذر التحقق من نوع الحساب. حاول مرة أخرى")
+            }
+    }
+
+    fun saveSelectedRole(role: String) {
+        if (role != "باحث عن عمل" && role != "صاحب عمل") {
+            message("اختر نوع الحساب أولاً")
+            return
+        }
+
+        loading = true
+        persistUserBasics(role = role, onDone = ::signedIn)
+    }
+
+    fun persistAuthenticatedUser(onDone: () -> Unit) {
+        // للحسابات الموجودة: نقرأ الدور المحفوظ، وإذا كان مفقوداً نطلب اختياره بدلاً من افتراضه.
+        continueAuthenticatedUser()
     }
 
     suspend fun googleSignIn() {
@@ -598,7 +643,7 @@ private fun ForsaApp() {
 
                 auth.signInWithCredential(firebaseCredential).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        persistAuthenticatedUser(::signedIn)
+                        continueAuthenticatedUser()
                     } else {
                         loading = false
                         message(firebaseError(task.exception))
@@ -659,7 +704,7 @@ private fun ForsaApp() {
                 onBack = { authScreen = AuthScreen.Welcome },
                 onRegister = { authScreen = AuthScreen.Register },
                 onForgot = { authScreen = AuthScreen.ResetPassword },
-                onSuccess = { persistAuthenticatedUser(::signedIn) },
+                onSuccess = { continueAuthenticatedUser() },
                 onMessage = ::message
             )
 
@@ -673,13 +718,18 @@ private fun ForsaApp() {
                 onMessage = ::message
             )
 
+            AuthScreen.RoleSelection -> RoleSelectionScreen(
+                loading = loading,
+                onSelect = ::saveSelectedRole
+            )
+
             AuthScreen.Phone -> PhoneAuthScreen(
                 activity = activity,
                 auth = auth,
                 loading = loading,
                 onLoading = { loading = it },
                 onBack = { authScreen = AuthScreen.Welcome },
-                onSuccess = { persistAuthenticatedUser(::signedIn) },
+                onSuccess = { continueAuthenticatedUser() },
                 onMessage = ::message
             )
 
@@ -1039,6 +1089,104 @@ private fun ForsaApp() {
             }
         }
     )
+}
+
+@Composable
+private fun RoleChoiceSection(
+    selectedRole: String?,
+    onSelect: (String) -> Unit
+) {
+    Column(
+        Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(
+            "نوع الحساب — مطلوب",
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            "اختار الدور الذي راح تستخدمه داخل فرصة. هذا الاختيار يُحفظ مع الحساب.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 13.sp
+        )
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            listOf("باحث عن عمل", "صاحب عمل").forEach { option ->
+                val selected = selectedRole == option
+                if (selected) {
+                    Button(
+                        onClick = { onSelect(option) },
+                        modifier = Modifier.weight(1f).height(54.dp),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Icon(Icons.Default.CheckCircle, null)
+                        Spacer(Modifier.width(6.dp))
+                        Text(option)
+                    }
+                } else {
+                    OutlinedButton(
+                        onClick = { onSelect(option) },
+                        modifier = Modifier.weight(1f).height(54.dp),
+                        shape = RoundedCornerShape(14.dp)
+                    ) {
+                        Text(option)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RoleSelectionScreen(
+    loading: Boolean,
+    onSelect: (String) -> Unit
+) {
+    var selectedRole by remember { mutableStateOf<String?>(null) }
+
+    AuthScaffold {
+        AuthHeader(
+            "اختيار نوع الحساب",
+            "هذه الخطوة مطلوبة حتى نحدد لك صلاحيات وواجهة الحساب بشكل صحيح.",
+            onBack = null
+        )
+        Spacer(Modifier.height(24.dp))
+
+        RoleChoiceSection(
+            selectedRole = selectedRole,
+            onSelect = { selectedRole = it }
+        )
+
+        Spacer(Modifier.height(22.dp))
+
+        Text(
+            "راح تقدر تستخدم وظائف الحساب حسب الدور المختار، لذلك ما راح نكمل بدون تأكيد اختيارك.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 13.sp
+        )
+
+        Spacer(Modifier.height(22.dp))
+
+        Button(
+            onClick = { selectedRole?.let(onSelect) },
+            enabled = selectedRole != null && !loading,
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    Modifier.size(22.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Text("تأكيد نوع الحساب", fontSize = 16.sp)
+            }
+        }
+    }
 }
 
 @Composable
@@ -2421,13 +2569,26 @@ private fun ProfileTab(
                     onClick = { section = "cv" }
                 )
 
-                Text("نوع الحساب", fontWeight = FontWeight.SemiBold)
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("باحث عن عمل", "صاحب عمل").forEach { option ->
-                        FilterChip(
-                            selected = role == option,
-                            onClick = { onRoleChanged(option) },
-                            label = { Text(option) }
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                    )
+                ) {
+                    Column(Modifier.padding(16.dp)) {
+                        Text("نوع الحساب", fontWeight = FontWeight.Bold)
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            role,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(
+                            "نوع الحساب يُحدد عند التسجيل ويُحفظ للحساب.",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 12.sp
                         )
                     }
                 }
@@ -4167,6 +4328,7 @@ private fun RegisterScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirm by remember { mutableStateOf("") }
+    var role by remember { mutableStateOf<String?>(null) }
     var visible by remember { mutableStateOf(false) }
 
     AuthScaffold {
@@ -4179,6 +4341,11 @@ private fun RegisterScreen(
         PasswordField(password, visible, "كلمة المرور", { password = it }) { visible = !visible }
         Spacer(Modifier.height(12.dp))
         PasswordField(confirm, visible, "تأكيد كلمة المرور", { confirm = it }) { visible = !visible }
+        Spacer(Modifier.height(16.dp))
+        RoleChoiceSection(
+            selectedRole = role,
+            onSelect = { role = it }
+        )
         Spacer(Modifier.height(18.dp))
 
         Button(
@@ -4190,6 +4357,7 @@ private fun RegisterScreen(
                     cleanEmail.isEmpty() -> onMessage("اكتب البريد الإلكتروني")
                     password.length < 6 -> onMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل")
                     password != confirm -> onMessage("كلمتا المرور غير متطابقتين")
+                    role == null -> onMessage("اختار نوع الحساب أولاً")
                     else -> {
                         onLoading(true)
                         auth.createUserWithEmailAndPassword(cleanEmail, password).addOnCompleteListener { task ->
@@ -4215,7 +4383,10 @@ private fun RegisterScreen(
                                                         "email" to user.email.orEmpty(),
                                                         "phone" to "",
                                                         "city" to "",
-                                                        "role" to "باحث عن عمل"
+                                                        "role" to role.orEmpty(),
+                                                        "companyName" to "",
+                                                        "companyAbout" to "",
+                                                        "companyCity" to ""
                                                     ),
                                                     com.google.firebase.firestore.SetOptions.merge()
                                                 )
