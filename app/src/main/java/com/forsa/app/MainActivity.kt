@@ -98,7 +98,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
-import com.google.firebase.auth.FirebaseException
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
@@ -626,6 +626,7 @@ private fun ForsaApp() {
                 loading = loading,
                 onGoogle = { scope.launch { googleSignIn() } },
                 onEmailLogin = { authScreen = AuthScreen.Login },
+                onPhone = { authScreen = AuthScreen.Phone },
                 onRegister = { authScreen = AuthScreen.Register }
             )
 
@@ -1023,6 +1024,7 @@ private fun WelcomeScreen(
     loading: Boolean,
     onGoogle: () -> Unit,
     onEmailLogin: () -> Unit,
+    onPhone: () -> Unit,
     onRegister: () -> Unit
 ) {
     Surface(Modifier.fillMaxSize()) {
@@ -1077,7 +1079,8 @@ private fun WelcomeScreen(
 
             Spacer(Modifier.height(10.dp))
             OutlinedButton(
-                onClick = { authScreen = AuthScreen.Phone },
+                onClick = onPhone,
+                enabled = !loading,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
