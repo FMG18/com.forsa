@@ -96,7 +96,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
 import java.util.UUID
 import kotlinx.coroutines.launch
 
@@ -386,26 +385,33 @@ private fun ForsaApp() {
                 message("ما تقدر تقدم على إعلانك")
             } else {
                 val applicationId = job.id + "_" + user.uid
-                db.collection("applications").document(applicationId).create(
-                    mapOf(
-                        "jobId" to job.id,
-                        "jobTitle" to job.title,
-                        "company" to job.company,
-                        "applicantUid" to user.uid,
-                        "applicantName" to user.displayName.orEmpty(),
-                        "applicantEmail" to user.email.orEmpty(),
-                        "employerUid" to job.ownerUid,
-                        "note" to note.trim(),
-                        "status" to "pending",
-                        "createdAt" to System.currentTimeMillis()
-                    )
-                ).addOnSuccessListener {
+                val applicationRef = db.collection("applications").document(applicationId)
+                val applicationData = mapOf(
+                    "jobId" to job.id,
+                    "jobTitle" to job.title,
+                    "company" to job.company,
+                    "applicantUid" to user.uid,
+                    "applicantName" to user.displayName.orEmpty(),
+                    "applicantEmail" to user.email.orEmpty(),
+                    "employerUid" to job.ownerUid,
+                    "note" to note.trim(),
+                    "status" to "pending",
+                    "createdAt" to System.currentTimeMillis()
+                )
+
+                db.runTransaction { transaction ->
+                    if (transaction.get(applicationRef).exists()) {
+                        throw IllegalStateException("ALREADY_APPLIED")
+                    }
+                    transaction.set(applicationRef, applicationData)
+                    null
+                }.addOnSuccessListener {
                     appliedJobIds = appliedJobIds + job.id
                     message("تم إرسال طلب التقديم بنجاح")
                     selectedJob = null
                 }.addOnFailureListener { exception ->
-                    if (exception is FirebaseFirestoreException &&
-                        exception.code == FirebaseFirestoreException.Code.ALREADY_EXISTS
+                    if (exception is IllegalStateException &&
+                        exception.message == "ALREADY_APPLIED"
                     ) {
                         appliedJobIds = appliedJobIds + job.id
                         message("أنت مقدم على هذه الوظيفة مسبقاً")
