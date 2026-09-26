@@ -214,7 +214,13 @@ service cloud.firestore {
         ])
         && (
           !("role" in request.resource.data)
-          || request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
+          || (
+            request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
+            && (
+              !("role" in resource.data)
+              || request.resource.data.role == resource.data.role
+            )
+          )
         );
 
       allow delete: if request.auth != null
