@@ -204,7 +204,8 @@ service cloud.firestore {
 
       allow create: if request.auth != null
         && request.auth.uid == userId
-        && request.resource.data.role in ["باحث عن عمل", "صاحب عمل"];
+        && request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
+        && request.resource.data.roleConfirmed == true;
 
       allow update: if request.auth != null
         && request.auth.uid == userId
