@@ -122,6 +122,7 @@ private data class Job(
 private data class ApplicationItem(
     val id: String,
     val jobId: String,
+    val applicantUid: String = "",
     val jobTitle: String,
     val company: String,
     val applicantName: String,
