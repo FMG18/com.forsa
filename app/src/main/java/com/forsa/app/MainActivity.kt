@@ -94,6 +94,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
@@ -320,13 +321,18 @@ private fun ForsaApp() {
             unreadNotificationsCount = 0
             onDispose { }
         } else {
-            profileLoaded = false
+            val authenticatedUser = auth.currentUser
+
+            // لا نربط فتح التطبيق بنجاح قراءة Firestore؛ بيانات Firebase Auth المحلية تكفي لعرض الواجهة.
+            // تتم مزامنة ملف المستخدم في الخلفية حتى لا يبقى المستخدم عالقاً على شاشة التحميل.
+            profileLoaded = true
             profileRole = "باحث عن عمل"
-            profilePhone = ""
+            profilePhone = authenticatedUser?.phoneNumber.orEmpty()
             profileCity = ""
             companyName = ""
             companyAbout = ""
             companyCity = ""
+            userName = authenticatedUser?.displayName.orEmpty()
 
             val jobsRegistration = db.collection("jobs")
                 .addSnapshotListener { snapshot, error ->
@@ -422,6 +428,7 @@ private fun ForsaApp() {
 
             db.collection("users").document(currentUid).get()
                 .addOnSuccessListener { document ->
+                    val user = auth.currentUser
                     val storedRole = document.getString("role")
                     val finalRole = if (
                         storedRole == "باحث عن عمل" || storedRole == "صاحب عمل"
@@ -430,32 +437,50 @@ private fun ForsaApp() {
                     } else {
                         "باحث عن عمل"
                     }
+
                     profileRole = finalRole
                     profilePhone = document.getString("phone").orEmpty()
+                        .ifBlank { user?.phoneNumber.orEmpty() }
                     profileCity = document.getString("city").orEmpty()
                     companyName = document.getString("companyName").orEmpty()
                     companyAbout = document.getString("companyAbout").orEmpty()
                     companyCity = document.getString("companyCity").orEmpty()
+                    userName = user?.displayName
+                        ?: document.getString("displayName").orEmpty()
 
-                    val user = auth.currentUser
                     db.collection("users").document(currentUid).set(
                         mapOf(
-                            "displayName" to (user?.displayName ?: document.getString("displayName").orEmpty()),
+                            "displayName" to userName,
                             "email" to (user?.email ?: document.getString("email").orEmpty()),
-                            "phone" to document.getString("phone").orEmpty(),
-                            "city" to document.getString("city").orEmpty(),
+                            "phone" to profilePhone,
+                            "city" to profileCity,
                             "role" to finalRole,
-                            "companyName" to document.getString("companyName").orEmpty(),
-                            "companyAbout" to document.getString("companyAbout").orEmpty(),
-                            "companyCity" to document.getString("companyCity").orEmpty()
+                            "companyName" to companyName,
+                            "companyAbout" to companyAbout,
+                            "companyCity" to companyCity
                         ),
                         com.google.firebase.firestore.SetOptions.merge()
-                    ).addOnCompleteListener {
-                        profileLoaded = true
+                    ).addOnFailureListener {
+                        // الملف المحلي يبقى صالحاً حتى لو تعذرت المزامنة مؤقتاً.
                     }
                 }.addOnFailureListener {
-                    profileLoaded = true
-                    message("تعذر تحميل ملف الحساب، استخدم الإعدادات لإكمال بياناتك")
+                    val user = auth.currentUser
+                    profilePhone = profilePhone.ifBlank { user?.phoneNumber.orEmpty() }
+                    db.collection("users").document(currentUid).set(
+                        mapOf(
+                            "displayName" to user?.displayName.orEmpty(),
+                            "email" to user?.email.orEmpty(),
+                            "phone" to profilePhone,
+                            "city" to profileCity,
+                            "role" to profileRole,
+                            "companyName" to companyName,
+                            "companyAbout" to companyAbout,
+                            "companyCity" to companyCity
+                        ),
+                        com.google.firebase.firestore.SetOptions.merge()
+                    ).addOnFailureListener {
+                        // لا نمنع الدخول بسبب عطل مؤقت في Firestore.
+                    }
                 }
 
             onDispose {
@@ -555,10 +580,11 @@ private fun ForsaApp() {
 
         loading = true
         try {
-            val option = GetGoogleIdOption.Builder()
-                .setServerClientId(context.getString(R.string.default_web_client_id))
-                .setFilterByAuthorizedAccounts(false)
-                .build()
+            // زر Google يستخدم مسار Sign in with Google المباشر حتى لا يعتمد
+            // على بيانات اعتماد محفوظة قديمة/محذوفة على الجهاز.
+            val option = GetSignInWithGoogleOption.Builder(
+                context.getString(R.string.default_web_client_id)
+            ).build()
 
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(option)
@@ -588,10 +614,10 @@ private fun ForsaApp() {
             }
         } catch (_: GetCredentialException) {
             loading = false
-            message("تم إلغاء تسجيل Google أو تعذر اختيار الحساب")
+            message("تعذر فتح تسجيل الدخول بواسطة Google. جرّب اختيار حساب Google مرة أخرى")
         } catch (_: Exception) {
             loading = false
-            message("تعذر تسجيل الدخول بواسطة Google")
+            message("تعذر تسجيل الدخول بواسطة Google. تأكد من اتصال الإنترنت وإعداد Google في Firebase")
         }
     }
 
@@ -4464,7 +4490,13 @@ private fun phoneAuthError(exception: FirebaseException): String {
         "ERROR_QUOTA_EXCEEDED" -> "تم تجاوز حد الرسائل مؤقتاً. حاول لاحقاً"
         "ERROR_CAPTCHA_CHECK_FAILED" -> "تعذر التحقق من أن الطلب صادر من التطبيق"
         "ERROR_APP_NOT_AUTHORIZED" -> "التطبيق غير مفعّل لاستخدام تسجيل الدخول بالهاتف في Firebase"
-        else -> exception.localizedMessage ?: "تعذر إرسال رمز التحقق"
+        "ERROR_OPERATION_NOT_ALLOWED" -> "تسجيل الدخول برقم الهاتف غير مفعّل في Firebase"
+        "ERROR_INVALID_VERIFICATION_CODE" -> "رمز التحقق غير صحيح"
+        "ERROR_SESSION_EXPIRED" -> "انتهت صلاحية الرمز. أرسل رمزاً جديداً"
+        "ERROR_INVALID_CREDENTIAL" -> "بيانات التحقق غير صالحة. أعد إرسال الرمز"
+        "ERROR_WEB_CONTEXT_CANCELED" -> "تم إلغاء التحقق. حاول مرة أخرى"
+        "ERROR_INTERNAL_ERROR" -> "حدث خطأ داخلي أثناء التحقق. حاول مرة أخرى"
+        else -> "تعذر إرسال أو التحقق من رمز الهاتف. حاول مرة أخرى"
     }
 }
 
@@ -4638,7 +4670,14 @@ private fun firebaseError(exception: Exception?): String {
         "ERROR_NETWORK_REQUEST_FAILED" -> "تأكد من اتصال الإنترنت وحاول مرة أخرى"
         "ERROR_TOO_MANY_REQUESTS" -> "محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى"
         "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> "هذا البريد مرتبط بطريقة تسجيل دخول أخرى"
-        else -> exception?.localizedMessage ?: "حدث خطأ، حاول مرة أخرى"
+        "ERROR_INVALID_VERIFICATION_CODE" -> "رمز التحقق غير صحيح"
+        "ERROR_SESSION_EXPIRED" -> "انتهت صلاحية رمز التحقق. أرسل رمزاً جديداً"
+        "ERROR_CREDENTIAL_ALREADY_IN_USE" -> "بيانات تسجيل الدخول مستخدمة مع حساب آخر"
+        "ERROR_PROVIDER_ALREADY_LINKED" -> "طريقة تسجيل الدخول هذه مرتبطة بالحساب مسبقاً"
+        "ERROR_INVALID_PHONE_NUMBER" -> "رقم الهاتف غير صحيح"
+        "ERROR_MISSING_PHONE_NUMBER" -> "رقم الهاتف غير متوفر"
+        "ERROR_OPERATION_NOT_ALLOWED" -> "طريقة تسجيل الدخول هذه غير مفعّلة في Firebase"
+        else -> "حدث خطأ في تسجيل الدخول، حاول مرة أخرى"
     }
 }
 
