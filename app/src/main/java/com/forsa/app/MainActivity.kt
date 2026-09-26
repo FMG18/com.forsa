@@ -112,7 +112,11 @@ private data class Job(
     val type: String,
     val description: String,
     val ownerUid: String,
-    val isActive: Boolean = true
+    val isActive: Boolean = true,
+    val isFeatured: Boolean = false,
+    val promotionType: String = "",
+    val promotionStatus: String = "",
+    val promotionExpiresAt: Long = 0L
 )
 
 private data class ApplicationItem(
@@ -191,6 +195,7 @@ private fun ForsaApp() {
     var profileRole by remember { mutableStateOf("باحث عن عمل") }
     var jobs by remember { mutableStateOf<List<Job>>(emptyList()) }
     var selectedJob by remember { mutableStateOf<Job?>(null) }
+    var promotionTarget by remember { mutableStateOf<Job?>(null) }
     var appliedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var savedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     var cvProfile by remember { mutableStateOf(CvProfile()) }
@@ -233,7 +238,27 @@ private fun ForsaApp() {
                             val ownerUid = document.getString("ownerUid") ?: ""
                             if (ownerUid.isBlank()) return@mapNotNull null
                             val isActive = document.getBoolean("isActive") ?: true
-                            Job(id, title, company, city, type, description, ownerUid, isActive)
+                            val isFeatured = document.getBoolean("isFeatured") ?: false
+                            val promotionType = document.getString("promotionType").orEmpty()
+                            val promotionStatus = document.getString("promotionStatus").orEmpty()
+                            val promotionExpiresAt = document.getLong("promotionExpiresAt") ?: 0L
+                            val featuredNow = isFeatured && (
+                                promotionExpiresAt == 0L || promotionExpiresAt > System.currentTimeMillis()
+                            )
+                            Job(
+                                id = id,
+                                title = title,
+                                company = company,
+                                city = city,
+                                type = type,
+                                description = description,
+                                ownerUid = ownerUid,
+                                isActive = isActive,
+                                isFeatured = featuredNow,
+                                promotionType = promotionType,
+                                promotionStatus = promotionStatus,
+                                promotionExpiresAt = promotionExpiresAt
+                            )
                         }
                         ?: emptyList()
                 }
@@ -377,6 +402,7 @@ private fun ForsaApp() {
             savedJobIds = emptySet()
             cvProfile = CvProfile()
             selectedJob = null
+            promotionTarget = null
             authScreen = AuthScreen.Welcome
         }
     }
@@ -432,6 +458,9 @@ private fun ForsaApp() {
         jobs = jobs,
         db = db,
         onMessage = ::message,
+        promotionTarget = promotionTarget,
+        onPromotionTarget = { promotionTarget = it },
+        onPromotionDone = { promotionTarget = null },
         selectedJob = selectedJob,
         appliedJobIds = appliedJobIds,
         savedJobIds = savedJobIds,
@@ -679,6 +708,13 @@ private fun ForsaApp() {
                         message("تعذر تغيير حالة الإعلان")
                     }
             }
+        },
+        onPromoteJob = { job ->
+            if (profileRole != "صاحب عمل" || job.ownerUid != auth.currentUser?.uid) {
+                message("ما عندك صلاحية لترقية هذا الإعلان")
+            } else {
+                promotionTarget = job
+            }
         }
     )
 }
@@ -780,6 +816,9 @@ private fun MainScaffold(
     jobs: List<Job>,
     db: FirebaseFirestore,
     onMessage: (String) -> Unit,
+    promotionTarget: Job?,
+    onPromotionTarget: (Job?) -> Unit,
+    onPromotionDone: () -> Unit,
     selectedJob: Job?,
     appliedJobIds: Set<String>,
     savedJobIds: Set<String>,
@@ -802,6 +841,18 @@ private fun MainScaffold(
     val userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
     val canPublish = role == "صاحب عمل"
     val visibleTabs = MainTab.values().filter { it != MainTab.Publish || canPublish }
+
+    if (promotionTarget != null && role == "صاحب عمل") {
+        PromotionScreen(
+            job = promotionTarget,
+            db = db,
+            userUid = userUid,
+            onBack = { onPromotionTarget(null) },
+            onDone = onPromotionDone,
+            onMessage = onMessage
+        )
+        return
+    }
 
     Scaffold(
         topBar = {
@@ -888,6 +939,7 @@ private fun MainScaffold(
                     onDeleteJob = onDeleteJob,
                     onEditJob = onEditJob,
                     onToggleJobActive = onToggleJobActive,
+                    onPromoteJob = onPromoteJob,
                     onToggleSaved = onToggleSaved,
                     onSelectJob = onSelectJob,
                     onCvSaved = onCvSaved,
@@ -1048,7 +1100,11 @@ private fun JobsTab(
 
         val matchesType = typeFilter == "الكل" || job.type == typeFilter
         matchesQuery && matchesType
-    }
+    }.sortedWith(
+        compareByDescending<Job> { it.isFeatured }
+            .thenByDescending { it.promotionExpiresAt }
+            .thenByDescending { it.id }
+    )
 
     Column(
         Modifier
@@ -1197,6 +1253,9 @@ private fun JobCard(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AssistChip(onClick = {}, label = { Text(job.city) })
                 AssistChip(onClick = {}, label = { Text(job.type) })
+                if (job.isFeatured) {
+                    AssistChip(onClick = {}, label = { Text("مميز") })
+                }
                 if (!job.isActive) {
                     AssistChip(onClick = {}, label = { Text("موقوف") })
                 }
@@ -1551,6 +1610,140 @@ private fun RoleRequiredScreen(
 }
 
 @Composable
+private fun PromotionScreen(
+    job: Job,
+    db: FirebaseFirestore,
+    userUid: String,
+    onBack: () -> Unit,
+    onDone: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    val plans = listOf(
+        Triple("boost_7", "مميز 7 أيام", 5000L),
+        Triple("top_7", "تثبيت 7 أيام", 8000L),
+        Triple("urgent_48", "عاجل 48 ساعة", 3000L)
+    )
+    var selectedPlan by remember { mutableStateOf(plans.first()) }
+    var submitting by remember { mutableStateOf(false) }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+            Text("ترويج الإعلان", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Card(
+            Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+            Column(Modifier.padding(18.dp)) {
+                Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text(job.company, color = MaterialTheme.colorScheme.primary)
+                Text(
+                    "اختَر خدمة الترويج المناسبة لإعلانك.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+
+        plans.forEach { plan ->
+            Card(
+                Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(18.dp)
+            ) {
+                Row(
+                    Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(plan.second, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text(
+                            "السعر: " + plan.third + " د.ع",
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                    FilterChip(
+                        selected = selectedPlan.first == plan.first,
+                        onClick = { selectedPlan = plan },
+                        label = { Text("اختيار") }
+                    )
+                }
+            }
+        }
+
+        Surface(
+            Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Text(
+                "الأسعار تجريبية حالياً. الدفع الفعلي سيُربط ببوابة الدفع قبل الإطلاق، ولا يتم تفعيل الترويج بمجرد إنشاء الطلب.",
+                Modifier.padding(14.dp)
+            )
+        }
+
+        Button(
+            onClick = {
+                if (submitting) return@Button
+                if (userUid.isBlank()) {
+                    onMessage("سجّل الدخول أولاً")
+                    return@Button
+                }
+
+                submitting = true
+                val orderId = job.id + "_" + userUid + "_" + System.currentTimeMillis()
+                db.collection("promotionOrders").document(orderId)
+                    .set(
+                        mapOf(
+                            "jobId" to job.id,
+                            "ownerUid" to userUid,
+                            "planId" to selectedPlan.first,
+                            "amountIqd" to selectedPlan.third,
+                            "status" to "pending_payment",
+                            "requestedAt" to System.currentTimeMillis()
+                        )
+                    )
+                    .addOnSuccessListener {
+                        submitting = false
+                        onMessage("تم تجهيز طلب الترقية. الدفع غير مفعّل حالياً.")
+                        onDone()
+                    }
+                    .addOnFailureListener {
+                        submitting = false
+                        onMessage("تعذر إنشاء طلب الترقية")
+                    }
+            },
+            enabled = !submitting,
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            if (submitting) {
+                CircularProgressIndicator(
+                    Modifier.size(22.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Text("إنشاء طلب الترقية", fontSize = 16.sp)
+            }
+        }
+    }
+}
+
+@Composable
 private fun ProfileTab(
     userName: String,
     phone: String,
@@ -1569,6 +1762,7 @@ private fun ProfileTab(
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
     onToggleJobActive: (Job) -> Unit,
+    onPromoteJob: (Job) -> Unit,
     onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
     onCvSaved: (CvProfile) -> Unit,
@@ -1605,6 +1799,7 @@ private fun ProfileTab(
             onDeleteJob = onDeleteJob,
             onEditJob = { editingJob = it },
             onToggleJobActive = onToggleJobActive,
+            onPromoteJob = onPromoteJob,
             onMessage = onMessage
         )
 
@@ -1878,6 +2073,7 @@ private fun EmployerJobsScreen(
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
     onToggleJobActive: (Job) -> Unit,
+    onPromoteJob: (Job) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var applicationCounts by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
@@ -1990,6 +2186,13 @@ private fun EmployerJobsScreen(
                             Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(10.dp)
                         ) {
+                            OutlinedButton(
+                                onClick = { onPromoteJob(job) },
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text(if (job.isFeatured) "مميز" else "ترقية الإعلان")
+                            }
                             OutlinedButton(
                                 onClick = { onToggleJobActive(job) },
                                 modifier = Modifier.weight(1f),
