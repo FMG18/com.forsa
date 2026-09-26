@@ -172,7 +172,6 @@ function getClaim(payload, names) {
 }
 
 module.exports = {
-  getFirebaseAdmin: undefined,
   getAccessToken,
   initPayment,
   inquiry,
