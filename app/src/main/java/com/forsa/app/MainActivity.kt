@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,17 +19,27 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Work
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -43,10 +54,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.credentials.ClearCredentialStateRequest
@@ -59,10 +74,14 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.UserProfileChangeRequest
 import kotlinx.coroutines.launch
 
 private enum class AppScreen {
     Welcome,
+    Login,
+    Register,
+    ResetPassword,
     Home
 }
 
@@ -102,9 +121,7 @@ private fun ForsaApp() {
     val context = LocalContext.current
     val activity = context.findActivity()
     val auth = remember { FirebaseAuth.getInstance() }
-    val credentialManager = remember(context) {
-        CredentialManager.create(context)
-    }
+    val credentialManager = remember(context) { CredentialManager.create(context) }
     val scope = rememberCoroutineScope()
 
     var screen by remember {
@@ -119,6 +136,12 @@ private fun ForsaApp() {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
+    fun finishLogin() {
+        loading = false
+        userName = auth.currentUser?.displayName.orEmpty()
+        screen = AppScreen.Home
+    }
+
     suspend fun signInWithGoogle() {
         if (activity == null) {
             message("تعذر فتح تسجيل Google")
@@ -126,10 +149,9 @@ private fun ForsaApp() {
         }
 
         loading = true
-
         try {
             val googleIdOption = GetGoogleIdOption.Builder()
-                .setServerClientId(context.getString(com.forsa.app.R.string.default_web_client_id))
+                .setServerClientId(context.getString(R.string.default_web_client_id))
                 .setFilterByAuthorizedAccounts(false)
                 .build()
 
@@ -143,7 +165,6 @@ private fun ForsaApp() {
             )
 
             val credential = result.credential
-
             if (credential is CustomCredential &&
                 credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
             ) {
@@ -153,11 +174,9 @@ private fun ForsaApp() {
 
                 auth.signInWithCredential(firebaseCredential)
                     .addOnCompleteListener { task ->
-                        loading = false
-                        if (task.isSuccessful) {
-                            userName = auth.currentUser?.displayName.orEmpty()
-                            screen = AppScreen.Home
-                        } else {
+                        if (task.isSuccessful) finishLogin()
+                        else {
+                            loading = false
                             message(firebaseError(task.exception))
                         }
                     }
@@ -165,19 +184,17 @@ private fun ForsaApp() {
                 loading = false
                 message("تعذر قراءة حساب Google")
             }
-        } catch (e: GetCredentialException) {
+        } catch (_: GetCredentialException) {
             loading = false
-            message("تم إلغاء تسجيل الدخول أو تعذر اختيار حساب Google")
-        } catch (e: Exception) {
+            message("تم إلغاء تسجيل Google أو تعذر اختيار الحساب")
+        } catch (_: Exception) {
             loading = false
             message("تعذر تسجيل الدخول بواسطة Google")
         }
     }
 
     fun startGoogleSignIn() {
-        scope.launch {
-            signInWithGoogle()
-        }
+        scope.launch { signInWithGoogle() }
     }
 
     fun signOut() {
@@ -186,7 +203,6 @@ private fun ForsaApp() {
             try {
                 credentialManager.clearCredentialState(ClearCredentialStateRequest())
             } catch (_: Exception) {
-                // Firebase sign-out is still completed even if the provider state cannot be cleared.
             }
             userName = ""
             screen = AppScreen.Welcome
@@ -196,12 +212,44 @@ private fun ForsaApp() {
     when (screen) {
         AppScreen.Welcome -> ForsaWelcomeScreen(
             loading = loading,
-            onGoogleSignIn = ::startGoogleSignIn
+            onGoogleSignIn = ::startGoogleSignIn,
+            onEmailLogin = { screen = AppScreen.Login },
+            onRegister = { screen = AppScreen.Register }
+        )
+
+        AppScreen.Login -> ForsaLoginScreen(
+            auth = auth,
+            loading = loading,
+            onLoading = { loading = it },
+            onBack = { screen = AppScreen.Welcome },
+            onRegister = { screen = AppScreen.Register },
+            onForgotPassword = { screen = AppScreen.ResetPassword },
+            onLoggedIn = ::finishLogin,
+            onMessage = ::message
+        )
+
+        AppScreen.Register -> ForsaRegisterScreen(
+            auth = auth,
+            loading = loading,
+            onLoading = { loading = it },
+            onBack = { screen = AppScreen.Welcome },
+            onLogin = { screen = AppScreen.Login },
+            onRegistered = ::finishLogin,
+            onMessage = ::message
+        )
+
+        AppScreen.ResetPassword -> ForsaResetPasswordScreen(
+            auth = auth,
+            loading = loading,
+            onLoading = { loading = it },
+            onBack = { screen = AppScreen.Login },
+            onSent = { message("تم إرسال رابط إعادة تعيين كلمة المرور") },
+            onMessage = ::message
         )
 
         AppScreen.Home -> ForsaHomeScreen(
             userName = userName,
-            onGoogleSignOut = ::signOut
+            onLogout = ::signOut
         )
     }
 }
@@ -209,13 +257,15 @@ private fun ForsaApp() {
 @Composable
 private fun ForsaWelcomeScreen(
     loading: Boolean,
-    onGoogleSignIn: () -> Unit
+    onGoogleSignIn: () -> Unit,
+    onEmailLogin: () -> Unit,
+    onRegister: () -> Unit
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp, vertical = 32.dp)
+                .padding(horizontal = 24.dp, vertical = 28.dp)
                 .navigationBarsPadding()
                 .imePadding(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -223,31 +273,27 @@ private fun ForsaWelcomeScreen(
         ) {
             BrandMark()
 
-            Spacer(modifier = Modifier.height(22.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                text = "فرصة",
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text("فرصة", fontSize = 42.sp, fontWeight = FontWeight.Bold)
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "بوابتك للفرص المهنية في العراق",
+                "بوابتك للفرص المهنية في العراق",
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
                 lineHeight = 28.sp
             )
 
-            Spacer(modifier = Modifier.height(34.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             Button(
                 onClick = onGoogleSignIn,
                 enabled = !loading,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(56.dp),
+                    .height(54.dp),
                 shape = RoundedCornerShape(16.dp)
             ) {
                 if (loading) {
@@ -262,14 +308,29 @@ private fun ForsaWelcomeScreen(
             }
 
             Spacer(modifier = Modifier.height(14.dp))
+            AuthDivider()
+            Spacer(modifier = Modifier.height(14.dp))
 
-            Text(
-                text = "تسجيل الدخول وإنشاء الحساب يتمان بحساب Google",
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                fontSize = 13.sp,
-                lineHeight = 21.sp
-            )
+            OutlinedButton(
+                onClick = onEmailLogin,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Icon(Icons.Default.Email, contentDescription = null)
+                Spacer(modifier = Modifier.size(8.dp))
+                Text("تسجيل الدخول بالبريد الإلكتروني", fontSize = 15.sp)
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            TextButton(
+                onClick = onRegister,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("ليس لديك حساب؟ إنشاء حساب")
+            }
         }
     }
 }
@@ -296,11 +357,351 @@ private fun BrandMark() {
 }
 
 @Composable
+private fun AuthHeader(
+    title: String,
+    subtitle: String,
+    onBack: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onBack) {
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "رجوع")
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(title, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                subtitle,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 14.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun ForsaLoginScreen(
+    auth: FirebaseAuth,
+    loading: Boolean,
+    onLoading: (Boolean) -> Unit,
+    onBack: () -> Unit,
+    onRegister: () -> Unit,
+    onForgotPassword: () -> Unit,
+    onLoggedIn: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var visible by remember { mutableStateOf(false) }
+
+    AuthScaffold {
+        AuthHeader("تسجيل الدخول", "ادخل إلى حسابك في فرصة", onBack)
+
+        Spacer(modifier = Modifier.height(26.dp))
+
+        EmailField(email) { email = it }
+        Spacer(modifier = Modifier.height(14.dp))
+        PasswordField(password, visible, "كلمة المرور", { password = it }, { visible = !visible })
+
+        TextButton(
+            onClick = onForgotPassword,
+            modifier = Modifier.align(Alignment.Start)
+        ) {
+            Text("نسيت كلمة المرور؟")
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Button(
+            onClick = {
+                val cleanEmail = email.trim()
+                when {
+                    cleanEmail.isEmpty() -> onMessage("اكتب البريد الإلكتروني أولاً")
+                    password.length < 6 -> onMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل")
+                    else -> {
+                        onLoading(true)
+                        auth.signInWithEmailAndPassword(cleanEmail, password)
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) onLoggedIn()
+                                else {
+                                    onLoading(false)
+                                    onMessage(firebaseError(task.exception))
+                                }
+                            }
+                    }
+                }
+            },
+            enabled = !loading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(22.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else Text("دخول", fontSize = 16.sp)
+        }
+
+        Spacer(modifier = Modifier.height(18.dp))
+        TextButton(
+            onClick = onRegister,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("ما عندك حساب؟ إنشاء حساب")
+        }
+    }
+}
+
+@Composable
+private fun ForsaRegisterScreen(
+    auth: FirebaseAuth,
+    loading: Boolean,
+    onLoading: (Boolean) -> Unit,
+    onBack: () -> Unit,
+    onLogin: () -> Unit,
+    onRegistered: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirm by remember { mutableStateOf("") }
+    var visible by remember { mutableStateOf(false) }
+
+    AuthScaffold {
+        AuthHeader("إنشاء حساب", "أنشئ حسابك باستخدام البريد الإلكتروني", onBack)
+
+        Spacer(modifier = Modifier.height(22.dp))
+
+        NameField(name) { name = it }
+        Spacer(modifier = Modifier.height(12.dp))
+        EmailField(email) { email = it }
+        Spacer(modifier = Modifier.height(12.dp))
+        PasswordField(password, visible, "كلمة المرور", { password = it }, { visible = !visible })
+        Spacer(modifier = Modifier.height(12.dp))
+        PasswordField(confirm, visible, "تأكيد كلمة المرور", { confirm = it }, { visible = !visible })
+
+        Spacer(modifier = Modifier.height(18.dp))
+
+        Button(
+            onClick = {
+                val cleanName = name.trim()
+                val cleanEmail = email.trim()
+                when {
+                    cleanName.length < 2 -> onMessage("اكتب اسمك بشكل صحيح")
+                    cleanEmail.isEmpty() -> onMessage("اكتب البريد الإلكتروني")
+                    password.length < 6 -> onMessage("كلمة المرور يجب أن تكون 6 أحرف على الأقل")
+                    password != confirm -> onMessage("كلمتا المرور غير متطابقتين")
+                    else -> {
+                        onLoading(true)
+                        auth.createUserWithEmailAndPassword(cleanEmail, password)
+                            .addOnCompleteListener { task ->
+                                if (!task.isSuccessful) {
+                                    onLoading(false)
+                                    onMessage(firebaseError(task.exception))
+                                } else {
+                                    val user = auth.currentUser
+                                    if (user == null) {
+                                        onLoading(false)
+                                        onMessage("تعذر إنشاء جلسة المستخدم")
+                                    } else {
+                                        val profile = UserProfileChangeRequest.Builder()
+                                            .setDisplayName(cleanName)
+                                            .build()
+                                        user.updateProfile(profile)
+                                            .addOnCompleteListener { onRegistered() }
+                                    }
+                                }
+                            }
+                    }
+                }
+            },
+            enabled = !loading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(22.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else Text("إنشاء الحساب", fontSize = 16.sp)
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextButton(
+            onClick = onLogin,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text("عندك حساب؟ تسجيل الدخول")
+        }
+    }
+}
+
+@Composable
+private fun ForsaResetPasswordScreen(
+    auth: FirebaseAuth,
+    loading: Boolean,
+    onLoading: (Boolean) -> Unit,
+    onBack: () -> Unit,
+    onSent: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var email by remember { mutableStateOf("") }
+
+    AuthScaffold {
+        AuthHeader("إعادة كلمة المرور", "استرجع حسابك عن طريق البريد الإلكتروني", onBack)
+
+        Spacer(modifier = Modifier.height(26.dp))
+        EmailField(email) { email = it }
+        Spacer(modifier = Modifier.height(18.dp))
+
+        Button(
+            onClick = {
+                val cleanEmail = email.trim()
+                if (cleanEmail.isEmpty()) {
+                    onMessage("اكتب البريد الإلكتروني")
+                } else {
+                    onLoading(true)
+                    auth.sendPasswordResetEmail(cleanEmail)
+                        .addOnCompleteListener { task ->
+                            onLoading(false)
+                            if (task.isSuccessful) onSent()
+                            else onMessage(firebaseError(task.exception))
+                        }
+                }
+            },
+            enabled = !loading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            if (loading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(22.dp),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else Text("إرسال رابط إعادة التعيين", fontSize = 15.sp)
+        }
+    }
+}
+
+@Composable
+private fun EmailField(value: String, onValueChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text("البريد الإلكتروني") },
+        leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Email,
+            imeAction = ImeAction.Next
+        ),
+        shape = RoundedCornerShape(14.dp)
+    )
+}
+
+@Composable
+private fun NameField(value: String, onValueChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text("الاسم") },
+        leadingIcon = { Icon(Icons.Default.Person, contentDescription = null) },
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Text,
+            imeAction = ImeAction.Next
+        ),
+        shape = RoundedCornerShape(14.dp)
+    )
+}
+
+@Composable
+private fun PasswordField(
+    value: String,
+    visible: Boolean,
+    label: String,
+    onValueChange: (String) -> Unit,
+    onToggle: () -> Unit
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(label) },
+        leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null) },
+        trailingIcon = {
+            IconButton(onClick = onToggle) {
+                Icon(
+                    if (visible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
+                    contentDescription = if (visible) "إخفاء كلمة المرور" else "إظهار كلمة المرور"
+                )
+            }
+        },
+        singleLine = true,
+        visualTransformation = if (visible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Password,
+            imeAction = ImeAction.Done
+        ),
+        shape = RoundedCornerShape(14.dp)
+    )
+}
+
+@Composable
+private fun AuthScaffold(content: @Composable ColumnScope.() -> Unit) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .navigationBarsPadding()
+                .imePadding()
+                .padding(horizontal = 22.dp, vertical = 24.dp),
+            content = content
+        )
+    }
+}
+
+@Composable
+private fun AuthDivider() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        HorizontalDivider(modifier = Modifier.weight(1f))
+        Text(
+            "أو",
+            modifier = Modifier.padding(horizontal = 10.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontSize = 12.sp
+        )
+        HorizontalDivider(modifier = Modifier.weight(1f))
+    }
+}
+
+@Composable
 private fun ForsaHomeScreen(
     userName: String,
-    onGoogleSignOut: () -> Unit
+    onLogout: () -> Unit
 ) {
-    val displayName = userName.trim().ifEmpty { "مستخدم فرصة" }
+    val name = userName.trim().ifEmpty { "مستخدم فرصة" }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -310,31 +711,11 @@ private fun ForsaHomeScreen(
                 .padding(horizontal = 20.dp, vertical = 28.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "مرحباً، $displayName 👋",
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "أنت الآن مسجل دخولك بحساب Google",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontSize = 14.sp
-                    )
-                }
-
-                IconButton(onClick = onGoogleSignOut) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "تسجيل الخروج"
-                    )
-                }
-            }
+            Text("مرحباً، $name 👋", fontSize = 28.sp, fontWeight = FontWeight.Bold)
+            Text(
+                "تم تسجيل دخولك بنجاح",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
 
             Surface(
                 modifier = Modifier.fillMaxWidth(),
@@ -343,34 +724,21 @@ private fun ForsaHomeScreen(
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Text(
-                        text = "اكتشف فرص العمل",
+                        "اكتشف فرص العمل",
                         color = Color.White,
                         fontSize = 21.sp,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "هنا راح تكون الوظائف والبحث والتخصصات والفرص المنشورة.",
+                        "الوظائف والبحث والملف الشخصي راح تكون ضمن الخطوة التالية.",
                         color = Color.White.copy(alpha = 0.88f),
                         lineHeight = 24.sp
                     )
                 }
             }
 
-            OutlinedButton(
-                onClick = { },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text("الوظائف — قريباً")
-            }
-
-            TextButton(
-                onClick = onGoogleSignOut,
-                modifier = Modifier.align(Alignment.Start)
-            ) {
+            TextButton(onClick = onLogout) {
                 Text("تسجيل الخروج")
             }
         }
@@ -379,14 +747,16 @@ private fun ForsaHomeScreen(
 
 private fun firebaseError(exception: Exception?): String {
     return when ((exception as? com.google.firebase.auth.FirebaseAuthException)?.errorCode) {
-        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" ->
-            "هذا البريد مرتبط بطريقة تسجيل دخول أخرى"
-        "ERROR_INVALID_CREDENTIAL" ->
-            "بيانات Google غير صالحة"
-        "ERROR_NETWORK_REQUEST_FAILED" ->
-            "تأكد من اتصال الإنترنت وحاول مرة أخرى"
-        else ->
-            exception?.localizedMessage ?: "تعذر تسجيل الدخول بواسطة Google"
+        "ERROR_INVALID_EMAIL" -> "البريد الإلكتروني غير صحيح"
+        "ERROR_WRONG_PASSWORD" -> "كلمة المرور غير صحيحة"
+        "ERROR_USER_NOT_FOUND" -> "لا يوجد حساب بهذا البريد"
+        "ERROR_EMAIL_ALREADY_IN_USE" -> "هذا البريد مستخدم مسبقاً"
+        "ERROR_WEAK_PASSWORD" -> "كلمة المرور ضعيفة"
+        "ERROR_INVALID_CREDENTIAL" -> "بيانات الدخول غير صحيحة"
+        "ERROR_OPERATION_NOT_ALLOWED" -> "تسجيل البريد وكلمة المرور غير مفعّل في Firebase حالياً"
+        "ERROR_NETWORK_REQUEST_FAILED" -> "تأكد من اتصال الإنترنت وحاول مرة أخرى"
+        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> "هذا البريد مرتبط بطريقة تسجيل دخول أخرى"
+        else -> exception?.localizedMessage ?: "حدث خطأ، حاول مرة أخرى"
     }
 }
 
