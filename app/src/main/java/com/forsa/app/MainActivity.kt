@@ -322,10 +322,9 @@ private fun ForsaApp() {
         } else {
             val authenticatedUser = auth.currentUser
 
-            // لا نربط فتح التطبيق بنجاح قراءة Firestore؛ بيانات Firebase Auth المحلية تكفي لعرض الواجهة.
-            // تتم مزامنة ملف المستخدم في الخلفية حتى لا يبقى المستخدم عالقاً على شاشة التحميل.
-            profileLoaded = true
-            profileRole = "باحث عن عمل"
+            // نوع الحساب هو جزء من الصلاحيات، لذلك نتحقق منه قبل فتح الواجهة الرئيسية.
+            // لا نفترض "باحث عن عمل" عند غياب الدور أو عند الحسابات القديمة غير المؤكدة.
+            profileLoaded = false
             profilePhone = authenticatedUser?.phoneNumber.orEmpty()
             profileCity = ""
             companyName = ""
@@ -333,111 +332,11 @@ private fun ForsaApp() {
             companyCity = ""
             userName = authenticatedUser?.displayName.orEmpty()
 
-            val jobsRegistration = db.collection("jobs")
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        message("تعذر تحميل الوظائف من قاعدة البيانات")
-                        return@addSnapshotListener
-                    }
-
-                    jobs = snapshot?.documents
-                        ?.sortedByDescending { it.getLong("createdAt") ?: 0L }
-                        ?.mapNotNull { document ->
-                            val id = document.id
-                            val title = document.getString("title") ?: return@mapNotNull null
-                            val company = document.getString("company") ?: return@mapNotNull null
-                            val city = document.getString("city") ?: return@mapNotNull null
-                            val type = document.getString("type") ?: "دوام كامل"
-                            val description = document.getString("description") ?: ""
-                            val ownerUid = document.getString("ownerUid") ?: ""
-                            if (ownerUid.isBlank()) return@mapNotNull null
-                            val isActive = document.getBoolean("isActive") ?: true
-                            val isFeatured = document.getBoolean("isFeatured") ?: false
-                            val promotionType = document.getString("promotionType").orEmpty()
-                            val promotionStatus = document.getString("promotionStatus").orEmpty()
-                            val promotionExpiresAt = document.getLong("promotionExpiresAt") ?: 0L
-                            val featuredNow = isFeatured && (
-                                promotionExpiresAt == 0L || promotionExpiresAt > System.currentTimeMillis()
-                            )
-                            Job(
-                                id = id,
-                                title = title,
-                                company = company,
-                                city = city,
-                                type = type,
-                                description = description,
-                                ownerUid = ownerUid,
-                                isActive = isActive,
-                                isFeatured = featuredNow,
-                                promotionType = promotionType,
-                                promotionStatus = promotionStatus,
-                                promotionExpiresAt = promotionExpiresAt
-                            )
-                        }
-                        ?: emptyList()
-                }
-
-            val savedJobsRegistration = db.collection("savedJobs")
-                .whereEqualTo("userUid", currentUid)
-                .addSnapshotListener { snapshot, _ ->
-                    savedJobIds = snapshot?.documents
-                        ?.mapNotNull { it.getString("jobId") }
-                        ?.toSet()
-                        ?: emptySet()
-                }
-
-            val notificationsRegistration = db.collection("notifications")
-                .whereEqualTo("targetUid", currentUid)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        unreadNotificationsCount = 0
-                        return@addSnapshotListener
-                    }
-
-                    unreadNotificationsCount = snapshot?.documents
-                        ?.count { !(it.getBoolean("read") ?: false) }
-                        ?: 0
-                }
-
-            val applicationsRegistration = db.collection("applications")
-                .whereEqualTo("applicantUid", currentUid)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        appliedJobIds = emptySet()
-                        return@addSnapshotListener
-                    }
-
-                    appliedJobIds = snapshot?.documents
-                        ?.mapNotNull { it.getString("jobId") }
-                        ?.toSet()
-                        ?: emptySet()
-                }
-
-            db.collection("cvProfiles").document(currentUid).get()
-                .addOnSuccessListener { document ->
-                    cvProfile = CvProfile(
-                        headline = document.getString("headline").orEmpty(),
-                        about = document.getString("about").orEmpty(),
-                        education = document.getString("education").orEmpty(),
-                        experience = document.getString("experience").orEmpty(),
-                        skills = document.getString("skills").orEmpty(),
-                        languages = document.getString("languages").orEmpty()
-                    )
-                }
-
+            // مزامنة بيانات الملف في الخلفية، لكن من دون لمس role أو roleConfirmed.
+            // قرار الدور تم حسمه في فحص الصلاحيات أعلاه.
             db.collection("users").document(currentUid).get()
                 .addOnSuccessListener { document ->
                     val user = auth.currentUser
-                    val storedRole = document.getString("role")
-                    val finalRole = if (
-                        storedRole == "باحث عن عمل" || storedRole == "صاحب عمل"
-                    ) {
-                        storedRole
-                    } else {
-                        "باحث عن عمل"
-                    }
-
-                    profileRole = finalRole
                     profilePhone = document.getString("phone").orEmpty()
                         .ifBlank { user?.phoneNumber.orEmpty() }
                     profileCity = document.getString("city").orEmpty()
@@ -453,34 +352,16 @@ private fun ForsaApp() {
                             "email" to (user?.email ?: document.getString("email").orEmpty()),
                             "phone" to profilePhone,
                             "city" to profileCity,
-                            "role" to finalRole,
                             "companyName" to companyName,
                             "companyAbout" to companyAbout,
                             "companyCity" to companyCity
                         ),
                         com.google.firebase.firestore.SetOptions.merge()
                     ).addOnFailureListener {
-                        // الملف المحلي يبقى صالحاً حتى لو تعذرت المزامنة مؤقتاً.
-                    }
-                }.addOnFailureListener {
-                    val user = auth.currentUser
-                    profilePhone = profilePhone.ifBlank { user?.phoneNumber.orEmpty() }
-                    db.collection("users").document(currentUid).set(
-                        mapOf(
-                            "displayName" to user?.displayName.orEmpty(),
-                            "email" to user?.email.orEmpty(),
-                            "phone" to profilePhone,
-                            "city" to profileCity,
-                            "role" to profileRole,
-                            "companyName" to companyName,
-                            "companyAbout" to companyAbout,
-                            "companyCity" to companyCity
-                        ),
-                        com.google.firebase.firestore.SetOptions.merge()
-                    ).addOnFailureListener {
-                        // لا نمنع الدخول بسبب عطل مؤقت في Firestore.
+                        // المزامنة ثانوية ولا تمنع فتح الحساب.
                     }
                 }
+
 
             onDispose {
                 jobsRegistration.remove()
@@ -610,6 +491,7 @@ private fun ForsaApp() {
         }
 
         loading = true
+        profileLoaded = true
         persistUserBasics(role = role, onDone = ::signedIn)
     }
 
