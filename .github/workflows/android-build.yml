@@ -37,7 +37,7 @@ jobs:
           set -o pipefail
           mkdir -p ci
           gradle --no-daemon :app:assembleDebug 2>&1 | tee ci/build.log
-          code=\${PIPESTATUS[0]}
+          code=${PIPESTATUS[0]}
           echo "BUILD_EXIT_CODE=$code" >> "$GITHUB_ENV"
           exit "$code"
 
@@ -63,14 +63,14 @@ jobs:
             adb shell am force-stop com.forsa.app
             adb shell am start -W -n com.forsa.app/.MainActivity
             sleep 8
-            pid=\$(adb shell pidof com.forsa.app | tr -d '\\r' || true)
+            pid=$(adb shell pidof com.forsa.app | tr -d '\r' || true)
             if [ -z "$pid" ]; then
               echo "Application process is not running."
               adb logcat -d -t 400 > ci/smoke-logcat.txt
               exit 1
             fi
             adb logcat -d -t 400 > ci/smoke-logcat.txt
-            if grep -E "FATAL EXCEPTION|Process: com\\.forsa\\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then
+            if grep -E "FATAL EXCEPTION|Process: com\.forsa\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then
               echo "Runtime crash detected."
               exit 1
             fi
@@ -81,8 +81,8 @@ jobs:
         shell: bash
         run: |
           mkdir -p ci
-          build_code="\${BUILD_EXIT_CODE:-1}"
-          smoke_ok="\${{ steps.smoke.outcome == 'success' }}"
+          build_code="${BUILD_EXIT_CODE:-1}"
+          smoke_ok="${{ steps.smoke.outcome == 'success' }}"
           if [ "$build_code" = "0" ] && [ "$smoke_ok" = "true" ]; then
             status="PASS"
             summary="APK built successfully and launched on Android Emulator without a detected crash."
@@ -117,7 +117,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: forsa-android-build-\${{ github.run_number }}
+          name: forsa-android-build-${{ github.run_number }}
           path: |
             app/build/outputs/apk/debug/app-debug.apk
             ci/build.log
@@ -140,8 +140,8 @@ jobs:
         if: always()
         shell: bash
         run: |
-          build_code="\${BUILD_EXIT_CODE:-1}"
-          smoke_outcome="\${{ steps.smoke.outcome }}"
+          build_code="${BUILD_EXIT_CODE:-1}"
+          smoke_outcome="${{ steps.smoke.outcome }}"
           if [ "$build_code" != "0" ] || [ "$smoke_outcome" != "success" ]; then
             exit 1
           fi
