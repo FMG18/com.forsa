@@ -1,6 +1,6 @@
 status=PASS
-commit=f3a2c527b55dc914bcab5520ab5a968498f6ca2b
-run=36274137665
+commit=55dffe09ae04d1505b6da5b662374acf890d8028
+run=36274373552
 attempt=1
 build_exit_code=0
 smoke_exit_code=0
@@ -33,21 +33,22 @@ Daemon will be stopped at the end of the build
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
-> Task :app:processDebugManifestForPackage
 > Task :app:desugarDebugFileDependencies
-> Task :app:mergeDebugJniLibFolders
+> Task :app:processDebugManifestForPackage
 > Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugJniLibFolders
+> Task :app:mergeLibDexDebug
 > Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
-> Task :app:mergeLibDexDebug
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
+
 > Task :app:compileDebugKotlin
 w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1792:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1825:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
@@ -73,129 +74,129 @@ w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790459282404.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790459539309.json
 
-BUILD SUCCESSFUL in 58s
+BUILD SUCCESSFUL in 55s
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.gsm.AutoSelectPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.gsm.OpenNetworkSelectPagePreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.SatelliteSettingPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.ApnPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.CarrierPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.Enable2gPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.NullAlgorithmsPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.NrAdvancedCallingPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.ConvertToEsimPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.TransferEsimPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.DeleteSimProfilePreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.DisableSimFooterPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.network.telephony.NrDisabledInDsdsFooterPreferenceController
-09-26 21:50:42.138  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.slices.SlicePreferenceController
-09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
-09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
-09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
-09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
-09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
-09-26 21:50:42.139  1073  1099 W System  : A resource failed to call AbstractCursor.close. 
-09-26 21:50:42.139  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AddDevicePreferenceController
-09-26 21:50:42.139  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.PreviouslyConnectedDevicePreferenceController
-09-26 21:50:42.139  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.fastpair.FastPairDevicePreferenceController
-09-26 21:50:42.140  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AdvancedConnectedDeviceController
-09-26 21:50:42.140  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.DiscoverableFooterPreferenceController
-09-26 21:50:42.140  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AddDevicePreferenceController
-09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.PreviouslyConnectedDevicePreferenceController
-09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.fastpair.FastPairDevicePreferenceController
-09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.AdvancedConnectedDeviceController
-09-26 21:50:42.141  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.connecteddevice.DiscoverableFooterPreferenceController
-09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageSelectionPreferenceController
-09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageUsageProgressBarPreferenceController
-09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.AutomaticStorageManagementSwitchPreferenceController
-09-26 21:50:42.144  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.ManageStoragePreferenceController
-09-26 21:50:42.145  1073  1073 D CarrierConfigLoader: EVENT_FETCH_DEFAULT_DONE phoneId: 0
-09-26 21:50:42.146  1073  1073 D CarrierConfigLoader: updateSubscriptionDatabase: phoneId=0
-09-26 21:50:42.147  3123  3177 I cr_LibraryLoader: Successfully loaded native library
-09-26 21:50:42.150  3123  3177 I cr_CachingUmaRecorder: Flushed 18 samples from 17 histograms, 0 samples were dropped.
-09-26 21:50:42.151  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.TemperatureUnitController
-09-26 21:50:42.151  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.FirstDayOfWeekController
-09-26 21:50:42.151  1076  1102 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.NumberingSystemController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageSelectionPreferenceController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.StorageUsageProgressBarPreferenceController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.AutomaticStorageManagementSwitchPreferenceController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.deviceinfo.storage.ManageStoragePreferenceController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.TemperatureUnitController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.FirstDayOfWeekController
-09-26 21:50:42.152  1076  1101 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.regionalpreferences.NumberingSystemController
-09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.DefaultAppsPreferenceController
-09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.ClonedAppsPreferenceController
-09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.HibernatedAppsPreferenceController
-09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.AppBatteryUsagePreferenceController
-09-26 21:50:42.154  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.appcompat.UserAspectRatioAppsPreferenceController
-09-26 21:50:42.154  1076  1347 W SettingsPrefController: Skipping updateNonIndexableKeys, key already in list. com.android.settings.applications.AppsPreferenceController@89e26ed
-09-26 21:50:42.161   497   497 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
-09-26 21:50:42.181  1076  1101 D CompatChangeReporter: Compat change id reported: 291868760; UID 1000; state: ENABLED
-09-26 21:50:42.181  1527  3026 I Icing   : Indexing com.google.android.gms-internal.3p:MobileApplication from com.google.android.gms
-09-26 21:50:42.187  1076  1083 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.extservices/priv-app/GoogleExtServices@350820300/GoogleExtServices.apk' with 1 weak references
-09-26 21:50:42.187  1076  1083 W ndroid.settings: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk' with 1 weak references
-09-26 21:50:42.190  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.development.graphicsdriver.GraphicsDriverTopIntroPreferenceController
-09-26 21:50:42.190  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.development.graphicsdriver.GraphicsDriverEnableForAllAppsPreferenceController
-09-26 21:50:42.196  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.development.graphicsdriver.GraphicsDriverAppPreferenceController
-09-26 21:50:42.206  1226  1690 I FontLog : Received query Google Sans, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
-09-26 21:50:42.206  1226  1690 I FontLog : Query [Google Sans] resolved to {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
-09-26 21:50:42.208  1073  1073 D MultiSimSettingController: notifySubscriptionInfoChanged
-09-26 21:50:42.208  1159  1184 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.devicelockcontroller]
-09-26 21:50:42.209  1071  1249 I HeadsetPhoneState: stopListenForPhoneState(), no listener indicates nothing is listening
-09-26 21:50:42.212  1071  1249 W HeadsetPhoneState: startListenForPhoneState, no event to listen
-09-26 21:50:42.226   357   357 I netd    : tetherGetStats() -> {[]} <0.30ms>
-09-26 21:50:42.230  1159  1184 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.devicelockcontroller
-09-26 21:50:42.231  1076  1347 V SettingsSearchProvider: com.android.settings.development.graphicsdriver.GraphicsDriverDashboard$1@4b4522b tried to add an empty non-indexable key
-09-26 21:50:42.232  1527  3026 I Icing   : Indexing done com.google.android.gms-internal.3p:MobileApplication
-09-26 21:50:42.239  1159  1184 D PackageUpdatedTask: OP_UPDATE: package com.google.android.devicelockcontroller is disabled, removing package.
-09-26 21:50:42.239  1159  1184 D ModelWriter: removing items from db . Reason: [removed because the corresponding package or component is removed. mOp=2 removedPackages=[com.google.android.devicelockcontroller] removedComponents=[]]
-09-26 21:50:42.240  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.gestures.TapScreenGesturePreferenceController
-09-26 21:50:42.243  1159  1184 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.healthconnect.controller]
-09-26 21:50:42.244   556   556 I AS.AudioService: onSubscriptionsChanged()
-09-26 21:50:42.244  1226  1672 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
-09-26 21:50:42.245  1226  1672 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
-09-26 21:50:42.245  1226  1672 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
-09-26 21:50:42.258   556   842 E AppOps  : attributionTag VCN not declared in manifest of android
-09-26 21:50:42.261  1159  1184 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.healthconnect.controller
-09-26 21:50:42.261  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.gestures.SwipeToNotificationPreferenceController
-09-26 21:50:42.270  1073  1304 D CellBroadcastConfigTracker-0: IdleState message:5
---------- beginning of kernel
-09-26 21:50:42.452     0     0 I logd    : logdr: UID=2000 GID=2000 PID=3185 n tail=400 logMask=99 pid=0 start=0ns deadline=0ns
-09-26 21:50:42.270  1073  1304 D CellBroadcastConfigTracker-0: DefaultState message:5
-09-26 21:50:42.272  1226  1690 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
-09-26 21:50:42.272  1226  1690 I FontLog : Fetch {Google Sans, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
-09-26 21:50:42.273  1159  1184 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.settings.intelligence]
-09-26 21:50:42.280  1073  1073 D CarrierConfigLoader: EVENT_SUBSCRIPTION_INFO_UPDATED phoneId: 0
-09-26 21:50:42.280   556  2334 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.280  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.281  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.281  1073  1473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.281  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.281  1073  2473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  1116 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  1473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  2040 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  2473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  2068 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.282  1073  1116 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.283  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.284   556   567 I system_server: Background concurrent mark compact GC freed 24MB AllocSpace bytes, 51(1152KB) LOS objects, 48% free, 25MB/49MB, paused 617us,1.959ms total 166.427ms
-09-26 21:50:42.285  1073  2068 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.286  1073  2068 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.286  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.286  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.290  1073  2091 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.290  1073  1473 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.290  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.291  1073  2040 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.292   556   842 E AppOps  : attributionTag VCN not declared in manifest of android
-09-26 21:50:42.293  1073  1109 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.293  1073  2384 D com.android.ons.ONSProfileActivator: ERR_AUTO_PROVISIONING_DISABLED
-09-26 21:50:42.293  1073  2040 D TelephonyRegistryManager: onCarrierConfigChanged call in ICarrierConfigChangeListener callback
-09-26 21:50:42.295  1076  1347 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.security.SecurityAdvancedSettingsController
+09-26 21:54:54.994  3073  3117 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:54.994  3073  3117 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:55.010  3159  3159 V GraphicsEnvironment: Currently set values for:
+09-26 21:54:55.011  3159  3159 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-26 21:54:55.013  3159  3159 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-26 21:54:55.013  3159  3159 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+09-26 21:54:55.013  3159  3159 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+09-26 21:54:55.013  3162  3162 D nativeloader: InitLlndkLibrariesProduct: libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libRS.so:libandroid_net.so:libapexsupport.so:libbinder_ndk.so:libc.so:libcgrouprc.so:libclang_rt.asan-x86_64-android.so:libcom.android.tethering.connectivity_native.so:libdl.so:libft2.so:liblog.so:libm.so:libmediandk.so:libnativewindow.so:libneuralnetworks.so:libselinux.so:libsync.so:libvendorsupport.so:libvndksupport.so:libvulkan.so
+09-26 21:54:55.014  3162  3162 D nativeloader: Configuring product-clns-9 for unbundled product apk /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk. target_sdk_version=34, uses_libraries=, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64:/product/lib64:/system/product/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms:/product/lib64:/system/product/lib64
+09-26 21:54:55.015  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleDialer/GoogleDialer.apk' with 1 weak references
+09-26 21:54:55.020  3162  3162 D nativeloader: InitVndkspLibrariesProduct: VNDK is deprecated with product
+09-26 21:54:55.028  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
+09-26 21:54:55.030  3164  3164 D nativeloader: InitVndkspLibrariesProduct: VNDK is deprecated with product
+09-26 21:54:55.054  3073  3118 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.marvin.talkback.preference.search.TalkBackSearchIndexablesProvider/settings/indexables_xml_res
+09-26 21:54:55.054  3073  3118 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: Provider querying exception:
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: java.lang.IllegalStateException: We should initialize FormFactorUtils before getting instance.
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at com.google.android.accessibility.utils.FormFactorUtils.getInstance(PG:10)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at com.google.android.accessibility.talkback.preference.search.TalkBackSearchIndexablesProvider.queryRawData(PG:16)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at com.google.android.settings.search.SearchIndexablesProvider.query(PG:36)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1620)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1716)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at android.content.ContentProvider$Transport.query(ContentProvider.java:295)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:107)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+09-26 21:54:55.056  3165  3198 E IndexablesProvider: 	at android.os.Binder.execTransact(Binder.java:1444)
+09-26 21:54:55.057  3073  3118 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.marvin.talkback.preference.search.TalkBackSearchIndexablesProvider/settings/indexables_raw
+09-26 21:54:55.058  3073  3118 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:55.058  3073  3118 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.marvin.talkback.preference.search.TalkBackSearchIndexablesProvider/settings/dynamic_indexables_raw
+09-26 21:54:55.058  3073  3118 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:55.058  3073  3118 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.marvin.talkback.preference.search.TalkBackSearchIndexablesProvider/settings/non_indexables_key
+09-26 21:54:55.058  3073  3118 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:55.060  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleContacts/GoogleContacts.apk' with 1 weak references
+09-26 21:54:55.061  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~jvDNGXhuGSqE62uOxPuveg==/com.android.chrome-9z5wogis5R-I6CcmH3NnOg==/Chrome.apk' with 1 weak references
+09-26 21:54:55.061  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Vw8fiiTG328T2Hn0n31fJA==/com.google.android.trichromelibrary_636771938-sJKY_WH9LkRQrGRpfSV6Pw==/TrichromeLibrary.apk' with 1 weak references
+09-26 21:54:55.061  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Maps/Maps.apk' with 1 weak references
+09-26 21:54:55.061  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Photos/Photos.apk' with 1 weak references
+09-26 21:54:55.061  3073  3118 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-26 21:54:55.078  3159  3159 I MultiDex: Installing application
+09-26 21:54:55.078  3162  3162 V GraphicsEnvironment: Currently set values for:
+09-26 21:54:55.087  3159  3159 I MultiDex: VM with version 2.1.0 has multidex support
+09-26 21:54:55.087  3162  3162 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-26 21:54:55.087  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk' with 1 weak references
+09-26 21:54:55.088  3162  3162 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-26 21:54:55.088  3162  3162 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+09-26 21:54:55.088  3162  3162 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+09-26 21:54:55.089  3164  3164 V GraphicsEnvironment: Currently set values for:
+09-26 21:54:55.089  3159  3159 I MultiDex: VM has multidex support, MultiDex support library is disabled.
+09-26 21:54:55.091  3164  3164 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-26 21:54:55.091  3164  3164 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-26 21:54:55.091  3164  3164 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+09-26 21:54:55.091  3164  3164 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+09-26 21:54:55.097  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
+09-26 21:54:55.100  3162  3162 I LoadedApk: No resource references to update in package com.google.android.gms
+09-26 21:54:55.102  1236  1810 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.clearcut.uploader.QosUploaderService started execution. cause:5 exec_start_elapsed_seconds: 60 [CONTEXT service_id=218 ]
+09-26 21:54:55.102  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
+09-26 21:54:55.119  1471  2924 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+09-26 21:54:55.121  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SettingsIntelligenceGooglePrebuilt/SettingsIntelligenceGooglePrebuilt.apk' with 1 weak references
+09-26 21:54:55.130  3162  3162 I GmsApplication: Using GservicesReaderQueryDelegate
+09-26 21:54:55.133  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
+09-26 21:54:55.138  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+09-26 21:54:55.139  3162  3162 W SQLiteCompatibilityWalFlags: Cannot read global setting sqlite_compatibility_wal_flags - Application state not available
+09-26 21:54:55.145  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGmail/PrebuiltGmail.apk' with 1 weak references
+09-26 21:54:55.165  1471  1936 I ModuleSetResolution: Computing pending module set with APKs: [[AdsFdrDynamite.integ:241199801100000], [Cronetdynamite:242335190800], [Dynamiteloader:242335190000], [Dynamitemodulesa:242335190000], [Dynamitemodulesc:242335190000], [Googlecertificates:242335190000], [Mapsdynamite:242335190000], [Measurementdynamite:242335190000]]
+09-26 21:54:55.166  1471  1471 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.credential.manager.service.zeroparty.checkup.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsApiService }
+09-26 21:54:55.167  1471  2468 I SystemUpdate: [Control,InstallationControl] Installation progress updated to (0x000, -1.000).
+09-26 21:54:55.168   562  1176 D FileUtils: Rounded bytes from 4110737408 to 8000000000
+09-26 21:54:55.174   434   495 D PermissionCache: checking android.permission.DUMP for uid=10143 => granted (199 us)
+09-26 21:54:55.185  1167  1174 W s.nexuslauncher: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/SafetyHubPrebuilt/SafetyHubPrebuilt.apk' with 1 weak references
+09-26 21:54:55.188  1471  1936 I ModuleSetMgr: Download of container feature ambient_context is disabled.
+09-26 21:54:55.195   562  2474 I SystemUpdateManagerService: No existing info file /data/system/system-update-info.xml
+09-26 21:54:55.247  1471  2924 I Icing   : Indexing done com.google.android.gms-apps
+09-26 21:54:55.248  1471  2924 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+09-26 21:54:55.249  1471  2924 I Icing   : Indexing done com.google.android.gms-apps
+09-26 21:54:55.254  1471  2924 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
+09-26 21:54:55.255  1471  2924 I Icing   : Indexing done com.google.android.gms-apps
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature antifingerprinting is disabled.
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature appsearch_dynamite_impl is disabled.
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature brella_dynamite is disabled.
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature callstreaming is disabled.
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature dck_management is disabled.
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature easyunlock is disabled.
+09-26 21:54:55.281  1471  1936 I ModuleSetMgr: Download of container feature enterprise_zt_mp_complete is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature fast_pair is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature game_platform is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature games is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature growth_upgradeparty is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature home is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature homegraph is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature tflite_dynamite is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature maps_core is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature mdocstore is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature mlkit.docscan.crop is disabled.
+09-26 21:54:55.283  1471  1936 I ModuleSetMgr: Download of container feature mlkit.docscan.enhance is disabled.
+09-26 21:54:55.297  2591  2591 D CompatChangeReporter: Compat change id reported: 311402873; UID 10100; state: ENABLED
+09-26 21:54:55.297  2591  2591 D CompatChangeReporter: Compat change id reported: 323349338; UID 10100; state: ENABLED
+09-26 21:54:55.298   562  2474 D CompatChangeReporter: Compat change id reported: 311402873; UID 10100; state: ENABLED
+09-26 21:54:55.298   562  2474 D CompatChangeReporter: Compat change id reported: 323349338; UID 10100; state: ENABLED
+09-26 21:54:55.309  1471  1936 I ModuleSetMgr: Download of container feature mlkit.docscan.shadow is disabled.
+09-26 21:54:55.309  1471  1936 I ModuleSetMgr: Download of container feature mlkit.segmentation.subject is disabled.
+09-26 21:54:55.309  1471  1936 I ModuleSetMgr: Download of container feature multipackage_debug is disabled.
+09-26 21:54:55.311  1471  1936 I ModuleSetMgr: Download of container feature permissions_debug is disabled.
+09-26 21:54:55.332  3162  3162 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+09-26 21:54:55.332  3162  3162 I DynamiteModule: Considering local module com.google.android.gms.providerinstaller.dynamite:1 and remote module com.google.android.gms.providerinstaller.dynamite:0
+09-26 21:54:55.332  3162  3162 I DynamiteModule: Selected local version of com.google.android.gms.providerinstaller.dynamite
+09-26 21:54:55.336  1471  1936 I ModuleSetMgr: Download of container feature play_cloud_search is disabled.
+09-26 21:54:55.342  3162  3211 I DynamiteModule: Considering local module com.google.android.gms.googlecertificates:7 and remote module com.google.android.gms.googlecertificates:7
+09-26 21:54:55.342  3162  3211 I DynamiteModule: Selected local version of com.google.android.gms.googlecertificates
+09-26 21:54:55.343   562  1176 D CompatChangeReporter: Compat change id reported: 311208629; UID 10100; state: ENABLED
+09-26 21:54:55.350  3164  3164 D CompatChangeReporter: Compat change id reported: 3400644; UID 10129; state: ENABLED
+09-26 21:54:55.361  1471  1936 I ModuleSetMgr: Download of container feature semanticlocation_debug is disabled.
+09-26 21:54:55.361  1471  1936 I ModuleSetMgr: Download of container feature tensorgps_metrics is disabled.
+09-26 21:54:55.369  1471  1936 I ModuleSetMgr: Download of container feature tflite_delegate_edgetpu is disabled.
+09-26 21:54:55.369  1471  1936 I ModuleSetMgr: Download of container feature tflite_delegate_test is disabled.
+09-26 21:54:55.369  1471  1936 I ModuleSetMgr: Download of container feature tflite_gpu_dynamite is disabled.
