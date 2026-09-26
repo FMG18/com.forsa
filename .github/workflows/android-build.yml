@@ -11,7 +11,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-and-smoke-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -41,31 +41,70 @@ jobs:
           echo "BUILD_EXIT_CODE=$code" >> "$GITHUB_ENV"
           exit "$code"
 
-      - name: Collect build status
+      - name: Runtime smoke test on Android Emulator
+        id: smoke
+        if: env.BUILD_EXIT_CODE == '0'
+        continue-on-error: true
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          profile: Nexus 6
+          ram-size: 2048M
+          disk-size: 8G
+          emulator-boot-timeout: 600
+          disable-animations: true
+          emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: |
+            set -o pipefail
+            mkdir -p ci
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb shell am force-stop com.forsa.app
+            adb shell am start -W -n com.forsa.app/.MainActivity
+            sleep 8
+            adb shell pidof com.forsa.app
+            adb logcat -d -t 250 > ci/smoke-logcat.txt
+            if grep -E "FATAL EXCEPTION|Process: com\.forsa\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then
+              echo "Runtime crash detected."
+              exit 1
+            fi
+            echo "Runtime smoke test passed."
+
+      - name: Collect build and smoke status
         if: always()
         shell: bash
         run: |
           mkdir -p ci
-          code="${BUILD_EXIT_CODE:-1}"
-          if [ "$code" = "0" ]; then
+          build_code="${BUILD_EXIT_CODE:-1}"
+          smoke_code="${{ steps.smoke.outcome == 'success' && '0' || '1' }}"
+          if [ "$build_code" = "0" ] && [ "$smoke_code" = "0" ]; then
             status="PASS"
-            summary="Android debug APK build completed successfully."
+            summary="APK built successfully and launched on Android Emulator without a detected crash."
+          elif [ "$build_code" != "0" ]; then
+            status="FAIL"
+            summary="APK build failed with exit code $build_code."
           else
             status="FAIL"
-            summary="Android debug APK build failed with exit code $code."
+            summary="APK built, but runtime smoke test failed."
           fi
           {
             echo "status=$status"
             echo "commit=$GITHUB_SHA"
             echo "run=$GITHUB_RUN_ID"
             echo "attempt=$GITHUB_RUN_ATTEMPT"
+            echo "build_exit_code=$build_code"
+            echo "smoke_exit_code=$smoke_code"
             echo "summary=$summary"
             echo
-            echo "--- tail of build log ---"
-            tail -n 120 ci/build.log 2>/dev/null || true
+            echo "--- build log tail ---"
+            tail -n 80 ci/build.log 2>/dev/null || true
+            echo
+            echo "--- smoke logcat tail ---"
+            tail -n 120 ci/smoke-logcat.txt 2>/dev/null || true
           } > ci/build-status.txt
 
-      - name: Upload build artifacts
+      - name: Upload build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -73,6 +112,7 @@ jobs:
           path: |
             app/build/outputs/apk/debug/app-debug.apk
             ci/build.log
+            ci/smoke-logcat.txt
             ci/build-status.txt
           if-no-files-found: warn
 
@@ -87,7 +127,11 @@ jobs:
           git commit -m "ci: record Android build status [skip ci]"
           git push
 
-      - name: Fail workflow when build failed
-        if: always() && env.BUILD_EXIT_CODE != '0'
+      - name: Fail workflow when verification failed
+        if: always()
         shell: bash
-        run: exit "${BUILD_EXIT_CODE:-1}"
+        run: |
+          build_code="${BUILD_EXIT_CODE:-1}"
+          if [ "$build_code" != "0" ] || [ "${{ steps.smoke.outcome }}" != "success" ]; then
+            exit 1
+          fi
