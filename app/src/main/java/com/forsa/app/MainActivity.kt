@@ -62,8 +62,8 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.AlertDialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -93,6 +93,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Co
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 import kotlinx.coroutines.launch
 
@@ -152,10 +153,52 @@ private fun ForsaApp() {
     var loading by remember { mutableStateOf(false) }
     var userName by remember { mutableStateOf(auth.currentUser?.displayName.orEmpty()) }
     var profileRole by remember { mutableStateOf("باحث عن عمل") }
-    val localJobs = remember { mutableStateListOf<Job>() }
+    var jobs by remember { mutableStateOf<List<Job>>(emptyList()) }
+    val db = remember { FirebaseFirestore.getInstance() }
 
     fun message(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    val currentUid = auth.currentUser?.uid
+
+    DisposableEffect(currentUid) {
+        if (currentUid == null) {
+            jobs = emptyList()
+            onDispose { }
+        } else {
+            val jobsRegistration = db.collection("jobs")
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        message("تعذر تحميل الوظائف من قاعدة البيانات")
+                        return@addSnapshotListener
+                    }
+
+                    jobs = snapshot?.documents
+                        ?.mapNotNull { document ->
+                            val id = document.id
+                            val title = document.getString("title") ?: return@mapNotNull null
+                            val company = document.getString("company") ?: return@mapNotNull null
+                            val city = document.getString("city") ?: return@mapNotNull null
+                            val type = document.getString("type") ?: "دوام كامل"
+                            val description = document.getString("description") ?: ""
+                            val ownerUid = document.getString("ownerUid") ?: ""
+                            Job(id, title, company, city, type, description, ownerUid)
+                        }
+                        ?.sortedByDescending { it.id }
+                        ?: emptyList()
+                }
+
+            db.collection("users").document(currentUid).get()
+                .addOnSuccessListener { document ->
+                    val storedRole = document.getString("role")
+                    if (!storedRole.isNullOrBlank()) profileRole = storedRole
+                }
+
+            onDispose {
+                jobsRegistration.remove()
+            }
+        }
     }
 
     fun signedIn() {
@@ -270,7 +313,7 @@ private fun ForsaApp() {
         currentTab = tab,
         userName = userName,
         role = profileRole,
-        jobs = localJobs,
+        jobs = jobs,
         onTab = { tab = it },
         onLogout = ::signOut,
         onProfileNameChanged = { newName ->
@@ -283,6 +326,15 @@ private fun ForsaApp() {
                     loading = false
                     if (task.isSuccessful) {
                         userName = newName
+                        db.collection("users").document(user.uid)
+                            .set(
+                                mapOf(
+                                    "displayName" to newName,
+                                    "email" to user.email.orEmpty(),
+                                    "role" to profileRole
+                                ),
+                                com.google.firebase.firestore.SetOptions.merge()
+                            )
                         message("تم تحديث الاسم")
                     } else {
                         message("تعذر تحديث الاسم")
@@ -290,15 +342,46 @@ private fun ForsaApp() {
                 }
             }
         },
-        onRoleChanged = { profileRole = it },
+        onRoleChanged = { role ->
+            profileRole = role
+            auth.currentUser?.let { user ->
+                db.collection("users").document(user.uid)
+                    .set(
+                        mapOf(
+                            "displayName" to user.displayName.orEmpty(),
+                            "email" to user.email.orEmpty(),
+                            "role" to role
+                        ),
+                        com.google.firebase.firestore.SetOptions.merge()
+                    )
+            }
+        },
         onPublish = { job ->
-            localJobs.add(0, job)
-            tab = MainTab.Jobs
-            message("تم نشر الوظيفة داخل التطبيق")
+            db.collection("jobs").document(job.id).set(
+                mapOf(
+                    "title" to job.title,
+                    "company" to job.company,
+                    "city" to job.city,
+                    "type" to job.type,
+                    "description" to job.description,
+                    "ownerUid" to job.ownerUid,
+                    "createdAt" to System.currentTimeMillis()
+                )
+            ).addOnSuccessListener {
+                tab = MainTab.Jobs
+                message("تم نشر الوظيفة بنجاح")
+            }.addOnFailureListener {
+                message("تعذر نشر الوظيفة، تأكد من إعداد Firestore")
+            }
         },
         onDeleteJob = { job ->
-            localJobs.remove(job)
-            message("تم حذف الوظيفة")
+            db.collection("jobs").document(job.id).delete()
+                .addOnSuccessListener {
+                    message("تم حذف الوظيفة")
+                }
+                .addOnFailureListener {
+                    message("تعذر حذف الوظيفة")
+                }
         }
     )
 }
@@ -581,7 +664,7 @@ private fun JobsTab(
             fontWeight = FontWeight.Bold
         )
         Text(
-            "البيانات الحالية محفوظة داخل جلسة التطبيق فقط إلى أن نربط قاعدة البيانات.",
+            "الوظائف محفوظة في Cloud Firestore وتظهر للمستخدمين بعد تحميلها.",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -779,7 +862,7 @@ private fun PublishTab(
         }
 
         Text(
-            "ملاحظة: هذه المرحلة تحفظ الإعلان داخل جلسة التطبيق فقط. ربط قاعدة البيانات سيكون بالدفعة القادمة.",
+            "سيتم حفظ الإعلان مباشرة في قاعدة بيانات فرصة ليظهر للمستخدمين.",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
