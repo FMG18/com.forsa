@@ -35,6 +35,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -173,6 +175,7 @@ private fun ForsaApp() {
     var jobs by remember { mutableStateOf<List<Job>>(emptyList()) }
     var selectedJob by remember { mutableStateOf<Job?>(null) }
     var appliedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var savedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     val db = remember { FirebaseFirestore.getInstance() }
 
     fun message(text: String) {
@@ -185,6 +188,7 @@ private fun ForsaApp() {
         if (currentUid == null) {
             jobs = emptyList()
             appliedJobIds = emptySet()
+            savedJobIds = emptySet()
             onDispose { }
         } else {
             profileRole = "باحث عن عمل"
@@ -213,6 +217,15 @@ private fun ForsaApp() {
                             Job(id, title, company, city, type, description, ownerUid, isActive)
                         }
                         ?: emptyList()
+                }
+
+            val savedJobsRegistration = db.collection("savedJobs")
+                .whereEqualTo("userUid", currentUid)
+                .addSnapshotListener { snapshot, _ ->
+                    savedJobIds = snapshot?.documents
+                        ?.mapNotNull { it.getString("jobId") }
+                        ?.toSet()
+                        ?: emptySet()
                 }
 
             val applicationsRegistration = db.collection("applications")
@@ -259,6 +272,7 @@ private fun ForsaApp() {
             onDispose {
                 jobsRegistration.remove()
                 applicationsRegistration.remove()
+                savedJobsRegistration.remove()
             }
         }
     }
@@ -329,6 +343,7 @@ private fun ForsaApp() {
             profileCity = ""
             profileRole = "باحث عن عمل"
             appliedJobIds = emptySet()
+            savedJobIds = emptySet()
             selectedJob = null
             authScreen = AuthScreen.Welcome
         }
@@ -387,6 +402,29 @@ private fun ForsaApp() {
         onMessage = ::message,
         selectedJob = selectedJob,
         appliedJobIds = appliedJobIds,
+        savedJobIds = savedJobIds,
+        onToggleSaved = { job ->
+            val user = auth.currentUser
+            if (user == null) {
+                message("سجّل الدخول أولاً")
+            } else {
+                val ref = db.collection("savedJobs").document(job.id + "_" + user.uid)
+                if (job.id in savedJobIds) {
+                    ref.delete()
+                        .addOnSuccessListener { savedJobIds = savedJobIds - job.id }
+                        .addOnFailureListener { message("تعذر إزالة الوظيفة من المحفوظة") }
+                } else {
+                    ref.set(
+                        mapOf(
+                            "jobId" to job.id,
+                            "userUid" to user.uid,
+                            "createdAt" to System.currentTimeMillis()
+                        )
+                    ).addOnSuccessListener { savedJobIds = savedJobIds + job.id }
+                        .addOnFailureListener { message("تعذر حفظ الوظيفة") }
+                }
+            }
+        },
         onSelectJob = { selectedJob = it },
         onClearSelectedJob = { selectedJob = null },
         onApplyToJob = { job, note ->
@@ -702,6 +740,8 @@ private fun MainScaffold(
     onMessage: (String) -> Unit,
     selectedJob: Job?,
     appliedJobIds: Set<String>,
+    savedJobIds: Set<String>,
+    onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
     onClearSelectedJob: () -> Unit,
     onApplyToJob: (Job, String) -> Unit,
@@ -761,6 +801,8 @@ private fun MainScaffold(
                     role = role,
                     selectedJob = selectedJob,
                     appliedJobIds = appliedJobIds,
+                    savedJobIds = savedJobIds,
+                    onToggleSaved = onToggleSaved,
                     onSelectJob = onSelectJob,
                     onClearSelectedJob = onClearSelectedJob,
                     onApply = onApplyToJob,
@@ -791,6 +833,7 @@ private fun MainScaffold(
                     email = FirebaseAuth.getInstance().currentUser?.email.orEmpty(),
                     role = role,
                     jobs = jobs,
+                    savedJobIds = savedJobIds,
                     userUid = userUid,
                     db = db,
                     onProfileSaved = onProfileSaved,
@@ -800,6 +843,8 @@ private fun MainScaffold(
                     onDeleteJob = onDeleteJob,
                     onEditJob = onEditJob,
                     onToggleJobActive = onToggleJobActive,
+                    onToggleSaved = onToggleSaved,
+                    onSelectJob = onSelectJob,
                     onMessage = onMessage
                 )
             }
@@ -920,6 +965,8 @@ private fun JobsTab(
     role: String,
     selectedJob: Job?,
     appliedJobIds: Set<String>,
+    savedJobIds: Set<String>,
+    onToggleSaved: (Job) -> Unit,
     onSelectJob: (Job) -> Unit,
     onClearSelectedJob: () -> Unit,
     onApply: (Job, String) -> Unit,
@@ -931,6 +978,8 @@ private fun JobsTab(
             isOwner = selectedJob.ownerUid == currentUserJobUid,
             alreadyApplied = selectedJob.id in appliedJobIds,
             canApply = role == "باحث عن عمل",
+            isSaved = selectedJob.id in savedJobIds,
+            onToggleSaved = { onToggleSaved(selectedJob) },
             onBack = onClearSelectedJob,
             onApply = onApply
         )
@@ -1002,6 +1051,8 @@ private fun JobsTab(
                     job = job,
                     canDelete = role == "صاحب عمل" && job.ownerUid == currentUserJobUid,
                     alreadyApplied = job.id in appliedJobIds,
+                    isSaved = job.id in savedJobIds,
+                    onToggleSaved = { onToggleSaved(job) },
                     onOpen = { onSelectJob(job) },
                     onDelete = { onDelete(job) }
                 )
@@ -1060,6 +1111,8 @@ private fun JobCard(
     job: Job,
     canDelete: Boolean,
     alreadyApplied: Boolean,
+    isSaved: Boolean,
+    onToggleSaved: () -> Unit,
     onOpen: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -1071,11 +1124,21 @@ private fun JobCard(
             Modifier.padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Row(verticalAlignment = Alignment.Top) {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top
+            ) {
                 Column(Modifier.weight(1f)) {
                     Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(4.dp))
                     Text(job.company, color = MaterialTheme.colorScheme.primary)
+                }
+
+                IconButton(onClick = onToggleSaved) {
+                    Icon(
+                        imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                        contentDescription = if (isSaved) "إزالة من المحفوظة" else "حفظ الوظيفة"
+                    )
                 }
 
                 if (canDelete) {
@@ -1130,6 +1193,8 @@ private fun JobDetailsScreen(
     isOwner: Boolean,
     alreadyApplied: Boolean,
     canApply: Boolean,
+    isSaved: Boolean,
+    onToggleSaved: () -> Unit,
     onBack: () -> Unit,
     onApply: (Job, String) -> Unit
 ) {
@@ -1152,7 +1217,18 @@ private fun JobDetailsScreen(
                 Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
             }
 
-            Text("تفاصيل الوظيفة", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+            Text(
+                "تفاصيل الوظيفة",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+            IconButton(onClick = onToggleSaved) {
+                Icon(
+                    if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    contentDescription = if (isSaved) "إزالة من المحفوظة" else "حفظ الوظيفة"
+                )
+            }
         }
 
         Card(
@@ -1436,6 +1512,7 @@ private fun ProfileTab(
     email: String,
     role: String,
     jobs: List<Job>,
+    savedJobIds: Set<String>,
     userUid: String,
     db: FirebaseFirestore,
     onProfileSaved: (String, String, String) -> Unit,
@@ -1445,6 +1522,8 @@ private fun ProfileTab(
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
     onToggleJobActive: (Job) -> Unit,
+    onToggleSaved: (Job) -> Unit,
+    onSelectJob: (Job) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var editing by remember { mutableStateOf(false) }
@@ -1493,6 +1572,14 @@ private fun ProfileTab(
             userUid = userUid,
             onBack = { section = "main" },
             onMessage = onMessage
+        )
+
+        "savedJobs" -> SavedJobsScreen(
+            jobs = jobs,
+            savedJobIds = savedJobIds,
+            onBack = { section = "main" },
+            onToggleSaved = onToggleSaved,
+            onOpen = onSelectJob
         )
 
         else -> {
@@ -1612,6 +1699,13 @@ private fun ProfileTab(
                         Text("تغيير كلمة المرور")
                     }
                 }
+
+                ProfileActionCard(
+                    title = "المحفوظة",
+                    description = "الوظائف اللي حفظتها حتى ترجع لها لاحقاً.",
+                    actionLabel = "فتح المحفوظة",
+                    onClick = { section = "savedJobs" }
+                )
 
                 Text("نوع الحساب", fontWeight = FontWeight.SemiBold)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -2361,6 +2455,103 @@ private fun StatusBadge(status: String) {
             Icon(Icons.Default.CheckCircle, null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(7.dp))
             Text(label, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
+@Composable
+private fun SavedJobsScreen(
+    jobs: List<Job>,
+    savedJobIds: Set<String>,
+    onBack: () -> Unit,
+    onToggleSaved: (Job) -> Unit,
+    onOpen: (Job) -> Unit
+) {
+    val saved = jobs
+        .filter { it.id in savedJobIds && it.isActive }
+        .sortedByDescending { it.id }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+            Text("المحفوظة", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        if (saved.isEmpty()) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 50.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    Icons.Default.FavoriteBorder,
+                    contentDescription = null,
+                    modifier = Modifier.size(52.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(Modifier.height(16.dp))
+                Text("ما عندك وظائف محفوظة", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "اضغط القلب على أي وظيفة حتى تحفظها.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            saved.forEach { job ->
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Column(Modifier.weight(1f)) {
+                                Text(job.title, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                                Text(job.company, color = MaterialTheme.colorScheme.primary)
+                            }
+                            IconButton(onClick = { onToggleSaved(job) }) {
+                                Icon(
+                                    Icons.Default.Favorite,
+                                    contentDescription = "إزالة من المحفوظة",
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                        }
+
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            AssistChip(onClick = {}, label = { Text(job.city) })
+                            AssistChip(onClick = {}, label = { Text(job.type) })
+                        }
+
+                        OutlinedButton(
+                            onClick = { onOpen(job) },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text("عرض الوظيفة")
+                        }
+                    }
+                }
+            }
         }
     }
 }
