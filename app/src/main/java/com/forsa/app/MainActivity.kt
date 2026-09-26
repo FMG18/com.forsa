@@ -530,12 +530,14 @@ private fun ForsaApp() {
                     onDone()
                 }.addOnFailureListener {
                     loading = false
-                    message("تم تسجيل الدخول لكن تعذر حفظ ملف الحساب")
+                    message("تم تسجيل الدخول، لكن تعذر مزامنة ملف الحساب")
+                    onDone()
                 }
             }
             .addOnFailureListener {
                 loading = false
-                message("تعذر قراءة ملف الحساب")
+                message("تم تسجيل الدخول، لكن تعذر قراءة ملف الحساب")
+                onDone()
             }
     }
 
