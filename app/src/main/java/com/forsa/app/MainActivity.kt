@@ -1221,7 +1221,77 @@ private fun PublishTab(
                             city = cleanCity,
                             type = type,
                             description = cleanDescription,
-                         @Composable
+                            ownerUid = userUid
+                        )
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text("نشر الوظيفة", fontSize = 16.sp)
+        }
+
+        Text(
+            "سيتم حفظ الإعلان مباشرة في قاعدة بيانات فرصة ليظهر للمستخدمين.",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+@Composable
+private fun RoleRequiredScreen(
+    title: String,
+    description: String,
+    onBack: () -> Unit
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Surface(
+            Modifier.size(86.dp),
+            CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            androidx.compose.foundation.layout.Box(
+                Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    Icons.Default.Lock,
+                    contentDescription = null,
+                    modifier = Modifier.size(38.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
+        Spacer(Modifier.height(18.dp))
+        Text(
+            title,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(
+            description,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(18.dp))
+        OutlinedButton(onClick = onBack, shape = RoundedCornerShape(14.dp)) {
+            Text("رجوع")
+        }
+    }
+}
+
+@Composable
 private fun ProfileTab(
     userName: String,
     email: String,
