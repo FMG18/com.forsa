@@ -154,6 +154,8 @@ private fun ForsaApp() {
     var userName by remember { mutableStateOf(auth.currentUser?.displayName.orEmpty()) }
     var profileRole by remember { mutableStateOf("باحث عن عمل") }
     var jobs by remember { mutableStateOf<List<Job>>(emptyList()) }
+    var selectedJob by remember { mutableStateOf<Job?>(null) }
+    var appliedJobIds by remember { mutableStateOf<Set<String>>(emptySet()) }
     val db = remember { FirebaseFirestore.getInstance() }
 
     fun message(text: String) {
@@ -314,6 +316,48 @@ private fun ForsaApp() {
         userName = userName,
         role = profileRole,
         jobs = jobs,
+        selectedJob = selectedJob,
+        appliedJobIds = appliedJobIds,
+        onSelectJob = { selectedJob = it },
+        onClearSelectedJob = { selectedJob = null },
+        onApplyToJob = { job, note ->
+            val user = auth.currentUser
+            if (user == null) {
+                message("سجّل الدخول أولاً")
+            } else {
+                val applicationId = job.id + "_" + user.uid
+                db.collection("applications").document(applicationId).get()
+                    .addOnSuccessListener { existing ->
+                        if (existing.exists()) {
+                            appliedJobIds = appliedJobIds + job.id
+                            message("أنت مقدم على هذه الوظيفة مسبقاً")
+                        } else {
+                            db.collection("applications").document(applicationId).set(
+                                mapOf(
+                                    "jobId" to job.id,
+                                    "jobTitle" to job.title,
+                                    "company" to job.company,
+                                    "applicantUid" to user.uid,
+                                    "applicantName" to user.displayName.orEmpty(),
+                                    "applicantEmail" to user.email.orEmpty(),
+                                    "note" to note.trim(),
+                                    "status" to "pending",
+                                    "createdAt" to System.currentTimeMillis()
+                                )
+                            ).addOnSuccessListener {
+                                appliedJobIds = appliedJobIds + job.id
+                                message("تم إرسال طلب التقديم بنجاح")
+                                selectedJob = null
+                            }.addOnFailureListener {
+                                message("تعذر إرسال طلب التقديم")
+                            }
+                        }
+                    }
+                    .addOnFailureListener {
+                        message("تعذر التحقق من حالة طلب التقديم")
+                    }
+            }
+        },
         onTab = { tab = it },
         onLogout = ::signOut,
         onProfileNameChanged = { newName ->
@@ -479,6 +523,11 @@ private fun MainScaffold(
     userName: String,
     role: String,
     jobs: List<Job>,
+    selectedJob: Job?,
+    appliedJobIds: Set<String>,
+    onSelectJob: (Job) -> Unit,
+    onClearSelectedJob: () -> Unit,
+    onApplyToJob: (Job, String) -> Unit,
     onTab: (MainTab) -> Unit,
     onLogout: () -> Unit,
     onProfileNameChanged: (String) -> Unit,
@@ -524,6 +573,11 @@ private fun MainScaffold(
                 MainTab.Jobs -> JobsTab(
                     jobs = jobs,
                     currentUserJobUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty(),
+                    selectedJob = selectedJob,
+                    appliedJobIds = appliedJobIds,
+                    onSelectJob = onSelectJob,
+                    onClearSelectedJob = onClearSelectedJob,
+                    onApply = onApplyToJob,
                     onDelete = onDeleteJob
                 )
 
@@ -644,11 +698,37 @@ private fun SmallStat(title: String, value: String, modifier: Modifier) {
 private fun JobsTab(
     jobs: List<Job>,
     currentUserJobUid: String,
+    selectedJob: Job?,
+    appliedJobIds: Set<String>,
+    onSelectJob: (Job) -> Unit,
+    onClearSelectedJob: () -> Unit,
+    onApply: (Job, String) -> Unit,
     onDelete: (Job) -> Unit
 ) {
-    if (jobs.isEmpty()) {
-        EmptyJobs()
+    if (selectedJob != null) {
+        JobDetailsScreen(
+            job = selectedJob,
+            isOwner = selectedJob.ownerUid == currentUserJobUid,
+            alreadyApplied = selectedJob.id in appliedJobIds,
+            onBack = onClearSelectedJob,
+            onApply = onApply
+        )
         return
+    }
+
+    var query by remember { mutableStateOf("") }
+    var typeFilter by remember { mutableStateOf("الكل") }
+
+    val filteredJobs = jobs.filter { job ->
+        val q = query.trim()
+        val matchesQuery = q.isEmpty() ||
+            job.title.contains(q, ignoreCase = true) ||
+            job.company.contains(q, ignoreCase = true) ||
+            job.city.contains(q, ignoreCase = true) ||
+            job.description.contains(q, ignoreCase = true)
+
+        val matchesType = typeFilter == "الكل" || job.type == typeFilter
+        matchesQuery && matchesType
     }
 
     Column(
@@ -658,35 +738,61 @@ private fun JobsTab(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            "الوظائف المتاحة",
-            fontSize = 22.sp,
-            fontWeight = FontWeight.Bold
+        Text("ابحث عن فرصة", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("ابحث بالمسمى أو الشركة أو المدينة") },
+            leadingIcon = { Icon(Icons.Default.Search, null) },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Search
+            ),
+            shape = RoundedCornerShape(14.dp)
         )
+
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf("الكل", "دوام كامل", "دوام جزئي", "عن بُعد").forEach { option ->
+                FilterChip(
+                    selected = typeFilter == option,
+                    onClick = { typeFilter = option },
+                    label = { Text(option) }
+                )
+            }
+        }
+
         Text(
-            "الوظائف محفوظة في Cloud Firestore وتظهر للمستخدمين بعد تحميلها.",
-            fontSize = 12.sp,
+            text = "النتائج: " + filteredJobs.size,
+            fontSize = 13.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        jobs.forEach { job ->
-            JobCard(
-                job = job,
-                canDelete = job.ownerUid == currentUserJobUid,
-                onDelete = { onDelete(job) }
-            )
+        if (filteredJobs.isEmpty()) {
+            EmptyJobs(filtered = jobs.isNotEmpty())
+        } else {
+            filteredJobs.forEach { job ->
+                JobCard(
+                    job = job,
+                    canDelete = job.ownerUid == currentUserJobUid,
+                    alreadyApplied = job.id in appliedJobIds,
+                    onOpen = { onSelectJob(job) },
+                    onDelete = { onDelete(job) }
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun EmptyJobs() {
+private fun EmptyJobs(filtered: Boolean = false) {
     Column(
         Modifier
-            .fillMaxSize()
-            .padding(28.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .fillMaxWidth()
+            .padding(vertical = 48.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Surface(
             Modifier.size(84.dp),
@@ -705,11 +811,20 @@ private fun EmptyJobs() {
                 )
             }
         }
+
         Spacer(Modifier.height(18.dp))
-        Text("ماكو وظائف مضافة حالياً", fontSize = 22.sp, fontWeight = FontWeight.Bold)
-        Spacer(Modifier.height(8.dp))
+
         Text(
-            "بعد ما ننشر أول وظيفة راح تظهر هنا.",
+            if (filtered) "ما لقينا وظائف مطابقة" else "ماكو وظائف مضافة حالياً",
+            fontSize = 21.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            if (filtered) "جرّب تغيّر كلمة البحث أو نوع الدوام."
+            else "أول ما تننشر وظيفة راح تظهر هنا.",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -720,19 +835,25 @@ private fun EmptyJobs() {
 private fun JobCard(
     job: Job,
     canDelete: Boolean,
+    alreadyApplied: Boolean,
+    onOpen: () -> Unit,
     onDelete: () -> Unit
 ) {
     Card(
         Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp)
     ) {
-        Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(
+            Modifier.padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             Row(verticalAlignment = Alignment.Top) {
                 Column(Modifier.weight(1f)) {
                     Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                     Spacer(Modifier.height(4.dp))
                     Text(job.company, color = MaterialTheme.colorScheme.primary)
                 }
+
                 if (canDelete) {
                     IconButton(onClick = onDelete) {
                         Icon(Icons.Default.Delete, contentDescription = "حذف")
@@ -745,12 +866,135 @@ private fun JobCard(
                 AssistChip(onClick = {}, label = { Text(job.type) })
             }
 
-            Text(job.description, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                job.description,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 3
+            )
 
-            TextButton(onClick = {}) {
-                Icon(Icons.Default.ArrowForward, null)
+            if (alreadyApplied) {
+                Surface(
+                    shape = RoundedCornerShape(10.dp),
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                ) {
+                    Row(
+                        Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.CheckCircle, null, modifier = Modifier.size(17.dp))
+                        Spacer(Modifier.width(5.dp))
+                        Text("تم التقديم")
+                    }
+                }
+            }
+
+            TextButton(onClick = onOpen) {
+                Text("عرض تفاصيل الوظيفة")
                 Spacer(Modifier.width(4.dp))
-                Text("تفاصيل الوظيفة")
+                Icon(Icons.Default.ArrowForward, null)
+            }
+        }
+    }
+}
+
+@Composable
+private fun JobDetailsScreen(
+    job: Job,
+    isOwner: Boolean,
+    alreadyApplied: Boolean,
+    onBack: () -> Unit,
+    onApply: (Job, String) -> Unit
+) {
+    var note by remember(job.id) { mutableStateOf("") }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+
+            Text("تفاصيل الوظيفة", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        Card(
+            Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(22.dp)
+        ) {
+            Column(
+                Modifier.padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text(job.title, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                Text(job.company, color = MaterialTheme.colorScheme.primary, fontSize = 17.sp)
+
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    AssistChip(onClick = {}, label = { Text(job.city) })
+                    AssistChip(onClick = {}, label = { Text(job.type) })
+                }
+
+                HorizontalDivider()
+
+                Text("وصف الوظيفة", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Text(job.description, fontSize = 16.sp, lineHeight = 25.sp)
+            }
+        }
+
+        when {
+            isOwner -> {
+                Surface(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                ) {
+                    Text("هذا الإعلان منشور من حسابك.", Modifier.padding(16.dp))
+                }
+            }
+
+            alreadyApplied -> {
+                Surface(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.secondaryContainer
+                ) {
+                    Row(
+                        Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(Icons.Default.CheckCircle, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("تم إرسال طلبك لهذه الوظيفة.")
+                    }
+                }
+            }
+
+            else -> {
+                Text("التقديم على الوظيفة", fontSize = 19.sp, fontWeight = FontWeight.Bold)
+
+                OutlinedTextField(
+                    value = note,
+                    onValueChange = { note = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text("رسالة قصيرة لصاحب العمل (اختياري)") },
+                    minLines = 4
+                )
+
+                Button(
+                    onClick = { onApply(job, note) },
+                    modifier = Modifier.fillMaxWidth().height(54.dp),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Text("إرسال طلب التقديم", fontSize = 16.sp)
+                }
             }
         }
     }
