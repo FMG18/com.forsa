@@ -836,7 +836,8 @@ private fun MainScaffold(
     onPublish: (Job) -> Unit,
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
-    onToggleJobActive: (Job) -> Unit
+    onToggleJobActive: (Job) -> Unit,
+    onPromoteJob: (Job) -> Unit
 ) {
     val userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
     val canPublish = role == "صاحب عمل"
