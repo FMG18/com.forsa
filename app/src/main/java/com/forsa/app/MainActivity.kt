@@ -93,7 +93,6 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialException
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
@@ -4676,7 +4675,6 @@ private fun firebaseError(exception: Exception?): String {
         "ERROR_PROVIDER_ALREADY_LINKED" -> "طريقة تسجيل الدخول هذه مرتبطة بالحساب مسبقاً"
         "ERROR_INVALID_PHONE_NUMBER" -> "رقم الهاتف غير صحيح"
         "ERROR_MISSING_PHONE_NUMBER" -> "رقم الهاتف غير متوفر"
-        "ERROR_OPERATION_NOT_ALLOWED" -> "طريقة تسجيل الدخول هذه غير مفعّلة في Firebase"
         else -> "حدث خطأ في تسجيل الدخول، حاول مرة أخرى"
     }
 }
