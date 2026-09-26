@@ -932,7 +932,8 @@ private fun ForsaApp() {
                         "type" to job.type,
                         "description" to job.description,
                         "ownerUid" to job.ownerUid,
-                        "createdAt" to System.currentTimeMillis()
+                        "createdAt" to System.currentTimeMillis(),
+                        "isActive" to true
                     )
                 ).addOnSuccessListener {
                     tab = MainTab.Jobs
