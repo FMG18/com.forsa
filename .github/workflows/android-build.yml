@@ -65,28 +65,8 @@ jobs:
           disable-animations: true
           disable-linux-hw-accel: false
           emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
-          script: |
-            mkdir -p ci
-            adb start-server
-            echo "Checking APK at: ${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
-            test -f "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
-            ls -lh "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
-            adb install -r "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"
-            adb shell am force-stop com.forsa.app
-            adb shell am start -W -n com.forsa.app/.MainActivity
-            sleep 8
-            pid=$(adb shell pidof com.forsa.app | tr -d '\r' || true)
-            if [ -z "$pid" ]; then
-              echo "Application process is not running."
-              adb logcat -d -t 400 > ci/smoke-logcat.txt
-              exit 1
-            fi
-            adb logcat -d -t 400 > ci/smoke-logcat.txt
-            if grep -E "FATAL EXCEPTION|Process: com\.forsa\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then
-              echo "Runtime crash detected."
-              exit 1
-            fi
-            echo "Runtime smoke test passed."
+          script: >-
+            mkdir -p ci; adb start-server; echo "Checking APK at: ${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"; test -f "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"; ls -lh "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"; adb install -r "${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk"; adb shell am force-stop com.forsa.app; adb shell am start -W -n com.forsa.app/.MainActivity; sleep 8; pid="$(adb shell pidof com.forsa.app | tr -d '\r' || true)"; if [ -z "$pid" ]; then echo "Application process is not running."; adb logcat -d -t 400 > ci/smoke-logcat.txt; exit 1; fi; adb logcat -d -t 400 > ci/smoke-logcat.txt; if grep -E "FATAL EXCEPTION|Process: com\\.forsa\\.app, PID:|AndroidRuntime: FATAL EXCEPTION" ci/smoke-logcat.txt; then echo "Runtime crash detected."; exit 1; fi; echo "Runtime smoke test passed."
 
       - name: Collect build and smoke status
         if: always()
