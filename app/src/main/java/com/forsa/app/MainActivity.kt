@@ -233,16 +233,15 @@ private fun ForsaApp() {
                     }
                     profileRole = finalRole
 
-                    if (!document.exists()) {
-                        val user = auth.currentUser
-                        db.collection("users").document(currentUid).set(
-                            mapOf(
-                                "displayName" to (user?.displayName.orEmpty()),
-                                "email" to (user?.email.orEmpty()),
-                                "role" to finalRole
-                            )
-                        )
-                    }
+                    val user = auth.currentUser
+                    db.collection("users").document(currentUid).set(
+                        mapOf(
+                            "displayName" to (user?.displayName ?: document.getString("displayName").orEmpty()),
+                            "email" to (user?.email ?: document.getString("email").orEmpty()),
+                            "role" to finalRole
+                        ),
+                        com.google.firebase.firestore.SetOptions.merge()
+                    )
                 }
 
             onDispose {
