@@ -533,42 +533,39 @@ private fun ForsaApp() {
         }
 
         val userRef = db.collection("users").document(user.uid)
-        userRef.get()
-            .addOnSuccessListener { document ->
-                val storedRole = document.getString("role")
-                val role = if (
-                    storedRole == "باحث عن عمل" || storedRole == "صاحب عمل"
-                ) {
-                    storedRole
-                } else {
-                    "باحث عن عمل"
-                }
+        val baseData = mapOf(
+            "displayName" to user.displayName.orEmpty(),
+            "email" to user.email.orEmpty(),
+            "phone" to user.phoneNumber.orEmpty()
+        )
 
-                userRef.set(
-                    mapOf(
-                        "displayName" to user.displayName.orEmpty(),
-                        "email" to user.email.orEmpty(),
-                        "phone" to document.getString("phone").orEmpty().ifBlank { user.phoneNumber.orEmpty() },
-                        "city" to document.getString("city").orEmpty(),
-                        "role" to role,
-                        "companyName" to document.getString("companyName").orEmpty(),
-                        "companyAbout" to document.getString("companyAbout").orEmpty(),
-                        "companyCity" to document.getString("companyCity").orEmpty()
-                    ),
-                    com.google.firebase.firestore.SetOptions.merge()
-                ).addOnSuccessListener {
-                    onDone()
-                }.addOnFailureListener {
-                    loading = false
-                    message("تم تسجيل الدخول، لكن تعذر مزامنة ملف الحساب")
-                    onDone()
-                }
-            }
-            .addOnFailureListener {
+        // لا نجعل نجاح تسجيل الدخول معتمداً على قراءة ملف Firestore.
+        // التحديث المباشر يحافظ على الدور وباقي الحقول الموجودة بواسطة merge.
+        userRef.set(
+            baseData,
+            com.google.firebase.firestore.SetOptions.merge()
+        ).addOnSuccessListener {
+            onDone()
+        }.addOnFailureListener {
+            // إذا لم يكن مستند المستخدم موجوداً، ننشئه بالحد الأدنى المطلوب.
+            // وإذا تعذر Firestore مؤقتاً، يبقى تسجيل الدخول ناجحاً ولا نعلّق المستخدم.
+            userRef.set(
+                baseData + mapOf(
+                    "role" to "باحث عن عمل",
+                    "city" to "",
+                    "companyName" to "",
+                    "companyAbout" to "",
+                    "companyCity" to ""
+                ),
+                com.google.firebase.firestore.SetOptions.merge()
+            ).addOnSuccessListener {
+                onDone()
+            }.addOnFailureListener {
                 loading = false
-                message("تم تسجيل الدخول، لكن تعذر قراءة ملف الحساب")
+                message("تم تسجيل الدخول، ويمكن إكمال الملف الشخصي لاحقاً")
                 onDone()
             }
+        }
     }
 
     suspend fun googleSignIn() {
