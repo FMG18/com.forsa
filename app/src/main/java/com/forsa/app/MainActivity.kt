@@ -693,7 +693,7 @@ private fun MainScaffold(
                     onRoleChanged = onRoleChanged,
                     onLogout = onLogout,
                     onDeleteJob = onDeleteJob,
-                    onMessage = message
+                    onMessage = onMessage
                 )
             }
         }
