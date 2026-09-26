@@ -1841,6 +1841,7 @@ private fun ProfileTab(
     userUid: String,
     db: FirebaseFirestore,
     onProfileSaved: (String, String, String) -> Unit,
+    onCompanyProfileSaved: (String, String, String) -> Unit,
     onPasswordReset: () -> Unit,
     onRoleChanged: (String) -> Unit,
     onLogout: () -> Unit,
