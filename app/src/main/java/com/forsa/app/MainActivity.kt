@@ -109,7 +109,8 @@ private data class Job(
     val city: String,
     val type: String,
     val description: String,
-    val ownerUid: String
+    val ownerUid: String,
+    val isActive: Boolean = true
 )
 
 private data class ApplicationItem(
@@ -208,7 +209,8 @@ private fun ForsaApp() {
                             val description = document.getString("description") ?: ""
                             val ownerUid = document.getString("ownerUid") ?: ""
                             if (ownerUid.isBlank()) return@mapNotNull null
-                            Job(id, title, company, city, type, description, ownerUid)
+                            val isActive = document.getBoolean("isActive") ?: true
+                            Job(id, title, company, city, type, description, ownerUid, isActive)
                         }
                         ?: emptyList()
                 }
@@ -583,6 +585,20 @@ private fun ForsaApp() {
                         message("تعذر تحديث الوظيفة")
                     }
             }
+        },
+        onToggleJobActive = { job ->
+            if (profileRole != "صاحب عمل" || job.ownerUid != auth.currentUser?.uid) {
+                message("ما عندك صلاحية لتغيير حالة هذا الإعلان")
+            } else {
+                db.collection("jobs").document(job.id)
+                    .update("isActive", !job.isActive)
+                    .addOnSuccessListener {
+                        message(if (job.isActive) "تم إيقاف الإعلان" else "تم تفعيل الإعلان")
+                    }
+                    .addOnFailureListener {
+                        message("تعذر تغيير حالة الإعلان")
+                    }
+            }
         }
     )
 }
@@ -696,7 +712,8 @@ private fun MainScaffold(
     onRoleChanged: (String) -> Unit,
     onPublish: (Job) -> Unit,
     onDeleteJob: (Job) -> Unit,
-    onEditJob: (Job) -> Unit
+    onEditJob: (Job) -> Unit,
+    onToggleJobActive: (Job) -> Unit
 ) {
     val userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
     val canPublish = role == "صاحب عمل"
@@ -732,7 +749,7 @@ private fun MainScaffold(
                 MainTab.Home -> HomeTab(
                     userName = userName,
                     role = role,
-                    jobsCount = jobs.size,
+                    jobsCount = jobs.count { it.isActive },
                     canPublish = canPublish,
                     onJobs = { onTab(MainTab.Jobs) },
                     onPublish = { onTab(MainTab.Publish) }
@@ -923,6 +940,9 @@ private fun JobsTab(
     var typeFilter by remember { mutableStateOf("الكل") }
 
     val filteredJobs = jobs.filter { job ->
+        val visibleToUser = job.isActive || (role == "صاحب عمل" && job.ownerUid == currentUserJobUid)
+        if (!visibleToUser) return@filter false
+
         val q = query.trim()
         val matchesQuery = q.isEmpty() ||
             job.title.contains(q, ignoreCase = true) ||
@@ -1067,6 +1087,9 @@ private fun JobCard(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 AssistChip(onClick = {}, label = { Text(job.city) })
                 AssistChip(onClick = {}, label = { Text(job.type) })
+                if (!job.isActive) {
+                    AssistChip(onClick = {}, label = { Text("موقوف") })
+                }
             }
 
             Text(
@@ -1333,7 +1356,8 @@ private fun PublishTab(
                             city = cleanCity,
                             type = type,
                             description = cleanDescription,
-                            ownerUid = userUid
+                            ownerUid = userUid,
+                            isActive = true
                         )
                     )
                 }
@@ -1419,6 +1443,7 @@ private fun ProfileTab(
     onLogout: () -> Unit,
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
+    onToggleJobActive: (Job) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var editing by remember { mutableStateOf(false) }
@@ -1451,6 +1476,7 @@ private fun ProfileTab(
             onApplications = { section = "employerApps" },
             onDeleteJob = onDeleteJob,
             onEditJob = { editingJob = it },
+            onToggleJobActive = onToggleJobActive,
             onMessage = onMessage
         )
 
@@ -1692,6 +1718,7 @@ private fun EmployerJobsScreen(
     onApplications: () -> Unit,
     onDeleteJob: (Job) -> Unit,
     onEditJob: (Job) -> Unit,
+    onToggleJobActive: (Job) -> Unit,
     onMessage: (String) -> Unit
 ) {
     var applicationCounts by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
@@ -1751,6 +1778,20 @@ private fun EmployerJobsScreen(
                     ) {
                         Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Text(job.company, color = MaterialTheme.colorScheme.primary)
+                        Surface(
+                            shape = RoundedCornerShape(10.dp),
+                            color = if (job.isActive) {
+                                MaterialTheme.colorScheme.secondaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant
+                            }
+                        ) {
+                            Text(
+                                if (job.isActive) "الإعلان ظاهر للباحثين" else "الإعلان موقوف",
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             AssistChip(onClick = {}, label = { Text(job.city) })
                             AssistChip(onClick = {}, label = { Text(job.type) })
@@ -1764,7 +1805,10 @@ private fun EmployerJobsScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 3
                         )
-                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
                             OutlinedButton(
                                 onClick = { onEditJob(job) },
                                 modifier = Modifier.weight(1f),
@@ -1781,6 +1825,19 @@ private fun EmployerJobsScreen(
                             ) {
                                 Text("الطلبات")
                             }
+                        }
+
+                        Row(
+                            Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            OutlinedButton(
+                                onClick = { onToggleJobActive(job) },
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text(if (job.isActive) "إيقاف الإعلان" else "تفعيل الإعلان")
+                            }
                             OutlinedButton(
                                 onClick = { deleteTarget = job },
                                 modifier = Modifier.weight(1f),
@@ -1788,7 +1845,7 @@ private fun EmployerJobsScreen(
                             ) {
                                 Icon(Icons.Default.Delete, null)
                                 Spacer(Modifier.width(6.dp))
-                                Text("حذف")
+                                Text("حذف نهائي")
                             }
                         }
                     }
