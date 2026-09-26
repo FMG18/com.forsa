@@ -110,6 +110,18 @@ private data class Job(
     val ownerUid: String
 )
 
+private data class ApplicationItem(
+    val id: String,
+    val jobId: String,
+    val jobTitle: String,
+    val company: String,
+    val applicantName: String,
+    val applicantEmail: String,
+    val note: String,
+    val status: String,
+    val createdAt: Long
+)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,8 +179,11 @@ private fun ForsaApp() {
     DisposableEffect(currentUid) {
         if (currentUid == null) {
             jobs = emptyList()
+            appliedJobIds = emptySet()
             onDispose { }
         } else {
+            profileRole = "باحث عن عمل"
+
             val jobsRegistration = db.collection("jobs")
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
@@ -186,19 +201,53 @@ private fun ForsaApp() {
                             val type = document.getString("type") ?: "دوام كامل"
                             val description = document.getString("description") ?: ""
                             val ownerUid = document.getString("ownerUid") ?: ""
+                            if (ownerUid.isBlank()) return@mapNotNull null
                             Job(id, title, company, city, type, description, ownerUid)
                         }
                         ?: emptyList()
                 }
 
+            val applicationsRegistration = db.collection("applications")
+                .whereEqualTo("applicantUid", currentUid)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        appliedJobIds = emptySet()
+                        return@addSnapshotListener
+                    }
+
+                    appliedJobIds = snapshot?.documents
+                        ?.mapNotNull { it.getString("jobId") }
+                        ?.toSet()
+                        ?: emptySet()
+                }
+
             db.collection("users").document(currentUid).get()
                 .addOnSuccessListener { document ->
                     val storedRole = document.getString("role")
-                    if (!storedRole.isNullOrBlank()) profileRole = storedRole
+                    val finalRole = if (
+                        storedRole == "باحث عن عمل" || storedRole == "صاحب عمل"
+                    ) {
+                        storedRole
+                    } else {
+                        "باحث عن عمل"
+                    }
+                    profileRole = finalRole
+
+                    if (!document.exists()) {
+                        val user = auth.currentUser
+                        db.collection("users").document(currentUid).set(
+                            mapOf(
+                                "displayName" to (user?.displayName.orEmpty()),
+                                "email" to (user?.email.orEmpty()),
+                                "role" to finalRole
+                            )
+                        )
+                    }
                 }
 
             onDispose {
                 jobsRegistration.remove()
+                applicationsRegistration.remove()
             }
         }
     }
@@ -265,6 +314,9 @@ private fun ForsaApp() {
             } catch (_: Exception) {
             }
             userName = ""
+            profileRole = "باحث عن عمل"
+            appliedJobIds = emptySet()
+            selectedJob = null
             authScreen = AuthScreen.Welcome
         }
     }
@@ -316,6 +368,7 @@ private fun ForsaApp() {
         userName = userName,
         role = profileRole,
         jobs = jobs,
+        db = db,
         selectedJob = selectedJob,
         appliedJobIds = appliedJobIds,
         onSelectJob = { selectedJob = it },
@@ -324,6 +377,10 @@ private fun ForsaApp() {
             val user = auth.currentUser
             if (user == null) {
                 message("سجّل الدخول أولاً")
+            } else if (profileRole != "باحث عن عمل") {
+                message("بدّل نوع الحساب إلى باحث عن عمل حتى تقدر تقدم")
+            } else if (job.ownerUid == user.uid) {
+                message("ما تقدر تقدم على إعلانك")
             } else {
                 val applicationId = job.id + "_" + user.uid
                 db.collection("applications").document(applicationId).get()
@@ -340,6 +397,7 @@ private fun ForsaApp() {
                                     "applicantUid" to user.uid,
                                     "applicantName" to user.displayName.orEmpty(),
                                     "applicantEmail" to user.email.orEmpty(),
+                                    "employerUid" to job.ownerUid,
                                     "note" to note.trim(),
                                     "status" to "pending",
                                     "createdAt" to System.currentTimeMillis()
@@ -387,7 +445,11 @@ private fun ForsaApp() {
             }
         },
         onRoleChanged = { role ->
+            if (role != "باحث عن عمل" && role != "صاحب عمل") return@MainScaffold
             profileRole = role
+            if (role != "صاحب عمل" && tab == MainTab.Publish) {
+                tab = MainTab.Home
+            }
             auth.currentUser?.let { user ->
                 db.collection("users").document(user.uid)
                     .set(
@@ -401,6 +463,10 @@ private fun ForsaApp() {
             }
         },
         onPublish = { job ->
+            if (profileRole != "صاحب عمل") {
+                message("نشر الوظائف متاح لحساب صاحب العمل")
+                return@MainScaffold
+            }
             db.collection("jobs").document(job.id).set(
                 mapOf(
                     "title" to job.title,
@@ -419,6 +485,10 @@ private fun ForsaApp() {
             }
         },
         onDeleteJob = { job ->
+            if (profileRole != "صاحب عمل" || job.ownerUid != auth.currentUser?.uid) {
+                message("ما عندك صلاحية لحذف هذا الإعلان")
+                return@MainScaffold
+            }
             db.collection("jobs").document(job.id).delete()
                 .addOnSuccessListener {
                     message("تم حذف الوظيفة")
@@ -523,6 +593,7 @@ private fun MainScaffold(
     userName: String,
     role: String,
     jobs: List<Job>,
+    db: FirebaseFirestore,
     selectedJob: Job?,
     appliedJobIds: Set<String>,
     onSelectJob: (Job) -> Unit,
@@ -535,6 +606,10 @@ private fun MainScaffold(
     onPublish: (Job) -> Unit,
     onDeleteJob: (Job) -> Unit
 ) {
+    val userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty()
+    val canPublish = role == "صاحب عمل"
+    val visibleTabs = MainTab.values().filter { it != MainTab.Publish || canPublish }
+
     Scaffold(
         topBar = {
             if (currentTab != MainTab.Publish) {
@@ -543,7 +618,7 @@ private fun MainScaffold(
         },
         bottomBar = {
             NavigationBar {
-                MainTab.values().forEach { item ->
+                visibleTabs.forEach { item ->
                     NavigationBarItem(
                         selected = currentTab == item,
                         onClick = { onTab(item) },
@@ -566,13 +641,15 @@ private fun MainScaffold(
                     userName = userName,
                     role = role,
                     jobsCount = jobs.size,
+                    canPublish = canPublish,
                     onJobs = { onTab(MainTab.Jobs) },
                     onPublish = { onTab(MainTab.Publish) }
                 )
 
                 MainTab.Jobs -> JobsTab(
                     jobs = jobs,
-                    currentUserJobUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty(),
+                    currentUserJobUid = userUid,
+                    role = role,
                     selectedJob = selectedJob,
                     appliedJobIds = appliedJobIds,
                     onSelectJob = onSelectJob,
@@ -581,19 +658,35 @@ private fun MainScaffold(
                     onDelete = onDeleteJob
                 )
 
-                MainTab.Publish -> PublishTab(
-                    userUid = FirebaseAuth.getInstance().currentUser?.uid.orEmpty(),
-                    onPublish = onPublish,
-                    onCancel = { onTab(MainTab.Home) }
-                )
+                MainTab.Publish -> {
+                    if (canPublish) {
+                        PublishTab(
+                            userUid = userUid,
+                            onPublish = onPublish,
+                            onCancel = { onTab(MainTab.Home) },
+                            onMessage = message
+                        )
+                    } else {
+                        RoleRequiredScreen(
+                            title = "النشر متاح لصاحب العمل",
+                            description = "بدّل نوع الحساب من الملف الشخصي حتى تقدر تنشر وظائف.",
+                            onBack = { onTab(MainTab.Home) }
+                        )
+                    }
+                }
 
                 MainTab.Profile -> ProfileTab(
                     userName = userName,
                     email = FirebaseAuth.getInstance().currentUser?.email.orEmpty(),
                     role = role,
+                    jobs = jobs,
+                    userUid = userUid,
+                    db = db,
                     onNameChanged = onProfileNameChanged,
                     onRoleChanged = onRoleChanged,
-                    onLogout = onLogout
+                    onLogout = onLogout,
+                    onDeleteJob = onDeleteJob,
+                    onMessage = message
                 )
             }
         }
@@ -605,6 +698,7 @@ private fun HomeTab(
     userName: String,
     role: String,
     jobsCount: Int,
+    canPublish: Boolean,
     onJobs: () -> Unit,
     onPublish: () -> Unit
 ) {
@@ -637,7 +731,11 @@ private fun HomeTab(
                 )
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    "ابحث عن وظيفة مناسبة أو انشر فرصة عمل جديدة.",
+                    if (canPublish) {
+                        "ابحث عن وظيفة مناسبة أو انشر فرصة عمل جديدة."
+                    } else {
+                        "ابحث عن الوظيفة المناسبة وتابع طلباتك من حسابك."
+                    },
                     color = Color.White.copy(alpha = .9f),
                     lineHeight = 24.sp
                 )
@@ -650,29 +748,36 @@ private fun HomeTab(
                     ) {
                         Text("الوظائف")
                     }
-                    OutlinedButton(
-                        onClick = onPublish,
-                        modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
-                    ) {
-                        Text("نشر وظيفة")
+
+                    if (canPublish) {
+                        OutlinedButton(
+                            onClick = onPublish,
+                            modifier = Modifier.weight(1f),
+                            shape = RoundedCornerShape(14.dp)
+                        ) {
+                            Text("نشر وظيفة")
+                        }
                     }
                 }
             }
         }
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            SmallStat("الوظائف المنشورة", jobsCount.toString(), Modifier.weight(1f))
+            SmallStat("إجمالي الوظائف", jobsCount.toString(), Modifier.weight(1f))
             SmallStat("المدن", "العراق", Modifier.weight(1f))
         }
 
         Text(
-            "ابدأ من الأسفل",
+            if (canPublish) "إدارة حسابك من الأسفل" else "تابع فرصك من الحساب",
             fontSize = 18.sp,
             fontWeight = FontWeight.SemiBold
         )
         Text(
-            "الوظائف للتصفح، + للنشر، والحساب لإدارة ملفك الشخصي.",
+            if (canPublish) {
+                "من الحساب تقدر تدير إعلاناتك وتشوف طلبات المتقدمين."
+            } else {
+                "من الحساب تقدر تشوف طلباتك وحالتها وتحدث بياناتك."
+            },
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
@@ -698,6 +803,7 @@ private fun SmallStat(title: String, value: String, modifier: Modifier) {
 private fun JobsTab(
     jobs: List<Job>,
     currentUserJobUid: String,
+    role: String,
     selectedJob: Job?,
     appliedJobIds: Set<String>,
     onSelectJob: (Job) -> Unit,
@@ -710,6 +816,7 @@ private fun JobsTab(
             job = selectedJob,
             isOwner = selectedJob.ownerUid == currentUserJobUid,
             alreadyApplied = selectedJob.id in appliedJobIds,
+            canApply = role == "باحث عن عمل",
             onBack = onClearSelectedJob,
             onApply = onApply
         )
@@ -776,7 +883,7 @@ private fun JobsTab(
             filteredJobs.forEach { job ->
                 JobCard(
                     job = job,
-                    canDelete = job.ownerUid == currentUserJobUid,
+                    canDelete = role == "صاحب عمل" && job.ownerUid == currentUserJobUid,
                     alreadyApplied = job.id in appliedJobIds,
                     onOpen = { onSelectJob(job) },
                     onDelete = { onDelete(job) }
@@ -902,6 +1009,7 @@ private fun JobDetailsScreen(
     job: Job,
     isOwner: Boolean,
     alreadyApplied: Boolean,
+    canApply: Boolean,
     onBack: () -> Unit,
     onApply: (Job, String) -> Unit
 ) {
@@ -960,6 +1068,19 @@ private fun JobDetailsScreen(
                 }
             }
 
+            !canApply -> {
+                Surface(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    color = MaterialTheme.colorScheme.primaryContainer
+                ) {
+                    Text(
+                        "التقديم متاح من حساب الباحث عن عمل. تقدر تبدّل نوع الحساب من الملف الشخصي.",
+                        Modifier.padding(16.dp)
+                    )
+                }
+            }
+
             alreadyApplied -> {
                 Surface(
                     Modifier.fillMaxWidth(),
@@ -1004,7 +1125,8 @@ private fun JobDetailsScreen(
 private fun PublishTab(
     userUid: String,
     onPublish: (Job) -> Unit,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    onMessage: (String) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var company by remember { mutableStateOf("") }
@@ -1081,145 +1203,635 @@ private fun PublishTab(
 
         Button(
             onClick = {
-                if (title.trim().length < 2 ||
-                    company.trim().length < 2 ||
-                    city.trim().length < 2 ||
-                    description.trim().length < 5
-                ) return@Button
+                val cleanTitle = title.trim()
+                val cleanCompany = company.trim()
+                val cleanCity = city.trim()
+                val cleanDescription = description.trim()
 
-                onPublish(
-                    Job(
-                        id = UUID.randomUUID().toString(),
-                        title = title.trim(),
-                        company = company.trim(),
-                        city = city.trim(),
-                        type = type,
-                        description = description.trim(),
-                        ownerUid = userUid
-                    )
-                )
-            },
-            modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
-        ) {
-            Text("نشر الوظيفة", fontSize = 16.sp)
-        }
-
-        Text(
-            "سيتم حفظ الإعلان مباشرة في قاعدة بيانات فرصة ليظهر للمستخدمين.",
-            fontSize = 12.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
-}
-
-@Composable
+                when {
+                    cleanTitle.length < 2 -> onMessage("اكتب المسمى الوظيفي")
+                    cleanCompany.length < 2 -> onMessage("اكتب اسم الشركة أو الجهة")
+                    cleanCity.length < 2 -> onMessage("اكتب المدينة")
+                    cleanDescription.length < 5 -> onMessage("اكتب وصفاً أوضح للوظيفة")
+                    userUid.isBlank() -> onMessage("تعذر التحقق من حسابك")
+                    else -> onPublish(
+                        Job(
+                            id = UUID.randomUUID().toString(),
+                            title = cleanTitle,
+                            company = cleanCompany,
+                            city = cleanCity,
+                            type = type,
+                            description = cleanDescription,
+                         @Composable
 private fun ProfileTab(
     userName: String,
     email: String,
     role: String,
+    jobs: List<Job>,
+    userUid: String,
+    db: FirebaseFirestore,
     onNameChanged: (String) -> Unit,
     onRoleChanged: (String) -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onDeleteJob: (Job) -> Unit,
+    onMessage: (String) -> Unit
 ) {
     var editing by remember { mutableStateOf(false) }
     var draftName by remember(userName) { mutableStateOf(userName) }
+    var section by remember { mutableStateOf("main") }
+
+    when (section) {
+        "employerJobs" -> EmployerJobsScreen(
+            jobs = jobs,
+            userUid = userUid,
+            db = db,
+            onBack = { section = "main" },
+            onApplications = { section = "employerApps" },
+            onDeleteJob = onDeleteJob,
+            onMessage = onMessage
+        )
+
+        "employerApps" -> EmployerApplicationsScreen(
+            db = db,
+            userUid = userUid,
+            onBack = { section = "main" },
+            onMessage = onMessage
+        )
+
+        "myApps" -> MyApplicationsScreen(
+            db = db,
+            userUid = userUid,
+            onBack = { section = "main" },
+            onMessage = onMessage
+        )
+
+        else -> {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                Surface(
+                    Modifier.size(86.dp).align(Alignment.CenterHorizontally),
+                    CircleShape,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                ) {
+                    androidx.compose.foundation.layout.Box(
+                        Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = (userName.trim().firstOrNull() ?: 'م').uppercase(),
+                            fontSize = 34.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+                Text(
+                    "الملف الشخصي",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                if (editing) {
+                    OutlinedTextField(
+                        value = draftName,
+                        onValueChange = { draftName = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("الاسم") },
+                        singleLine = true
+                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Button(
+                            onClick = {
+                                if (draftName.trim().length >= 2) {
+                                    onNameChanged(draftName.trim())
+                                    editing = false
+                                } else {
+                                    onMessage("الاسم يجب أن يكون حرفين على الأقل")
+                                }
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("حفظ")
+                        }
+                        OutlinedButton(
+                            onClick = {
+                                draftName = userName
+                                editing = false
+                            },
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("إلغاء")
+                        }
+                    }
+                } else {
+                    ProfileInfo("الاسم", userName.ifBlank { "بدون اسم" })
+                    ProfileInfo("البريد", email.ifBlank { "غير متوفر" })
+                    ProfileInfo("نوع الحساب", role)
+                    OutlinedButton(
+                        onClick = { editing = true },
+                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Icon(Icons.Default.Person, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("تعديل الملف الشخصي")
+                    }
+                }
+
+                Text("نوع الحساب", fontWeight = FontWeight.SemiBold)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf("باحث عن عمل", "صاحب عمل").forEach { option ->
+                        FilterChip(
+                            selected = role == option,
+                            onClick = { onRoleChanged(option) },
+                            label = { Text(option) }
+                        )
+                    }
+                }
+
+                if (role == "صاحب عمل") {
+                    ProfileActionCard(
+                        title = "إعلاناتي",
+                        description = "شوف الوظائف اللي نشرتها وإدارتها.",
+                        actionLabel = "فتح الإعلانات",
+                        onClick = { section = "employerJobs" }
+                    )
+                    ProfileActionCard(
+                        title = "طلبات التقديم",
+                        description = "شوف المتقدمين على وظائفك وغيّر حالة الطلب.",
+                        actionLabel = "فتح الطلبات",
+                        onClick = { section = "employerApps" }
+                    )
+                } else {
+                    ProfileActionCard(
+                        title = "طلباتي",
+                        description = "تابع الوظائف اللي قدمت عليها وحالة كل طلب.",
+                        actionLabel = "فتح طلباتي",
+                        onClick = { section = "myApps" }
+                    )
+                }
+
+                HorizontalDivider()
+
+                TextButton(
+                    onClick = onLogout,
+                    modifier = Modifier.align(Alignment.Start)
+                ) {
+                    Text("تسجيل الخروج")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileActionCard(
+    title: String,
+    description: String,
+    actionLabel: String,
+    onClick: () -> Unit
+) {
+    Card(
+        Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp)
+    ) {
+        Column(
+            Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(title, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+            Text(description, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            OutlinedButton(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text(actionLabel)
+            }
+        }
+    }
+}
+
+@Composable
+private fun EmployerJobsScreen(
+    jobs: List<Job>,
+    userUid: String,
+    db: FirebaseFirestore,
+    onBack: () -> Unit,
+    onApplications: () -> Unit,
+    onDeleteJob: (Job) -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var applicationCounts by remember { mutableStateOf<Map<String, Int>>(emptyMap()) }
+    var deleteTarget by remember { mutableStateOf<Job?>(null) }
+
+    DisposableEffect(userUid) {
+        if (userUid.isBlank()) {
+            onDispose { }
+        } else {
+            val registration = db.collection("applications")
+                .whereEqualTo("employerUid", userUid)
+                .addSnapshotListener { snapshot, _ ->
+                    applicationCounts = snapshot?.documents
+                        ?.mapNotNull { it.getString("jobId") }
+                        ?.groupingBy { it }
+                        ?.eachCount()
+                        ?: emptyMap()
+                }
+
+            onDispose { registration.remove() }
+        }
+    }
+
+    val myJobs = jobs.filter { it.ownerUid == userUid }
 
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Surface(
-            Modifier.size(86.dp).align(Alignment.CenterHorizontally),
-            CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            androidx.compose.foundation.layout.Box(
-                Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = (userName.trim().firstOrNull() ?: 'م').uppercase(),
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
-                )
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, "رجوع")
             }
+            Text("إعلاناتي", fontSize = 25.sp, fontWeight = FontWeight.Bold)
         }
 
-        Text(
-            "الملف الشخصي",
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        if (editing) {
-            OutlinedTextField(
-                value = draftName,
-                onValueChange = { draftName = it },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text("الاسم") },
-                singleLine = true
+        if (myJobs.isEmpty()) {
+            Text(
+                "ما عندك إعلانات منشورة حالياً.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                Button(
-                    onClick = {
-                        if (draftName.trim().length >= 2) {
-                            onNameChanged(draftName.trim())
-                            editing = false
+        } else {
+            myJobs.forEach { job ->
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(job.company, color = MaterialTheme.colorScheme.primary)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            AssistChip(onClick = {}, label = { Text(job.city) })
+                            AssistChip(onClick = {}, label = { Text(job.type) })
                         }
-                    },
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("حفظ")
+                        Text(
+                            "طلبات التقديم: ${applicationCounts[job.id] ?: 0}",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            job.description,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 3
+                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Button(
+                                onClick = onApplications,
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text("طلبات التقديم")
+                            }
+                            OutlinedButton(
+                                onClick = { deleteTarget = job },
+                                modifier = Modifier.weight(1f),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Icon(Icons.Default.Delete, null)
+                                Spacer(Modifier.width(6.dp))
+                                Text("حذف")
+                            }
+                        }
+                    }
                 }
-                OutlinedButton(
+            }
+        }
+    }
+
+    deleteTarget?.let { job ->
+        AlertDialog(
+            onDismissRequest = { deleteTarget = null },
+            title = { Text("حذف الإعلان؟") },
+            text = { Text("راح ينحذف هذا الإعلان من قائمة الوظائف.") },
+            confirmButton = {
+                TextButton(
                     onClick = {
-                        draftName = userName
-                        editing = false
-                    },
-                    modifier = Modifier.weight(1f)
+                        deleteTarget = null
+                        onDeleteJob(job)
+                    }
                 ) {
+                    Text("حذف")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { deleteTarget = null }) {
                     Text("إلغاء")
                 }
             }
+        )
+    }
+}
+
+@Composable
+private fun EmployerApplicationsScreen(
+    db: FirebaseFirestore,
+    userUid: String,
+    onBack: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var applications by remember { mutableStateOf<List<ApplicationItem>>(emptyList()) }
+
+    DisposableEffect(userUid) {
+        if (userUid.isBlank()) {
+            onDispose { }
         } else {
-            ProfileInfo("الاسم", userName.ifBlank { "بدون اسم" })
-            ProfileInfo("البريد", email.ifBlank { "غير متوفر" })
-            ProfileInfo("نوع الحساب", role)
-            OutlinedButton(
-                onClick = { editing = true },
-                modifier = Modifier.fillMaxWidth().height(52.dp),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Icon(Icons.Default.Person, null)
-                Spacer(Modifier.width(8.dp))
-                Text("تعديل الملف الشخصي")
-            }
+            val registration = db.collection("applications")
+                .whereEqualTo("employerUid", userUid)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        onMessage("تعذر تحميل طلبات التقديم")
+                        applications = emptyList()
+                        return@addSnapshotListener
+                    }
+
+                    applications = snapshot?.documents
+                        ?.mapNotNull { doc ->
+                            val jobId = doc.getString("jobId") ?: return@mapNotNull null
+                            ApplicationItem(
+                                id = doc.id,
+                                jobId = jobId,
+                                jobTitle = doc.getString("jobTitle").orEmpty(),
+                                company = doc.getString("company").orEmpty(),
+                                applicantName = doc.getString("applicantName").orEmpty(),
+                                applicantEmail = doc.getString("applicantEmail").orEmpty(),
+                                note = doc.getString("note").orEmpty(),
+                                status = doc.getString("status") ?: "pending",
+                                createdAt = doc.getLong("createdAt") ?: 0L
+                            )
+                        }
+                        ?.sortedByDescending { it.createdAt }
+                        ?: emptyList()
+                }
+
+            onDispose { registration.remove() }
         }
+    }
 
-        Text("نوع الحساب", fontWeight = FontWeight.SemiBold)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            listOf("باحث عن عمل", "صاحب عمل").forEach { option ->
-                FilterChip(
-                    selected = role == option,
-                    onClick = { onRoleChanged(option) },
-                    label = { Text(option) }
-                )
-            }
-        }
-
-        HorizontalDivider()
-
-        TextButton(
-            onClick = onLogout,
-            modifier = Modifier.align(Alignment.Start)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text("تسجيل الخروج")
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, "رجوع")
+            }
+            Text("طلبات التقديم", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        if (applications.isEmpty()) {
+            Text(
+                "ما وصلت طلبات تقديم حالياً.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        } else {
+            applications.forEach { app ->
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(app.jobTitle, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                        Text(app.company, color = MaterialTheme.colorScheme.primary)
+                        Text("المتقدم: ${app.applicantName.ifBlank { "بدون اسم" }}")
+                        Text(
+                            app.applicantEmail.ifBlank { "بدون بريد" },
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        if (app.note.isNotBlank()) {
+                            Text(
+                                "رسالة المتقدم",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(app.note, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+
+                        StatusBadge(app.status)
+
+                        if (app.status == "pending") {
+                            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                Button(
+                                    onClick = {
+                                        db.collection("applications").document(app.id)
+                                            .update("status", "accepted")
+                                            .addOnFailureListener {
+                                                onMessage("تعذر قبول الطلب")
+                                            }
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(14.dp)
+                                ) {
+                                    Text("قبول")
+                                }
+                                OutlinedButton(
+                                    onClick = {
+                                        db.collection("applications").document(app.id)
+                                            .update("status", "rejected")
+                                            .addOnFailureListener {
+                                                onMessage("تعذر رفض الطلب")
+                                            }
+                                    },
+                                    modifier = Modifier.weight(1f),
+                                    shape = RoundedCornerShape(14.dp)
+                                ) {
+                                    Text("رفض")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MyApplicationsScreen(
+    db: FirebaseFirestore,
+    userUid: String,
+    onBack: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var applications by remember { mutableStateOf<List<ApplicationItem>>(emptyList()) }
+    var deleteTarget by remember { mutableStateOf<ApplicationItem?>(null) }
+
+    DisposableEffect(userUid) {
+        if (userUid.isBlank()) {
+            onDispose { }
+        } else {
+            val registration = db.collection("applications")
+                .whereEqualTo("applicantUid", userUid)
+                .addSnapshotListener { snapshot, error ->
+                    if (error != null) {
+                        onMessage("تعذر تحميل طلباتك")
+                        applications = emptyList()
+                        return@addSnapshotListener
+                    }
+
+                    applications = snapshot?.documents
+                        ?.mapNotNull { doc ->
+                            ApplicationItem(
+                                id = doc.id,
+                                jobId = doc.getString("jobId").orEmpty(),
+                                jobTitle = doc.getString("jobTitle").orEmpty(),
+                                company = doc.getString("company").orEmpty(),
+                                applicantName = doc.getString("applicantName").orEmpty(),
+                                applicantEmail = doc.getString("applicantEmail").orEmpty(),
+                                note = doc.getString("note").orEmpty(),
+                                status = doc.getString("status") ?: "pending",
+                                createdAt = doc.getLong("createdAt") ?: 0L
+                            )
+                        }
+                        ?.sortedByDescending { it.createdAt }
+                        ?: emptyList()
+                }
+
+            onDispose { registration.remove() }
+        }
+    }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, "رجوع")
+            }
+            Text("طلباتي", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+        }
+
+        if (applications.isEmpty()) {
+            Text(
+                "بعدك ما قدمت على وظائف.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        } else {
+            applications.forEach { app ->
+                Card(
+                    Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(18.dp)
+                ) {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(app.jobTitle, fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                        Text(app.company, color = MaterialTheme.colorScheme.primary)
+                        StatusBadge(app.status)
+
+                        if (app.note.isNotBlank()) {
+                            Text(
+                                "رسالتك",
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Text(app.note, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+
+                        if (app.status == "pending") {
+                            OutlinedButton(
+                                onClick = { deleteTarget = app },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text("سحب الطلب")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    deleteTarget?.let { app ->
+        AlertDialog(
+            onDismissRequest = { deleteTarget = null },
+            title = { Text("سحب الطلب؟") },
+            text = { Text("راح ينحذف طلب التقديم وما راح يبقى ضمن طلباتك.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        db.collection("applications").document(app.id).delete()
+                            .addOnSuccessListener {
+                                onMessage("تم سحب الطلب")
+                            }
+                            .addOnFailureListener {
+                                onMessage("تعذر سحب الطلب")
+                            }
+                        deleteTarget = null
+                    }
+                ) {
+                    Text("سحب الطلب")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { deleteTarget = null }) {
+                    Text("إلغاء")
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun StatusBadge(status: String) {
+    val label = when (status) {
+        "accepted" -> "مقبول"
+        "rejected" -> "مرفوض"
+        else -> "قيد المراجعة"
+    }
+
+    Surface(
+        shape = RoundedCornerShape(10.dp),
+        color = MaterialTheme.colorScheme.secondaryContainer
+    ) {
+        Row(
+            Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(Icons.Default.CheckCircle, null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(7.dp))
+            Text(label, fontWeight = FontWeight.SemiBold)
         }
     }
 }
@@ -1364,8 +1976,26 @@ private fun RegisterScreen(
                                     val profile = UserProfileChangeRequest.Builder()
                                         .setDisplayName(cleanName)
                                         .build()
-                                    user.updateProfile(profile).addOnCompleteListener {
-                                        onSuccess()
+                                    user.updateProfile(profile).addOnCompleteListener { profileTask ->
+                                        if (!profileTask.isSuccessful) {
+                                            onLoading(false)
+                                            onMessage("تعذر حفظ اسم الحساب")
+                                        } else {
+                                            FirebaseFirestore.getInstance()
+                                                .collection("users")
+                                                .document(user.uid)
+                                                .set(
+                                                    mapOf(
+                                                        "displayName" to cleanName,
+                                                        "email" to user.email.orEmpty(),
+                                                        "role" to "باحث عن عمل"
+                                                    ),
+                                                    com.google.firebase.firestore.SetOptions.merge()
+                                                )
+                                                .addOnCompleteListener {
+                                                    onSuccess()
+                                                }
+                                        }
                                     }
                                 } ?: run {
                                     onLoading(false)
