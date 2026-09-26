@@ -628,7 +628,7 @@ private fun ForsaApp() {
                 onBack = { authScreen = AuthScreen.Welcome },
                 onRegister = { authScreen = AuthScreen.Register },
                 onForgot = { authScreen = AuthScreen.ResetPassword },
-                onSuccess = ::signedIn,
+                onSuccess = { persistAuthenticatedUser(::signedIn) },
                 onMessage = ::message
             )
 
