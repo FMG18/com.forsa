@@ -368,6 +368,7 @@ private fun ForsaApp() {
         role = profileRole,
         jobs = jobs,
         db = db,
+        onMessage = ::message,
         selectedJob = selectedJob,
         appliedJobIds = appliedJobIds,
         onSelectJob = { selectedJob = it },
@@ -594,6 +595,7 @@ private fun MainScaffold(
     role: String,
     jobs: List<Job>,
     db: FirebaseFirestore,
+    onMessage: (String) -> Unit,
     selectedJob: Job?,
     appliedJobIds: Set<String>,
     onSelectJob: (Job) -> Unit,
@@ -664,7 +666,7 @@ private fun MainScaffold(
                             userUid = userUid,
                             onPublish = onPublish,
                             onCancel = { onTab(MainTab.Home) },
-                            onMessage = message
+                            onMessage = onMessage
                         )
                     } else {
                         RoleRequiredScreen(
