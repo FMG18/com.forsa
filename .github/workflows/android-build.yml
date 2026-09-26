@@ -66,7 +66,6 @@ jobs:
           disable-linux-hw-accel: false
           emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: |
-            set -o pipefail
             mkdir -p ci
             adb start-server
             adb install -r app/build/outputs/apk/debug/app-debug.apk
@@ -92,8 +91,8 @@ jobs:
         run: |
           mkdir -p ci
           build_code="${BUILD_EXIT_CODE:-1}"
-          smoke_conclusion="${{ steps.smoke.conclusion }}"
-          if [ "$build_code" = "0" ] && [ "$smoke_conclusion" = "success" ]; then
+          smoke_outcome="${{ steps.smoke.outcome }}"
+          if [ "$build_code" = "0" ] && [ "$smoke_outcome" = "success" ]; then
             status="PASS"
             summary="APK built successfully and launched on Android Emulator without a detected crash."
             smoke_code=0
@@ -113,7 +112,7 @@ jobs:
             echo "attempt=$GITHUB_RUN_ATTEMPT"
             echo "build_exit_code=$build_code"
             echo "smoke_exit_code=$smoke_code"
-            echo "smoke_conclusion=$smoke_conclusion"
+            echo "smoke_outcome=$smoke_outcome"
             echo "summary=$summary"
             echo
             echo "--- build log tail ---"
@@ -152,7 +151,7 @@ jobs:
         shell: bash
         run: |
           build_code="${BUILD_EXIT_CODE:-1}"
-          smoke_conclusion="${{ steps.smoke.conclusion }}"
-          if [ "$build_code" != "0" ] || [ "$smoke_conclusion" != "success" ]; then
+          smoke_outcome="${{ steps.smoke.outcome }}"
+          if [ "$build_code" != "0" ] || [ "$smoke_outcome" != "success" ]; then
             exit 1
           fi
