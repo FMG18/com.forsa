@@ -8,15 +8,17 @@ service cloud.firestore {
 
       allow create: if request.auth != null
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
-        && request.resource.data.ownerUid == request.auth.uid;
+        && request.resource.data.ownerUid == request.auth.uid
+        && (!("isActive" in request.resource.data) || request.resource.data.isActive == true);
 
       allow update: if request.auth != null
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
         && resource.data.ownerUid == request.auth.uid
         && request.resource.data.ownerUid == request.auth.uid
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
-          "title", "company", "city", "type", "description"
-        ]);
+          "title", "company", "city", "type", "description", "isActive"
+        ])
+        && (!("isActive" in request.resource.data) || request.resource.data.isActive == true || request.resource.data.isActive == false);
 
       allow delete: if request.auth != null
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "صاحب عمل"
@@ -32,6 +34,10 @@ service cloud.firestore {
         && request.resource.data.jobId is string
         && request.resource.data.employerUid ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.ownerUid
+        && (
+          !("isActive" in get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data)
+          || get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.isActive == true
+        )
         && request.resource.data.jobTitle ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.title
         && request.resource.data.company ==
