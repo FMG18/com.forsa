@@ -15,6 +15,9 @@ android {
         targetSdk = 35
         versionCode = 14
         versionName = "0.14.0"
+
+        val paymentApiBaseUrl = project.findProperty("FORSA_PAYMENT_API_BASE_URL")?.toString().orEmpty()
+        buildConfigField("String", "FORSA_PAYMENT_API_BASE_URL", "\"$paymentApiBaseUrl\"")
     }
 
     compileOptions {
@@ -33,16 +36,6 @@ android {
         buildConfig = true
     }
 
-    val paymentApiBaseUrl = providers
-        .gradleProperty("FORSA_PAYMENT_API_BASE_URL")
-        .orElse("")
-        .get()
-
-    buildConfigField(
-        "String",
-        "FORSA_PAYMENT_API_BASE_URL",
-        ""$paymentApiBaseUrl""
-    )
 }
 
 dependencies {
