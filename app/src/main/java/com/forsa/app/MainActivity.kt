@@ -97,7 +97,13 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.FirebaseException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthOptions
+import com.google.firebase.auth.PhoneAuthProvider
+import java.util.concurrent.TimeUnit
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.BufferedReader
@@ -172,7 +178,7 @@ private suspend fun startForsaPayment(
     }
 }
 
-private enum class AuthScreen { Welcome, Login, Register, ResetPassword }
+private enum class AuthScreen { Welcome, Login, Register, Phone, ResetPassword }
 private enum class MainTab { Home, Jobs, Publish, Profile }
 
 private data class Job(
@@ -518,7 +524,7 @@ private fun ForsaApp() {
                     mapOf(
                         "displayName" to user.displayName.orEmpty(),
                         "email" to user.email.orEmpty(),
-                        "phone" to document.getString("phone").orEmpty(),
+                        "phone" to document.getString("phone").orEmpty().ifBlank { user.phoneNumber.orEmpty() },
                         "city" to document.getString("city").orEmpty(),
                         "role" to role,
                         "companyName" to document.getString("companyName").orEmpty(),
@@ -641,6 +647,16 @@ private fun ForsaApp() {
                 onBack = { authScreen = AuthScreen.Welcome },
                 onLogin = { authScreen = AuthScreen.Login },
                 onSuccess = ::signedIn,
+                onMessage = ::message
+            )
+
+            AuthScreen.Phone -> PhoneAuthScreen(
+                activity = activity,
+                auth = auth,
+                loading = loading,
+                onLoading = { loading = it },
+                onBack = { authScreen = AuthScreen.Welcome },
+                onSuccess = { persistAuthenticatedUser(::signedIn) },
                 onMessage = ::message
             )
 
@@ -1057,6 +1073,15 @@ private fun WelcomeScreen(
                 Icon(Icons.Default.Email, null)
                 Spacer(Modifier.width(8.dp))
                 Text("تسجيل الدخول بالبريد الإلكتروني")
+            }
+
+            Spacer(Modifier.height(10.dp))
+            OutlinedButton(
+                onClick = { authScreen = AuthScreen.Phone },
+                modifier = Modifier.fillMaxWidth().height(54.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text("المتابعة برقم الهاتف")
             }
 
             Spacer(Modifier.height(4.dp))
@@ -4205,6 +4230,238 @@ private fun RegisterScreen(
         TextButton(onClick = onLogin, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text("عندك حساب؟ تسجيل الدخول")
         }
+    }
+}
+
+@Composable
+private fun PhoneAuthScreen(
+    activity: Activity?,
+    auth: FirebaseAuth,
+    loading: Boolean,
+    onLoading: (Boolean) -> Unit,
+    onBack: () -> Unit,
+    onSuccess: () -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var phone by remember { mutableStateOf("") }
+    var code by remember { mutableStateOf("") }
+    var verificationId by remember { mutableStateOf<String?>(null) }
+    var verifying by remember { mutableStateOf(false) }
+
+    fun finishWithCredential(credential: PhoneAuthCredential) {
+        if (verifying) return
+        verifying = true
+        onLoading(true)
+        auth.signInWithCredential(credential).addOnCompleteListener { task ->
+            verifying = false
+            onLoading(false)
+            if (task.isSuccessful) {
+                onSuccess()
+            } else {
+                onMessage(firebaseError(task.exception))
+            }
+        }
+    }
+
+    fun sendCode() {
+        val normalized = normalizeIraqiPhone(phone)
+        when {
+            activity == null -> onMessage("تعذر بدء التحقق على الهاتف")
+            normalized == null -> onMessage("اكتب رقم هاتف عراقي صحيح، مثل 0770XXXXXXX")
+            else -> {
+                onLoading(true)
+                auth.setLanguageCode("ar")
+                val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                        finishWithCredential(credential)
+                    }
+
+                    override fun onVerificationFailed(e: FirebaseException) {
+                        verifying = false
+                        onLoading(false)
+                        onMessage(phoneAuthError(e))
+                    }
+
+                    override fun onCodeSent(
+                        newVerificationId: String,
+                        token: PhoneAuthProvider.ForceResendingToken
+                    ) {
+                        verificationId = newVerificationId
+                        onLoading(false)
+                        onMessage("تم إرسال رمز التحقق إلى $normalized")
+                    }
+                }
+
+                val options = PhoneAuthOptions.newBuilder(auth)
+                    .setPhoneNumber(normalized)
+                    .setTimeout(60L, TimeUnit.SECONDS)
+                    .setActivity(activity)
+                    .setCallbacks(callbacks)
+                    .build()
+
+                PhoneAuthProvider.verifyPhoneNumber(options)
+            }
+        }
+    }
+
+    AuthScaffold {
+        AuthHeader(
+            if (verificationId == null) "تسجيل الدخول بالهاتف" else "أدخل رمز التحقق",
+            if (verificationId == null) {
+                "راح نرسل رمز لمرة واحدة إلى رقمك"
+            } else {
+                "اكتب الرمز المكوّن من 6 أرقام حتى نكمل تسجيل الدخول"
+            },
+            onBack
+        )
+        Spacer(Modifier.height(24.dp))
+
+        if (verificationId == null) {
+            OutlinedTextField(
+                value = phone,
+                onValueChange = { phone = it },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("رقم الهاتف العراقي") },
+                placeholder = { Text("0770XXXXXXX أو +96477XXXXXXX") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done
+                ),
+                shape = RoundedCornerShape(14.dp)
+            )
+
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "قد تصلك رسالة SMS للتحقق، وقد تنطبق رسوم الرسائل حسب شركة الاتصالات.",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 12.sp
+            )
+            Spacer(Modifier.height(18.dp))
+
+            Button(
+                onClick = ::sendCode,
+                enabled = !loading,
+                modifier = Modifier.fillMaxWidth().height(54.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                if (loading) {
+                    CircularProgressIndicator(
+                        Modifier.size(22.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("إرسال رمز التحقق", fontSize = 16.sp)
+                }
+            }
+        } else {
+            OutlinedTextField(
+                value = code,
+                onValueChange = { value ->
+                    code = value.filter(Char::isDigit).take(6)
+                },
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("رمز التحقق") },
+                placeholder = { Text("000000") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                ),
+                shape = RoundedCornerShape(14.dp)
+            )
+
+            Spacer(Modifier.height(18.dp))
+
+            Button(
+                onClick = {
+                    val id = verificationId.orEmpty()
+                    when {
+                        id.isBlank() -> onMessage("أرسل رمز التحقق أولاً")
+                        code.length != 6 -> onMessage("رمز التحقق يجب أن يكون 6 أرقام")
+                        verifying || loading -> Unit
+                        else -> finishWithCredential(
+                            PhoneAuthProvider.getCredential(id, code)
+                        )
+                    }
+                },
+                enabled = !loading && !verifying,
+                modifier = Modifier.fillMaxWidth().height(54.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                if (loading || verifying) {
+                    CircularProgressIndicator(
+                        Modifier.size(22.dp),
+                        strokeWidth = 2.dp,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Text("تحقق ودخول", fontSize = 16.sp)
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
+            OutlinedButton(
+                onClick = {
+                    verificationId = null
+                    code = ""
+                },
+                enabled = !loading && !verifying,
+                modifier = Modifier.fillMaxWidth().height(50.dp),
+                shape = RoundedCornerShape(14.dp)
+            ) {
+                Text("تغيير الرقم")
+            }
+
+            Spacer(Modifier.height(6.dp))
+            TextButton(
+                onClick = ::sendCode,
+                enabled = !loading && !verifying,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text("إعادة إرسال الرمز")
+            }
+        }
+    }
+}
+
+private fun normalizeIraqiPhone(raw: String): String? {
+    val value = raw.trim()
+        .replace(" ", "")
+        .replace("-", "")
+        .replace("(", "")
+        .replace(")", "")
+
+    if (value.startsWith("+964")) {
+        val local = value.removePrefix("+964")
+        return if (local.matches(Regex("7[3-9]\\d{8}"))) "+964$local" else null
+    }
+
+    if (value.startsWith("00964")) {
+        val local = value.removePrefix("00964")
+        return if (local.matches(Regex("7[3-9]\\d{8}"))) "+964$local" else null
+    }
+
+    if (value.matches(Regex("07[3-9]\\d{8}"))) {
+        return "+964" + value.drop(1)
+    }
+
+    if (value.matches(Regex("7[3-9]\\d{8}"))) {
+        return "+964$value"
+    }
+
+    return null
+}
+
+private fun phoneAuthError(exception: FirebaseException): String {
+    return when ((exception as? FirebaseAuthException)?.errorCode) {
+        "ERROR_INVALID_PHONE_NUMBER" -> "رقم الهاتف غير صحيح"
+        "ERROR_TOO_MANY_REQUESTS" -> "محاولات كثيرة. انتظر قليلاً ثم حاول مرة أخرى"
+        "ERROR_QUOTA_EXCEEDED" -> "تم تجاوز حد الرسائل مؤقتاً. حاول لاحقاً"
+        "ERROR_CAPTCHA_CHECK_FAILED" -> "تعذر التحقق من أن الطلب صادر من التطبيق"
+        "ERROR_APP_NOT_AUTHORIZED" -> "التطبيق غير مفعّل لاستخدام تسجيل الدخول بالهاتف في Firebase"
+        else -> exception.localizedMessage ?: "تعذر إرسال رمز التحقق"
     }
 }
 
