@@ -13,8 +13,8 @@ android {
         applicationId = "com.forsa.app"
         minSdk = 26
         targetSdk = 35
-        versionCode = 14
-        versionName = "0.14.0"
+        versionCode = 15
+        versionName = "0.14.1"
 
         val paymentApiBaseUrl = project.findProperty("FORSA_PAYMENT_API_BASE_URL")?.toString().orEmpty()
         buildConfigField("String", "FORSA_PAYMENT_API_BASE_URL", "\"$paymentApiBaseUrl\"")
