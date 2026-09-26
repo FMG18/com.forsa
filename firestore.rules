@@ -79,22 +79,11 @@ service cloud.firestore {
     }
 
     match /promotionOrders/{orderId} {
-      allow create: if request.auth != null
-        && request.resource.data.ownerUid == request.auth.uid
-        && request.resource.data.jobId is string
-        && get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.ownerUid == request.auth.uid
-        && request.resource.data.planId in ["boost_7", "top_7", "urgent_48"]
-        && (
-          (request.resource.data.planId == "boost_7" && request.resource.data.amountIqd == 5000)
-          || (request.resource.data.planId == "top_7" && request.resource.data.amountIqd == 8000)
-          || (request.resource.data.planId == "urgent_48" && request.resource.data.amountIqd == 3000)
-        )
-        && request.resource.data.status == "pending_payment";
+      // Payment orders are created and updated only by the trusted payment backend.
+      allow create, update, delete: if false;
 
       allow read: if request.auth != null
         && resource.data.ownerUid == request.auth.uid;
-
-      allow update, delete: if false;
     }
 
     match /notifications/{notificationId} {
