@@ -166,6 +166,8 @@ private fun ForsaApp() {
     var tab by remember { mutableStateOf(MainTab.Home) }
     var loading by remember { mutableStateOf(false) }
     var userName by remember { mutableStateOf(auth.currentUser?.displayName.orEmpty()) }
+    var profilePhone by remember { mutableStateOf("") }
+    var profileCity by remember { mutableStateOf("") }
     var profileRole by remember { mutableStateOf("باحث عن عمل") }
     var jobs by remember { mutableStateOf<List<Job>>(emptyList()) }
     var selectedJob by remember { mutableStateOf<Job?>(null) }
@@ -185,6 +187,8 @@ private fun ForsaApp() {
             onDispose { }
         } else {
             profileRole = "باحث عن عمل"
+            profilePhone = ""
+            profileCity = ""
 
             val jobsRegistration = db.collection("jobs")
                 .addSnapshotListener { snapshot, error ->
@@ -234,12 +238,16 @@ private fun ForsaApp() {
                         "باحث عن عمل"
                     }
                     profileRole = finalRole
+                    profilePhone = document.getString("phone").orEmpty()
+                    profileCity = document.getString("city").orEmpty()
 
                     val user = auth.currentUser
                     db.collection("users").document(currentUid).set(
                         mapOf(
                             "displayName" to (user?.displayName ?: document.getString("displayName").orEmpty()),
                             "email" to (user?.email ?: document.getString("email").orEmpty()),
+                            "phone" to document.getString("phone").orEmpty(),
+                            "city" to document.getString("city").orEmpty(),
                             "role" to finalRole
                         ),
                         com.google.firebase.firestore.SetOptions.merge()
@@ -315,6 +323,8 @@ private fun ForsaApp() {
             } catch (_: Exception) {
             }
             userName = ""
+            profilePhone = ""
+            profileCity = ""
             profileRole = "باحث عن عمل"
             appliedJobIds = emptySet()
             selectedJob = null
@@ -367,6 +377,8 @@ private fun ForsaApp() {
     MainScaffold(
         currentTab = tab,
         userName = userName,
+        phone = profilePhone,
+        city = profileCity,
         role = profileRole,
         jobs = jobs,
         db = db,
@@ -423,30 +435,70 @@ private fun ForsaApp() {
         },
         onTab = { tab = it },
         onLogout = ::signOut,
-        onProfileNameChanged = { newName ->
-            auth.currentUser?.let { user ->
-                val profile = UserProfileChangeRequest.Builder()
-                    .setDisplayName(newName)
-                    .build()
-                loading = true
-                user.updateProfile(profile).addOnCompleteListener { task ->
-                    loading = false
-                    if (task.isSuccessful) {
-                        userName = newName
-                        db.collection("users").document(user.uid)
-                            .set(
-                                mapOf(
-                                    "displayName" to newName,
-                                    "email" to user.email.orEmpty(),
-                                    "role" to profileRole
-                                ),
-                                com.google.firebase.firestore.SetOptions.merge()
-                            )
-                        message("تم تحديث الاسم")
-                    } else {
-                        message("تعذر تحديث الاسم")
+        onProfileSaved = { newName, newPhone, newCity ->
+            val user = auth.currentUser
+            if (user == null) {
+                message("سجّل الدخول أولاً")
+            } else {
+                val cleanName = newName.trim()
+                val cleanPhone = newPhone.trim()
+                val cleanCity = newCity.trim()
+
+                when {
+                    cleanName.length < 2 -> message("الاسم يجب أن يكون حرفين على الأقل")
+                    cleanPhone.isNotEmpty() && cleanPhone.length < 7 -> message("رقم الهاتف غير صحيح")
+                    cleanCity.isNotEmpty() && cleanCity.length < 2 -> message("المدينة غير صحيحة")
+                    else -> {
+                        loading = true
+                        val profile = UserProfileChangeRequest.Builder()
+                            .setDisplayName(cleanName)
+                            .build()
+
+                        user.updateProfile(profile).addOnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                loading = false
+                                message("تعذر تحديث بيانات الحساب")
+                            } else {
+                                db.collection("users").document(user.uid)
+                                    .set(
+                                        mapOf(
+                                            "displayName" to cleanName,
+                                            "email" to user.email.orEmpty(),
+                                            "phone" to cleanPhone,
+                                            "city" to cleanCity,
+                                            "role" to profileRole
+                                        ),
+                                        com.google.firebase.firestore.SetOptions.merge()
+                                    )
+                                    .addOnSuccessListener {
+                                        userName = cleanName
+                                        profilePhone = cleanPhone
+                                        profileCity = cleanCity
+                                        loading = false
+                                        message("تم حفظ بيانات الملف الشخصي")
+                                    }
+                                    .addOnFailureListener {
+                                        loading = false
+                                        message("تعذر حفظ بيانات الملف الشخصي")
+                                    }
+                            }
+                        }
                     }
                 }
+            }
+        },
+        onPasswordReset = {
+            val emailAddress = auth.currentUser?.email.orEmpty()
+            if (emailAddress.isBlank()) {
+                message("البريد الإلكتروني غير متوفر")
+            } else {
+                auth.sendPasswordResetEmail(emailAddress)
+                    .addOnSuccessListener {
+                        message("تم إرسال رابط تغيير كلمة المرور إلى بريدك")
+                    }
+                    .addOnFailureListener {
+                        message("تعذر إرسال رابط تغيير كلمة المرور")
+                    }
             }
         },
         onRoleChanged = { role ->
@@ -457,6 +509,8 @@ private fun ForsaApp() {
                             mapOf(
                                 "displayName" to user.displayName.orEmpty(),
                                 "email" to user.email.orEmpty(),
+                                "phone" to profilePhone,
+                                "city" to profileCity,
                                 "role" to role
                             ),
                             com.google.firebase.firestore.SetOptions.merge()
@@ -624,6 +678,8 @@ private fun BrandMark() {
 private fun MainScaffold(
     currentTab: MainTab,
     userName: String,
+    phone: String,
+    city: String,
     role: String,
     jobs: List<Job>,
     db: FirebaseFirestore,
@@ -635,7 +691,8 @@ private fun MainScaffold(
     onApplyToJob: (Job, String) -> Unit,
     onTab: (MainTab) -> Unit,
     onLogout: () -> Unit,
-    onProfileNameChanged: (String) -> Unit,
+    onProfileSaved: (String, String, String) -> Unit,
+    onPasswordReset: () -> Unit,
     onRoleChanged: (String) -> Unit,
     onPublish: (Job) -> Unit,
     onDeleteJob: (Job) -> Unit,
@@ -712,12 +769,15 @@ private fun MainScaffold(
 
                 MainTab.Profile -> ProfileTab(
                     userName = userName,
+                    phone = phone,
+                    city = city,
                     email = FirebaseAuth.getInstance().currentUser?.email.orEmpty(),
                     role = role,
                     jobs = jobs,
                     userUid = userUid,
                     db = db,
-                    onNameChanged = onProfileNameChanged,
+                    onProfileSaved = onProfileSaved,
+                    onPasswordReset = onPasswordReset,
                     onRoleChanged = onRoleChanged,
                     onLogout = onLogout,
                     onDeleteJob = onDeleteJob,
@@ -1346,12 +1406,15 @@ private fun RoleRequiredScreen(
 @Composable
 private fun ProfileTab(
     userName: String,
+    phone: String,
+    city: String,
     email: String,
     role: String,
     jobs: List<Job>,
     userUid: String,
     db: FirebaseFirestore,
-    onNameChanged: (String) -> Unit,
+    onProfileSaved: (String, String, String) -> Unit,
+    onPasswordReset: () -> Unit,
     onRoleChanged: (String) -> Unit,
     onLogout: () -> Unit,
     onDeleteJob: (Job) -> Unit,
@@ -1360,6 +1423,9 @@ private fun ProfileTab(
 ) {
     var editing by remember { mutableStateOf(false) }
     var draftName by remember(userName) { mutableStateOf(userName) }
+    var draftPhone by remember(phone) { mutableStateOf(phone) }
+    var draftCity by remember(city) { mutableStateOf(city) }
+    var loggingOut by remember { mutableStateOf(false) }
     var section by remember { mutableStateOf("main") }
     var editingJob by remember { mutableStateOf<Job?>(null) }
 
@@ -1443,14 +1509,39 @@ private fun ProfileTab(
                         label = { Text("الاسم") },
                         singleLine = true
                     )
+                    OutlinedTextField(
+                        value = draftPhone,
+                        onValueChange = { draftPhone = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("رقم الهاتف (اختياري)") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next
+                        )
+                    )
+                    OutlinedTextField(
+                        value = draftCity,
+                        onValueChange = { draftCity = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text("المدينة (اختياري)") },
+                        singleLine = true
+                    )
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Button(
                             onClick = {
-                                if (draftName.trim().length >= 2) {
-                                    onNameChanged(draftName.trim())
+                                if (draftName.trim().length >= 2 &&
+                                    (draftPhone.trim().isEmpty() || draftPhone.trim().length >= 7) &&
+                                    (draftCity.trim().isEmpty() || draftCity.trim().length >= 2)
+                                ) {
+                                    onProfileSaved(
+                                        draftName.trim(),
+                                        draftPhone.trim(),
+                                        draftCity.trim()
+                                    )
                                     editing = false
                                 } else {
-                                    onMessage("الاسم يجب أن يكون حرفين على الأقل")
+                                    onMessage("راجع الاسم ورقم الهاتف والمدينة")
                                 }
                             },
                             modifier = Modifier.weight(1f)
@@ -1460,6 +1551,8 @@ private fun ProfileTab(
                         OutlinedButton(
                             onClick = {
                                 draftName = userName
+                                draftPhone = phone
+                                draftCity = city
                                 editing = false
                             },
                             modifier = Modifier.weight(1f)
@@ -1470,6 +1563,8 @@ private fun ProfileTab(
                 } else {
                     ProfileInfo("الاسم", userName.ifBlank { "بدون اسم" })
                     ProfileInfo("البريد", email.ifBlank { "غير متوفر" })
+                    ProfileInfo("رقم الهاتف", phone.ifBlank { "غير مضاف" })
+                    ProfileInfo("المدينة", city.ifBlank { "غير مضافة" })
                     ProfileInfo("نوع الحساب", role)
                     OutlinedButton(
                         onClick = { editing = true },
@@ -1479,6 +1574,15 @@ private fun ProfileTab(
                         Icon(Icons.Default.Person, null)
                         Spacer(Modifier.width(8.dp))
                         Text("تعديل الملف الشخصي")
+                    }
+                    OutlinedButton(
+                        onClick = onPasswordReset,
+                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        shape = RoundedCornerShape(16.dp)
+                    ) {
+                        Icon(Icons.Default.Lock, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text("تغيير كلمة المرور")
                     }
                 }
 
@@ -1518,10 +1622,33 @@ private fun ProfileTab(
                 HorizontalDivider()
 
                 TextButton(
-                    onClick = onLogout,
+                    onClick = { loggingOut = true },
                     modifier = Modifier.align(Alignment.Start)
                 ) {
                     Text("تسجيل الخروج")
+                }
+
+                if (loggingOut) {
+                    AlertDialog(
+                        onDismissRequest = { loggingOut = false },
+                        title = { Text("تسجيل الخروج؟") },
+                        text = { Text("راح يتم تسجيل الخروج من حساب فرصة على هذا الجهاز.") },
+                        confirmButton = {
+                            TextButton(
+                                onClick = {
+                                    loggingOut = false
+                                    onLogout()
+                                }
+                            ) {
+                                Text("تسجيل الخروج")
+                            }
+                        },
+                        dismissButton = {
+                            TextButton(onClick = { loggingOut = false }) {
+                                Text("إلغاء")
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -2332,6 +2459,8 @@ private fun RegisterScreen(
                                                     mapOf(
                                                         "displayName" to cleanName,
                                                         "email" to user.email.orEmpty(),
+                                                        "phone" to "",
+                                                        "city" to "",
                                                         "role" to "باحث عن عمل"
                                                     ),
                                                     com.google.firebase.firestore.SetOptions.merge()
