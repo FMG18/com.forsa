@@ -175,6 +175,7 @@ private fun ForsaApp() {
                     }
 
                     jobs = snapshot?.documents
+                        ?.sortedByDescending { it.getLong("createdAt") ?: 0L }
                         ?.mapNotNull { document ->
                             val id = document.id
                             val title = document.getString("title") ?: return@mapNotNull null
@@ -185,7 +186,6 @@ private fun ForsaApp() {
                             val ownerUid = document.getString("ownerUid") ?: ""
                             Job(id, title, company, city, type, description, ownerUid)
                         }
-                        ?.sortedByDescending { it.id }
                         ?: emptyList()
                 }
 
