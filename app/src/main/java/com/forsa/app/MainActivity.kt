@@ -444,57 +444,58 @@ private fun ForsaApp() {
             }
         },
         onRoleChanged = { role ->
-            if (role != "باحث عن عمل" && role != "صاحب عمل") return@MainScaffold
-            profileRole = role
-            if (role != "صاحب عمل" && tab == MainTab.Publish) {
-                tab = MainTab.Home
-            }
-            auth.currentUser?.let { user ->
-                db.collection("users").document(user.uid)
-                    .set(
-                        mapOf(
-                            "displayName" to user.displayName.orEmpty(),
-                            "email" to user.email.orEmpty(),
-                            "role" to role
-                        ),
-                        com.google.firebase.firestore.SetOptions.merge()
-                    )
+            if (role == "باحث عن عمل" || role == "صاحب عمل") {
+                profileRole = role
+                if (role != "صاحب عمل" && tab == MainTab.Publish) {
+                    tab = MainTab.Home
+                }
+                auth.currentUser?.let { user ->
+                    db.collection("users").document(user.uid)
+                        .set(
+                            mapOf(
+                                "displayName" to user.displayName.orEmpty(),
+                                "email" to user.email.orEmpty(),
+                                "role" to role
+                            ),
+                            com.google.firebase.firestore.SetOptions.merge()
+                        )
+                }
             }
         },
         onPublish = { job ->
             if (profileRole != "صاحب عمل") {
                 message("نشر الوظائف متاح لحساب صاحب العمل")
-                return@MainScaffold
-            }
-            db.collection("jobs").document(job.id).set(
-                mapOf(
-                    "title" to job.title,
-                    "company" to job.company,
-                    "city" to job.city,
-                    "type" to job.type,
-                    "description" to job.description,
-                    "ownerUid" to job.ownerUid,
-                    "createdAt" to System.currentTimeMillis()
-                )
-            ).addOnSuccessListener {
-                tab = MainTab.Jobs
-                message("تم نشر الوظيفة بنجاح")
-            }.addOnFailureListener {
-                message("تعذر نشر الوظيفة، تأكد من إعداد Firestore")
+            } else {
+                db.collection("jobs").document(job.id).set(
+                    mapOf(
+                        "title" to job.title,
+                        "company" to job.company,
+                        "city" to job.city,
+                        "type" to job.type,
+                        "description" to job.description,
+                        "ownerUid" to job.ownerUid,
+                        "createdAt" to System.currentTimeMillis()
+                    )
+                ).addOnSuccessListener {
+                    tab = MainTab.Jobs
+                    message("تم نشر الوظيفة بنجاح")
+                }.addOnFailureListener {
+                    message("تعذر نشر الوظيفة، تأكد من إعداد Firestore")
+                }
             }
         },
         onDeleteJob = { job ->
             if (profileRole != "صاحب عمل" || job.ownerUid != auth.currentUser?.uid) {
                 message("ما عندك صلاحية لحذف هذا الإعلان")
-                return@MainScaffold
+            } else {
+                db.collection("jobs").document(job.id).delete()
+                    .addOnSuccessListener {
+                        message("تم حذف الوظيفة")
+                    }
+                    .addOnFailureListener {
+                        message("تعذر حذف الوظيفة")
+                    }
             }
-            db.collection("jobs").document(job.id).delete()
-                .addOnSuccessListener {
-                    message("تم حذف الوظيفة")
-                }
-                .addOnFailureListener {
-                    message("تعذر حذف الوظيفة")
-                }
         }
     )
 }
