@@ -29,6 +29,14 @@ jobs:
         with:
           gradle-version: "8.10.2"
 
+      - name: Enable KVM
+        shell: bash
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l /dev/kvm || true
+
       - name: Build debug APK
         id: build
         continue-on-error: true
@@ -55,10 +63,12 @@ jobs:
           disk-size: 8G
           emulator-boot-timeout: 600
           disable-animations: true
+          disable-linux-hw-accel: false
           emulator-options: -no-snapshot -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
           script: |
             set -o pipefail
             mkdir -p ci
+            adb start-server
             adb install -r app/build/outputs/apk/debug/app-debug.apk
             adb shell am force-stop com.forsa.app
             adb shell am start -W -n com.forsa.app/.MainActivity
@@ -82,8 +92,8 @@ jobs:
         run: |
           mkdir -p ci
           build_code="${BUILD_EXIT_CODE:-1}"
-          smoke_ok="${{ steps.smoke.outcome == 'success' }}"
-          if [ "$build_code" = "0" ] && [ "$smoke_ok" = "true" ]; then
+          smoke_outcome="${{ steps.smoke.outcome }}"
+          if [ "$build_code" = "0" ] && [ "$smoke_outcome" = "success" ]; then
             status="PASS"
             summary="APK built successfully and launched on Android Emulator without a detected crash."
             smoke_code=0
@@ -103,7 +113,7 @@ jobs:
             echo "attempt=$GITHUB_RUN_ATTEMPT"
             echo "build_exit_code=$build_code"
             echo "smoke_exit_code=$smoke_code"
-            echo "smoke_outcome=$smoke_ok"
+            echo "smoke_outcome=$smoke_outcome"
             echo "summary=$summary"
             echo
             echo "--- build log tail ---"
