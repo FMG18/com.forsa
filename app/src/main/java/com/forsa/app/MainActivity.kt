@@ -201,6 +201,9 @@ private fun ForsaApp() {
     var profilePhone by remember { mutableStateOf("") }
     var profileCity by remember { mutableStateOf("") }
     var profileRole by remember { mutableStateOf("باحث عن عمل") }
+    var companyName by remember { mutableStateOf("") }
+    var companyAbout by remember { mutableStateOf("") }
+    var companyCity by remember { mutableStateOf("") }
     var jobs by remember { mutableStateOf<List<Job>>(emptyList()) }
     var selectedJob by remember { mutableStateOf<Job?>(null) }
     var promotionTarget by remember { mutableStateOf<Job?>(null) }
@@ -226,6 +229,9 @@ private fun ForsaApp() {
             profileRole = "باحث عن عمل"
             profilePhone = ""
             profileCity = ""
+            companyName = ""
+            companyAbout = ""
+            companyCity = ""
 
             val jobsRegistration = db.collection("jobs")
                 .addSnapshotListener { snapshot, error ->
@@ -319,6 +325,9 @@ private fun ForsaApp() {
                     profileRole = finalRole
                     profilePhone = document.getString("phone").orEmpty()
                     profileCity = document.getString("city").orEmpty()
+                    companyName = document.getString("companyName").orEmpty()
+                    companyAbout = document.getString("companyAbout").orEmpty()
+                    companyCity = document.getString("companyCity").orEmpty()
 
                     val user = auth.currentUser
                     db.collection("users").document(currentUid).set(
@@ -406,6 +415,9 @@ private fun ForsaApp() {
             profilePhone = ""
             profileCity = ""
             profileRole = "باحث عن عمل"
+            companyName = ""
+            companyAbout = ""
+            companyCity = ""
             appliedJobIds = emptySet()
             savedJobIds = emptySet()
             cvProfile = CvProfile()
@@ -463,6 +475,9 @@ private fun ForsaApp() {
         phone = profilePhone,
         city = profileCity,
         role = profileRole,
+        companyName = companyName,
+        companyAbout = companyAbout,
+        companyCity = companyCity,
         jobs = jobs,
         db = db,
         onMessage = ::message,
@@ -585,7 +600,10 @@ private fun ForsaApp() {
                                             "email" to user.email.orEmpty(),
                                             "phone" to cleanPhone,
                                             "city" to cleanCity,
-                                            "role" to profileRole
+                                            "role" to profileRole,
+                                            "companyName" to companyName,
+                                            "companyAbout" to companyAbout,
+                                            "companyCity" to companyCity
                                         ),
                                         com.google.firebase.firestore.SetOptions.merge()
                                     )
@@ -602,6 +620,46 @@ private fun ForsaApp() {
                                     }
                             }
                         }
+                    }
+                }
+            }
+        },
+        onCompanyProfileSaved = { newCompanyName, newCompanyAbout, newCompanyCity ->
+            val user = auth.currentUser
+            if (user == null) {
+                message("سجّل الدخول أولاً")
+            } else {
+                val cleanName = newCompanyName.trim()
+                val cleanAbout = newCompanyAbout.trim()
+                val cleanCity = newCompanyCity.trim()
+
+                when {
+                    profileRole != "صاحب عمل" -> message("بيانات الشركة متاحة لحساب صاحب العمل")
+                    cleanName.length < 2 -> message("اكتب اسم الشركة أو الجهة")
+                    cleanCity.length < 2 -> message("اكتب مدينة الشركة")
+                    cleanAbout.length < 10 -> message("اكتب نبذة أوضح عن الشركة")
+                    else -> {
+                        loading = true
+                        db.collection("users").document(user.uid)
+                            .set(
+                                mapOf(
+                                    "companyName" to cleanName,
+                                    "companyAbout" to cleanAbout,
+                                    "companyCity" to cleanCity
+                                ),
+                                com.google.firebase.firestore.SetOptions.merge()
+                            )
+                            .addOnSuccessListener {
+                                companyName = cleanName
+                                companyAbout = cleanAbout
+                                companyCity = cleanCity
+                                loading = false
+                                message("تم حفظ بيانات الشركة")
+                            }
+                            .addOnFailureListener {
+                                loading = false
+                                message("تعذر حفظ بيانات الشركة")
+                            }
                     }
                 }
             }
@@ -630,7 +688,10 @@ private fun ForsaApp() {
                                 "email" to user.email.orEmpty(),
                                 "phone" to profilePhone,
                                 "city" to profileCity,
-                                "role" to role
+                                "role" to role,
+                                "companyName" to companyName,
+                                "companyAbout" to companyAbout,
+                                "companyCity" to companyCity
                             ),
                             com.google.firebase.firestore.SetOptions.merge()
                         )
@@ -821,6 +882,9 @@ private fun MainScaffold(
     phone: String,
     city: String,
     role: String,
+    companyName: String,
+    companyAbout: String,
+    companyCity: String,
     jobs: List<Job>,
     db: FirebaseFirestore,
     onMessage: (String) -> Unit,
@@ -839,6 +903,7 @@ private fun MainScaffold(
     onTab: (MainTab) -> Unit,
     onLogout: () -> Unit,
     onProfileSaved: (String, String, String) -> Unit,
+    onCompanyProfileSaved: (String, String, String) -> Unit,
     onPasswordReset: () -> Unit,
     onRoleChanged: (String) -> Unit,
     onPublish: (Job) -> Unit,
@@ -917,6 +982,8 @@ private fun MainScaffold(
                     if (canPublish) {
                         PublishTab(
                             userUid = userUid,
+                            defaultCompanyName = companyName,
+                            defaultCompanyCity = companyCity,
                             onPublish = onPublish,
                             onCancel = { onTab(MainTab.Home) },
                             onMessage = onMessage
@@ -935,6 +1002,9 @@ private fun MainScaffold(
                     phone = phone,
                     city = city,
                     email = FirebaseAuth.getInstance().currentUser?.email.orEmpty(),
+                    companyName = companyName,
+                    companyAbout = companyAbout,
+                    companyCity = companyCity,
                     role = role,
                     jobs = jobs,
                     savedJobIds = savedJobIds,
@@ -942,6 +1012,7 @@ private fun MainScaffold(
                     userUid = userUid,
                     db = db,
                     onProfileSaved = onProfileSaved,
+                    onCompanyProfileSaved = onCompanyProfileSaved,
                     onPasswordReset = onPasswordReset,
                     onRoleChanged = onRoleChanged,
                     onLogout = onLogout,
@@ -1449,13 +1520,15 @@ private fun JobDetailsScreen(
 @Composable
 private fun PublishTab(
     userUid: String,
+    defaultCompanyName: String,
+    defaultCompanyCity: String,
     onPublish: (Job) -> Unit,
     onCancel: () -> Unit,
     onMessage: (String) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
-    var company by remember { mutableStateOf("") }
-    var city by remember { mutableStateOf("") }
+    var company by remember(defaultCompanyName) { mutableStateOf(defaultCompanyName) }
+    var city by remember(defaultCompanyCity) { mutableStateOf(defaultCompanyCity) }
     var type by remember { mutableStateOf("دوام كامل") }
     var description by remember { mutableStateOf("") }
 
@@ -1758,6 +1831,9 @@ private fun ProfileTab(
     phone: String,
     city: String,
     email: String,
+    companyName: String,
+    companyAbout: String,
+    companyCity: String,
     role: String,
     jobs: List<Job>,
     savedJobIds: Set<String>,
@@ -1799,6 +1875,18 @@ private fun ProfileTab(
     }
 
     when (section) {
+        "company" -> CompanyProfileScreen(
+            companyName = companyName,
+            companyAbout = companyAbout,
+            companyCity = companyCity,
+            onBack = { section = "main" },
+            onSave = { newName, newAbout, newCity ->
+                onCompanyProfileSaved(newName, newAbout, newCity)
+                section = "main"
+            },
+            onMessage = onMessage
+        )
+
         "dashboard" -> EmployerDashboardScreen(
             jobs = jobs,
             userUid = userUid,
@@ -1998,6 +2086,16 @@ private fun ProfileTab(
 
                 if (role == "صاحب عمل") {
                     ProfileActionCard(
+                        title = "ملف الشركة",
+                        description = if (companyName.isBlank()) {
+                            "أضف اسم الشركة ونبذة عنها حتى تكون بياناتك جاهزة عند نشر الوظائف."
+                        } else {
+                            "الشركة: $companyName" + if (companyCity.isNotBlank()) " — $companyCity" else ""
+                        },
+                        actionLabel = "إدارة ملف الشركة",
+                        onClick = { section = "company" }
+                    )
+                    ProfileActionCard(
                         title = "لوحة صاحب العمل",
                         description = "ملخص سريع لإعلاناتك وطلبات المتقدمين وحالاتها.",
                         actionLabel = "فتح اللوحة",
@@ -2084,6 +2182,100 @@ private fun ProfileActionCard(
             ) {
                 Text(actionLabel)
             }
+        }
+    }
+}
+
+@Composable
+private fun CompanyProfileScreen(
+    companyName: String,
+    companyAbout: String,
+    companyCity: String,
+    onBack: () -> Unit,
+    onSave: (String, String, String) -> Unit,
+    onMessage: (String) -> Unit
+) {
+    var name by remember(companyName) { mutableStateOf(companyName) }
+    var about by remember(companyAbout) { mutableStateOf(companyAbout) }
+    var city by remember(companyCity) { mutableStateOf(companyCity) }
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .imePadding()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+            }
+            Text(
+                "ملف الشركة",
+                fontSize = 25.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+        Text(
+            "احفظ معلومات شركتك مرة واحدة حتى تكون جاهزة عند نشر الوظائف.",
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("اسم الشركة أو الجهة") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = city,
+            onValueChange = { city = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("مدينة الشركة") },
+            singleLine = true
+        )
+
+        OutlinedTextField(
+            value = about,
+            onValueChange = { about = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("نبذة عن الشركة") },
+            minLines = 5
+        )
+
+        Button(
+            onClick = {
+                val cleanName = name.trim()
+                val cleanAbout = about.trim()
+                val cleanCity = city.trim()
+
+                when {
+                    cleanName.length < 2 -> onMessage("اكتب اسم الشركة أو الجهة")
+                    cleanCity.length < 2 -> onMessage("اكتب مدينة الشركة")
+                    cleanAbout.length < 10 -> onMessage("اكتب نبذة أوضح عن الشركة")
+                    else -> onSave(cleanName, cleanAbout, cleanCity)
+                }
+            },
+            modifier = Modifier.fillMaxWidth().height(54.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text("حفظ ملف الشركة", fontSize = 16.sp)
+        }
+
+        OutlinedButton(
+            onClick = onBack,
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Text("إلغاء")
         }
     }
 }
