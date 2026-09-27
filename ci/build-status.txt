@@ -1,6 +1,6 @@
 status=PASS
-commit=123fa484dccb8eccb84842b2693bc8fbdbad3cd3
-run=36286767679
+commit=c8ac27a1430b740b19a05698615af7bb1b68ca16
+run=36321319312
 attempt=1
 build_exit_code=0
 smoke_exit_code=0
@@ -16,29 +16,29 @@ Daemon will be stopped at the end of the build
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
 > Task :app:generateDebugResValues
-> Task :app:checkDebugAarMetadata
 > Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
 > Task :app:parseDebugLocalResources
+> Task :app:mergeDebugResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
 > Task :app:javaPreCompileDebug
-> Task :app:processDebugManifestForPackage
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
+> Task :app:processDebugManifestForPackage
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
-> Task :app:processDebugResources
 > Task :app:mergeDebugNativeLibs
+> Task :app:processDebugResources
 > Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
@@ -48,22 +48,21 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
-
 > Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2157:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2190:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2350:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2546:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3153:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3287:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3475:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3641:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3799:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4121:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4270:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4543:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4855:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4947:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2216:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2249:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2409:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2606:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3213:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3347:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3535:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3701:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3859:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4181:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4330:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4603:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4915:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5007:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
 > Task :app:compileDebugJavaWithJavac
 > Task :app:dexBuilderDebug
@@ -74,129 +73,129 @@ w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790473877840.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790514483968.json
 
-BUILD SUCCESSFUL in 47s
+BUILD SUCCESSFUL in 59s
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
-09-27 01:53:43.877  1225  1420 E czvx    : 	at czvx.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):11)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at boey.hj(:com.google.android.gms@242335041@24.23.35 (190800-646585959):1)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at bofh.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):97)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):97)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:53:43.877  1225  1420 E czvx    : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: operation=SetRuntimePropertiesOperationCall, opStatusCode=29503 [CONTEXT service_id=51 ]
-09-27 01:53:43.877  1225  1420 W AsyncOperation: OperationException[Status{statusCode=unknown status code: 29503, resolution=null}]
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at czvx.h(:com.google.android.gms@242335041@24.23.35 (190800-646585959):48)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at czvx.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):11)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at boey.hj(:com.google.android.gms@242335041@24.23.35 (190800-646585959):1)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at bofh.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):97)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):97)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:53:43.877  1225  1420 W AsyncOperation: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:53:43.878  3200  3334 D CompatChangeReporter: Compat change id reported: 312399441; UID 10137; state: ENABLED
-09-27 01:53:43.879  1554  2035 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:43.881  3200  3338 I CarrierServices: Initializing Carrier Services Library. [CONTEXT thread_id=52 ]
-09-27 01:53:43.881  1338  1728 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
-09-27 01:53:43.882  1338  1728 I Icing   : Indexing done com.google.android.gms-apps
-09-27 01:53:43.888  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.libraries.consentverifier#com.google.android.inputmethod.latin [CONTEXT service_id=51 ]
-09-27 01:53:43.889  1225  2472 I FontLog : Received query Noto Color Emoji Compat, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
-09-27 01:53:43.889  1225  2472 I FontLog : Query [Noto Color Emoji Compat] resolved to {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
-09-27 01:53:43.896  3200  3321 I Bugle   : DatabaseHelperBasic: sqlite version is 3.44.3
-09-27 01:53:43.897  1225  1621 I FontLog : Received query Noto Color Emoji Compat, URI content://com.google.android.gms.fonts [CONTEXT service_id=132 ]
-09-27 01:53:43.897  1225  1621 I FontLog : Query [Noto Color Emoji Compat] resolved to {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
-09-27 01:53:43.906  1554  1825 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:43.907  1554  1825 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:43.913  1554  1825 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:43.913  1225  2472 I FontLog : Fetch {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
-09-27 01:53:43.915  3200  3360 I GmsAccounts: GMSCore Auth returned 0 accounts.
-09-27 01:53:43.916  3200  3360 I GmsAccounts: GoogleOwnersProvider returned 0 accounts.
-09-27 01:53:43.916  1225  2472 I FontLog : Pulling font file for id = 6, cache size = 6 [CONTEXT service_id=132 ]
-09-27 01:53:43.917  1225  1621 I FontLog : Fetch {Noto Color Emoji Compat, wdth 100.0, wght 400, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
-09-27 01:53:43.923  1225  2110 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
-09-27 01:53:43.923  1225  2110 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
-09-27 01:53:43.923  1225  2110 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
-09-27 01:53:43.925  1225  2472 I FontLog : Pulling font file for id = 6, cache size = 7 [CONTEXT service_id=132 ]
-09-27 01:53:43.933  1225  1619 I FontLog : Pulling font file for id = 7, cache size = 7 [CONTEXT service_id=132 ]
-09-27 01:53:43.951  1225  2110 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
-09-27 01:53:43.951  1225  2110 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
-09-27 01:53:43.951  1225  2110 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
-09-27 01:53:43.951  1225  1619 I FontLog : Pulling font file for id = 7, cache size = 7 [CONTEXT service_id=132 ]
-09-27 01:53:43.959  1225  1420 I HeterodyneSyncScheduler: Scheduling Phenotype for a PhenotypeSyncImmediately(6, com.google.android.libraries.consentverifier#com.google.android.inputmethod.latin) one off with window [1, 2] in seconds [CONTEXT service_id=51 ]
-09-27 01:53:43.978  3200  3321 I Bugle   : TelephonyManagerFactory: Returning per-subscription TelephonyManager (>= N) subscription{id:1}
-09-27 01:53:43.980  3200  3321 D CompatChangeReporter: Compat change id reported: 330583731; UID 10137; state: ENABLED
-09-27 01:53:43.987  3200  3347 D CompatChangeReporter: Compat change id reported: 311402873; UID 10137; state: ENABLED
-09-27 01:53:43.987  3200  3347 D CompatChangeReporter: Compat change id reported: 323349338; UID 10137; state: ENABLED
-09-27 01:53:43.987   558  1744 D CompatChangeReporter: Compat change id reported: 311402873; UID 10137; state: ENABLED
-09-27 01:53:43.987   558  1744 D CompatChangeReporter: Compat change id reported: 323349338; UID 10137; state: ENABLED
-09-27 01:53:43.990  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.googleapp_widgets.sports.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:43.992  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.googleapp_widgets.stocks.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.000  3200  3338 I CarrierServices: Initializing Carrier Services Logging. [CONTEXT thread_id=52 ]
-09-27 01:53:44.005  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.hsi.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.018  1554  1829 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:44.019  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.lens.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.025  1554  1825 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:44.025   558  1923 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.025   558  1923 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.039  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.omnient.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.040   558  1923 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.040   558  1923 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.041   558   580 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.041   558   580 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.043   558  1742 D ConnectivityService: requestNetwork for uid/pid:1000/558 asUid: 10137 activeRequest: null callbackRequest: 98 [NetworkRequest [ TRACK_DEFAULT id=99, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10137 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ], NetworkRequest [ REQUEST id=100, [ Transports: SATELLITE Capabilities: INTERNET&TRUSTED&NOT_VCN_MANAGED Uid: 10137 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false
-09-27 01:53:44.049   558  1742 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.049   558  1742 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.051   558   834 D ConnectivityService: NetReassign [99 : null → 100] [c 0] [a 0] [i 0]
-09-27 01:53:44.051  1338  1728 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
-09-27 01:53:44.052  1338  1728 I Icing   : Indexing done com.google.android.gms-apps
-09-27 01:53:44.052  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.gsa.pcp.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.053   558  1923 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.053   558  1923 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.057   558  1742 D CompatChangeReporter: Compat change id reported: 297989574; UID 10137; state: ENABLED
-09-27 01:53:44.059   558   648 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.059   558   648 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.075  1554  1918 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:44.075  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.podcasts_android.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.080  1225  1229 I .gms.persistent: Compiler allocated 6590KB to compile czza czzb.t(epcy, evmz, java.lang.String, boolean, epbw, epcy, boolean, fkgb)
-09-27 01:53:44.094  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.policy#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.097  1554  2035 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:44.097  1554  2038 W TimedProcessReaper: Scheduling killing of process to refresh configuration
-09-27 01:53:44.098  3200  3347 I SyncWorkManagerOneTimeS: Successfully scheduled next onetime workers
-09-27 01:53:44.099  1225  1798 I TapAndPay: Disabling TapAndPay HCE service [CONTEXT service_id=79 ]
-09-27 01:53:44.101  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.readaloud#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.107   558   580 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.107   558   580 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.122  3200  3334 I Phlogger: Unable to retrieve flag snapshot for com.google.android.libraries.consentverifier#com.google.android.apps.messaging, using defaults.
-09-27 01:53:44.130  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.ar.sceneviewer.android.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.138  1338  1728 I Icing   : Indexing com.google.android.gms-apps from com.google.android.gms
-09-27 01:53:44.139   558   648 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:53:44.141   558   648 D PackageManager: Clear ephemeral installer activity
-09-27 01:53:44.147  1892  1909 I .android.as.oss: Background concurrent mark compact GC freed 10152KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 15MB/31MB, paused 1.106ms,1.883ms total 103.170ms
-09-27 01:53:44.148  1338  1728 I Icing   : Indexing done com.google.android.gms-apps
-09-27 01:53:44.149  3221  3251 W IndexableItem: indexing key is not set:Intent { act=com.google.android.gms.fido.fido2.ui.hybrid.LINKED_DEVICES_SETTINGS cat=[android.intent.category.DEFAULT] pkg=com.google.android.gms } [CONTEXT service_id=231 ]
-09-27 01:53:44.149  3221  3251 W IndexableItem: indexing key is not set:Intent { act=com.google.android.gms.fido.fido2.ui.hybrid.LINKED_DEVICES_SETTINGS cat=[android.intent.category.DEFAULT] pkg=com.google.android.gms } [CONTEXT service_id=231 ]
-09-27 01:53:44.150  3221  3251 W IndexableItem: info is null [CONTEXT service_id=231 ]
-09-27 01:53:44.153  3221  3251 W IndexableItem: indexing key is not set:Intent { cmp=com.google.android.gms/.romanesco.restore.settings.ContactsRestoreSettingsActivity } [CONTEXT service_id=231 ]
-09-27 01:53:44.153  3221  3251 W IndexableItem: indexing key is not set:Intent { cmp=com.google.android.gms/.romanesco.restore.settings.ContactsRestoreSettingsActivity } [CONTEXT service_id=231 ]
-09-27 01:53:44.153  3221  3251 W IndexableItem: indexing key is not set:Intent { cmp=com.google.android.gms/.romanesco.restore.settings.ContactsRestoreSettingsActivity } [CONTEXT service_id=231 ]
-09-27 01:53:44.153  3221  3251 W IndexableItem: indexing key is not set:Intent { act=com.google.android.gms.fido.fido2.ui.hybrid.LINKED_DEVICES_SETTINGS cat=[android.intent.category.DEFAULT] pkg=com.google.android.gms } [CONTEXT service_id=231 ]
-09-27 01:53:44.170  3100  3197 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 01:53:44.224  3221  3315 D Backup  : [BackupGoogleSettingsIO] Back up or restore entry point is not enabled
-09-27 01:53:44.228  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.smartsetup#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.230  1225  2373 I NearbySharing: FastInitiation warming period has ended [CONTEXT service_id=194 ]
-09-27 01:53:44.230  3221  3330 I CAR.DRIVINGMODE: DrivingMode Settings Indexed from the location module
-09-27 01:53:44.235  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.libraries.search.soda_apa.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.238  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.soundsearch.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
-09-27 01:53:44.239  3221  3331 W SettingsIntentOperation: No accounts
-09-27 01:53:44.244  3221  3331 I Nearby  : is blocked device type false, isAuto=false, isIot=false, isLatchsky=false, isChinaWearable=false, isTv=false, isWearable=false (supportWearOs=false), isChromeOsDevice=false (supportChromeOs=false) [CONTEXT service_id=49 ]
-09-27 01:53:44.244   558   580 W JobInfo : Job 'com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService#1728' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
-09-27 01:53:44.258  1225  1420 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.libraries.search.device#com.google.android.googlequicksearchbox [CONTEXT service_id=51 ]
+09-27 13:10:35.057  1096  1102 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:10:35.057  1096  1102 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:10:35.057  1227  1550 I NearbySharing: Dismissing HUN as there's no device nearby. [CONTEXT service_id=194 ]
+09-27 13:10:35.063  1096  1096 I Telephony: reRegisterPstnPhoneAccount: subId: 1 - no change
+09-27 13:10:35.063  1096  1096 I ImsResolver: Received Carrier Config Changed for SlotId: 0, SubId: 1, sim state: 5
+09-27 13:10:35.064  1096  1297 D ImsResolver: updateBoundDeviceServices: called
+09-27 13:10:35.065  1096  1297 I ImsResolver: updateBoundServices - carrier package changed: com.google.android.ims -> com.google.android.ims on slot 0, hasConfigChanged=false
+09-27 13:10:35.069  1096  1297 I ImsResolver: updateBoundServices - carrier package changed: com.google.android.ims -> com.google.android.ims on slot 0, hasConfigChanged=true
+09-27 13:10:35.069  1406  1767 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+09-27 13:10:35.069  1406  1767 I DynamiteModule: Considering local module com.google.android.gms.providerinstaller.dynamite:1 and remote module com.google.android.gms.providerinstaller.dynamite:0
+09-27 13:10:35.069  1406  1767 I DynamiteModule: Selected local version of com.google.android.gms.providerinstaller.dynamite
+09-27 13:10:35.070   559   832 W system_server: Long monitor contention with owner ConnectivityServiceThread (842) at void android.net.connectivity.com.android.server.net.NetworkStatsService.handleNotifyNetworkStatus(android.net.Network[], android.net.NetworkStateSnapshot[], java.lang.String, android.net.connectivity.com.android.server.net.NetworkStatsEventLogger$PollEvent)(NetworkStatsService.java:2332) waiters=0 in void android.net.connectivity.com.android.server.net.NetworkStatsService.noteUidForeground(int, boolean) for 339ms
+09-27 13:10:35.070   357   393 E NetlinkEvent: NetlinkEvent::FindParam(): Parameter 'INTERFACE' not found
+09-27 13:10:35.070   357   393 E NetlinkEvent: NetlinkEvent::FindParam(): Parameter 'STATE' not found
+09-27 13:10:35.070   357   393 E NetlinkEvent: NetlinkEvent::FindParam(): Parameter 'TIME_NS' not found
+09-27 13:10:35.070   357   393 E NetlinkEvent: NetlinkEvent::FindParam(): Parameter 'UID' not found
+09-27 13:10:35.071   357   415 I netd    : idletimerAddInterface(eth0, 10, 101) <0.55ms>
+09-27 13:10:35.071  1406  1767 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+09-27 13:10:35.071  1406  1767 I DynamiteModule: Considering local module com.google.android.gms.providerinstaller.dynamite:1 and remote module com.google.android.gms.providerinstaller.dynamite:0
+09-27 13:10:35.071  1406  1767 I DynamiteModule: Selected local version of com.google.android.gms.providerinstaller.dynamite
+09-27 13:10:35.071  1096  1297 I ImsResolver: updateBoundServices - carrier package changed: com.google.android.ims -> com.google.android.ims on slot 0, hasConfigChanged=true
+09-27 13:10:35.072  1096  1096 I TelephonyRcsService: updateFeatureControllerSubscription: slotId=0, oldSubId= 1, subId=1, existing feature=false
+09-27 13:10:35.072   559   831 W system_server: Long monitor contention with owner ConnectivityServiceThread (842) at void android.net.connectivity.com.android.server.net.NetworkStatsService.handleNotifyNetworkStatus(android.net.Network[], android.net.NetworkStateSnapshot[], java.lang.String, android.net.connectivity.com.android.server.net.NetworkStatsEventLogger$PollEvent)(NetworkStatsService.java:2332) waiters=1 in android.net.NetworkStatsHistory android.net.connectivity.com.android.server.net.NetworkStatsService.internalGetHistoryForNetwork(android.net.NetworkTemplate, int, int, int, int, long, long) for 334ms
+09-27 13:10:35.083   357  2801 I resolv  : res_nsend: used send_dg 173 terrno: 0
+09-27 13:10:35.083   357  2801 I resolv  : doQuery: rcode=0, ancount=8, return value=173
+09-27 13:10:35.084   357  2800 I resolv  : res_nsend: used send_dg 269 terrno: 0
+09-27 13:10:35.084   357  2800 I resolv  : doQuery: rcode=0, ancount=8, return value=269
+09-27 13:10:35.087  1227  2317 D TrafficStats: tagSocket(198) with statsTag=0x34000609, statsUid=10137
+09-27 13:10:35.089  1406  1648 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
+09-27 13:10:35.090  1406  1648 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
+09-27 13:10:35.090  1406  1648 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+09-27 13:10:35.092  1406  1767 I GmsModuleFndr: Beginning GMS chimera module scan
+09-27 13:10:35.095  1019  2821 D TrafficStats: tagSocket(130) with statsTag=0xffffff81, statsUid=-1
+09-27 13:10:35.097  1227  2317 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+09-27 13:10:35.097  1406  1767 I ModuleSetResolution: Computing pending module set with APKs: [[AdsFdrDynamite.integ:241199801100000], [Cronetdynamite:242335190800], [Dynamiteloader:242335190000], [Dynamitemodulesa:242335190000], [Dynamitemodulesc:242335190000], [Googlecertificates:242335190000], [Mapsdynamite:242335190000], [Measurementdynamite:242335190000]]
+09-27 13:10:35.097  1227  2317 I DynamiteModule: Considering local module com.google.android.gms.providerinstaller.dynamite:1 and remote module com.google.android.gms.providerinstaller.dynamite:0
+09-27 13:10:35.097  1227  2317 I DynamiteModule: Selected local version of com.google.android.gms.providerinstaller.dynamite
+09-27 13:10:35.098  1019  2822 D TrafficStats: tagSocket(132) with statsTag=0xffffff81, statsUid=-1
+09-27 13:10:35.098  1406  1767 I ModuleSetMgr: Download of container feature ambient_context is disabled.
+09-27 13:10:35.098  1406  1767 I ModuleSetMgr: Download of container feature antifingerprinting is disabled.
+09-27 13:10:35.098  1406  1767 I ModuleSetMgr: Download of container feature appsearch_dynamite_impl is disabled.
+09-27 13:10:35.098  1406  1767 I ModuleSetMgr: Download of container feature brella_dynamite is disabled.
+09-27 13:10:35.098  1406  1767 I ModuleSetMgr: Download of container feature callstreaming is disabled.
+09-27 13:10:35.099  1406  1767 I ModuleSetMgr: Download of container feature dck_management is disabled.
+09-27 13:10:35.099  1406  1767 I ModuleSetMgr: Download of container feature easyunlock is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature enterprise_zt_mp_complete is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature fast_pair is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature game_platform is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature games is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature growth_upgradeparty is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature home is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature homegraph is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature tflite_dynamite is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature kids is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature kids_dashboard is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature kids_get_parent_verification_intent is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature kids_resource_filtering is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature kids_screentime_restriction_callback is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature kids_transparency is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature maps_core is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature mdocstore is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature mlkit.docscan.crop is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature mlkit.docscan.enhance is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature mlkit.docscan.shadow is disabled.
+09-27 13:10:35.100  1406  1767 I ModuleSetMgr: Download of container feature mlkit.segmentation.subject is disabled.
+09-27 13:10:35.100  1019  2822 D TrafficStats: tagSocket(131) with statsTag=0xffffff81, statsUid=-1
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature multipackage_debug is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature permissions_debug is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature play_cloud_search is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature semanticlocation_debug is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature tensorgps_metrics is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature tflite_delegate_edgetpu is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature tflite_delegate_test is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature tflite_gpu_dynamite is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature usonia_iam is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature vision.face is disabled.
+09-27 13:10:35.101  1406  1767 I ModuleSetMgr: Download of container feature vision.ica is disabled.
+09-27 13:10:35.102  1406  1767 I ModuleSetResolution: Pending container module APKs: []
+09-27 13:10:35.102  1406  1767 I ModuleSetResolution: Pending non-container module APKs: []
+09-27 13:10:35.103  1019  2821 D TrafficStats: tagSocket(130) with statsTag=0xffffff81, statsUid=-1
+09-27 13:10:35.136   357  2826 I resolv  : ResNSendHandler::run: 0 / {101 983141 101 983141 1073 1}
+09-27 13:10:35.136   357  2826 I resolv  : res_nsend: used send_dg 75 terrno: 0
+09-27 13:10:35.139  1227  2557 I CastDatabase: Loading the database
+09-27 13:10:35.141   357  2827 I resolv  : ResNSendHandler::run: 0 / {101 983141 101 983141 1073 1}
+09-27 13:10:35.142   357  2828 I resolv  : ResNSendHandler::run: 0 / {101 983141 101 983141 1073 1}
+09-27 13:10:35.143   357  2828 I resolv  : res_nsend: used send_dg 256 terrno: 0
+09-27 13:10:35.144   357  2827 I resolv  : res_nsend: used send_dg 63 terrno: 0
+09-27 13:10:35.145  1096  1096 I ImsResolver: Received BOOT_COMPLETED
+09-27 13:10:35.148   357  2829 I resolv  : ResNSendHandler::run: 0 / {101 983141 101 983141 1073 1}
+09-27 13:10:35.152   357  2829 I resolv  : res_nsend: used send_dg 160 terrno: 0
+09-27 13:10:35.153  1096  1096 I ImsExternalCallTracker: handleVideoCapabilitiesChanged : isVideoCapable = false
+09-27 13:10:35.153  1096  1096 D ImsExternalCallTracker: refreshCallPullState
+09-27 13:10:35.153  1096  1096 I Telephony: handleVideoCapabilitesChanged. Video capability - false
+09-27 13:10:35.161  1019  1019 D TrafficStats: tagSocket(132) with statsTag=0xffffffff, statsUid=-1
+09-27 13:10:35.161  1096  1096 D Telephony: isEmergencyPreferredAccount: subId=1, activeData=1
+09-27 13:10:35.161  1019  1019 D TrafficStats: tagSocket(132) with statsTag=0xffffffff, statsUid=-1
+09-27 13:10:35.162  1096  1297 D ImsResolver: maybeAddedImsService, packageName: null
+09-27 13:10:35.162  1096  1096 D Telephony: isEmergencyPreferredAccount: Device does not require preference.
+09-27 13:10:35.162  1096  1096 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
+09-27 13:10:35.169  1019  1019 D TrafficStats: tagSocket(130) with statsTag=0xffffffff, statsUid=-1
+09-27 13:10:35.174   357   415 I netd    : networkSetPermissionForNetwork(101, 1) <3.62ms>
+09-27 13:10:35.178   559  1828 W ActivityManager: Slow operation: 80ms so far, now at attachApplicationLocked: immediately after bindApplication
+09-27 13:10:35.179   559  1828 W ActivityManager: Slow operation: 80ms so far, now at attachApplicationLocked: after updateLruProcessLocked
+09-27 13:10:35.191   559  1828 W ActivityManager: Slow operation: 92ms so far, now at attachApplicationLocked: after updateOomAdjLocked
+09-27 13:10:35.196  1019  2822 D NetworkMonitor/101: PROBE_DNS connectivitycheck.gstatic.com 81ms OK 192.178.218.94,2607:f8b0:4004:c21::5e
+09-27 13:10:35.202  1096  1096 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
+09-27 13:10:35.202  1096  1096 I Telephony:  isRttSupported: false
+09-27 13:10:35.202  1096  1096 I Telephony:  alwaysAllowWhileRoaming: false
+09-27 13:10:35.202  1096  1096 I Telephony:  isRoaming: false
+09-27 13:10:35.202  1096  1096 I Telephony:  isOnWfc: false
+09-27 13:10:35.213  1019  1019 D TrafficStats: tagSocket(130) with statsTag=0xffffffff, statsUid=-1
+09-27 13:10:35.238   357  2833 I resolv  : GetAddrInfoHandler::run: {101 983141 101 983141 1073 1}
+09-27 13:10:35.240   357  2834 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+09-27 13:10:35.240   357  2834 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x721fee2f0350
+09-27 13:10:35.240   357  2834 I resolv  : doQuery: rcode=0, ancount=1, return value=75
+09-27 13:10:35.243   357  2835 I resolv  : res_nmkquery: (QUERY, IN, A)
+09-27 13:10:35.243   357  2835 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x721fee2f15b0
+09-27 13:10:35.243   357  2835 I resolv  : doQuery: rcode=0, ancount=1, return value=63
+09-27 13:10:35.245  1019  2822 D TrafficStats: tagSocket(131) with statsTag=0xffffff81, statsUid=-1
+09-27 13:10:35.257  1019  1019 D TrafficStats: tagSocket(130) with statsTag=0xffffffff, statsUid=-1
