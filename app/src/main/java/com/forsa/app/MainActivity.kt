@@ -6,9 +6,12 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -106,6 +109,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -228,7 +232,10 @@ private data class CvProfile(
     val education: String = "",
     val experience: String = "",
     val skills: String = "",
-    val languages: String = ""
+    val languages: String = "",
+    val fileName: String = "",
+    val fileSize: Long = 0L,
+    val storagePath: String = ""
 )
 
 private data class DashboardApplication(
@@ -477,7 +484,10 @@ private fun ForsaApp() {
                                     education = cvDocument.getString("education").orEmpty(),
                                     experience = cvDocument.getString("experience").orEmpty(),
                                     skills = cvDocument.getString("skills").orEmpty(),
-                                    languages = cvDocument.getString("languages").orEmpty()
+                                    languages = cvDocument.getString("languages").orEmpty(),
+                                    fileName = cvDocument.getString("fileName").orEmpty(),
+                                    fileSize = cvDocument.getLong("fileSize") ?: 0L,
+                                    storagePath = cvDocument.getString("storagePath").orEmpty()
                                 )
                             }
 
@@ -4103,6 +4113,118 @@ private fun CvProfileScreen(
     var skills by remember(profile) { mutableStateOf(profile.skills) }
     var languages by remember(profile) { mutableStateOf(profile.languages) }
     var saving by remember { mutableStateOf(false) }
+    var fileBusy by remember { mutableStateOf(false) }
+    var currentFileName by remember(profile) { mutableStateOf(profile.fileName) }
+    var currentFileSize by remember(profile) { mutableStateOf(profile.fileSize) }
+    var currentStoragePath by remember(profile) { mutableStateOf(profile.storagePath) }
+    val context = LocalContext.current
+    val storage = remember { FirebaseStorage.getInstance() }
+
+    fun fileSizeText(bytes: Long): String {
+        if (bytes <= 0L) return ""
+        return if (bytes < 1024L * 1024L) {
+            (bytes / 1024L).toString() + " KB"
+        } else {
+            String.format("%.1f MB", bytes / 1024.0 / 1024.0)
+        }
+    }
+
+    val pickCv = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        if (userUid.isBlank()) {
+            onMessage("سجّل الدخول أولاً")
+            return@rememberLauncherForActivityResult
+        }
+
+        val mimeType = context.contentResolver.getType(uri).orEmpty().lowercase()
+        val displayName = context.contentResolver.query(
+            uri,
+            arrayOf(OpenableColumns.DISPLAY_NAME),
+            null,
+            null,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) cursor.getString(0) else null
+        }.orEmpty()
+        val extension = displayName.substringAfterLast('.', "").lowercase()
+        val allowedMime = mimeType in setOf(
+            "application/pdf",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        if (!allowedMime && extension !in setOf("pdf", "doc", "docx")) {
+            onMessage("المسموح فقط PDF أو DOC أو DOCX")
+            return@rememberLauncherForActivityResult
+        }
+
+        val size = try {
+            context.contentResolver.openAssetFileDescriptor(uri, "r")?.use { it.length } ?: -1L
+        } catch (_: Exception) {
+            -1L
+        }
+        if (size <= 0L) {
+            onMessage("تعذر قراءة حجم الملف")
+            return@rememberLauncherForActivityResult
+        }
+        if (size > 10L * 1024L * 1024L) {
+            onMessage("حجم الملف يجب أن لا يتجاوز 10 ميغابايت")
+            return@rememberLauncherForActivityResult
+        }
+
+        val safeName = (displayName.ifBlank {
+            "cv_" + System.currentTimeMillis() + "." + if (extension.isBlank()) "pdf" else extension
+        }).replace(Regex("[^A-Za-z0-9._-]"), "_")
+        val storagePath = "cvFiles/" + userUid + "/" + safeName
+        val oldPath = currentStoragePath
+        fileBusy = true
+
+        storage.reference.child(storagePath)
+            .putFile(uri)
+            .addOnSuccessListener {
+                val saveMetadata = {
+                    db.collection("cvProfiles").document(userUid)
+                        .set(
+                            mapOf(
+                                "fileName" to safeName,
+                                "fileSize" to size,
+                                "storagePath" to storagePath,
+                                "updatedAt" to System.currentTimeMillis()
+                            ),
+                            com.google.firebase.firestore.SetOptions.merge()
+                        )
+                        .addOnSuccessListener {
+                            currentFileName = safeName
+                            currentFileSize = size
+                            currentStoragePath = storagePath
+                            fileBusy = false
+                            onSaved(
+                                profile.copy(
+                                    fileName = safeName,
+                                    fileSize = size,
+                                    storagePath = storagePath
+                                )
+                            )
+                            onMessage("تم رفع ملف السيرة بنجاح")
+                        }
+                        .addOnFailureListener {
+                            fileBusy = false
+                            storage.reference.child(storagePath).delete()
+                            onMessage("تم رفع الملف لكن تعذر حفظ بياناته")
+                        }
+                }
+                if (oldPath.isNotBlank() && oldPath != storagePath) {
+                    storage.reference.child(oldPath).delete().addOnCompleteListener { saveMetadata() }
+                } else {
+                    saveMetadata()
+                }
+            }
+            .addOnFailureListener {
+                fileBusy = false
+                onMessage("تعذر رفع ملف السيرة")
+            }
+    }
 
     Column(
         Modifier
@@ -4126,6 +4248,124 @@ private fun CvProfileScreen(
             "اكتب معلوماتك الأساسية حتى تكون جاهزة عند التقديم.",
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+
+        Surface(
+            Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            color = MaterialTheme.colorScheme.primaryContainer
+        ) {
+            Column(
+                Modifier.padding(14.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    if (currentFileName.isBlank()) {
+                        "ماكو ملف CV مرفوع"
+                    } else {
+                        "ملف CV: " + currentFileName +
+                            if (currentFileSize > 0L) " — " + fileSizeText(currentFileSize) else ""
+                    },
+                    fontWeight = FontWeight.SemiBold
+                )
+                Text(
+                    "PDF أو DOC أو DOCX، وبحد أقصى 10 ميغابايت. الملف يبقى خاص بحسابك.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 12.sp
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = {
+                            if (!fileBusy && !saving) {
+                                pickCv.launch(
+                                    arrayOf(
+                                        "application/pdf",
+                                        "application/msword",
+                                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                    )
+                                )
+                            }
+                        },
+                        enabled = !fileBusy && !saving,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(if (currentFileName.isBlank()) "رفع ملف" else "استبدال الملف")
+                    }
+                    if (currentFileName.isNotBlank()) {
+                        OutlinedButton(
+                            onClick = {
+                                if (!fileBusy && !saving) {
+                                    fileBusy = true
+                                    storage.reference.child(currentStoragePath).downloadUrl
+                                        .addOnSuccessListener { url ->
+                                            fileBusy = false
+                                            try {
+                                                context.startActivity(Intent(Intent.ACTION_VIEW, url))
+                                            } catch (_: Exception) {
+                                                onMessage("تعذر فتح الملف")
+                                            }
+                                        }
+                                        .addOnFailureListener {
+                                            fileBusy = false
+                                            onMessage("تعذر فتح ملف السيرة")
+                                        }
+                                }
+                            },
+                            enabled = !fileBusy && !saving,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("فتح")
+                        }
+                        OutlinedButton(
+                            onClick = {
+                                if (!fileBusy && !saving) {
+                                    fileBusy = true
+                                    storage.reference.child(currentStoragePath).delete()
+                                        .addOnSuccessListener {
+                                            db.collection("cvProfiles").document(userUid)
+                                                .set(
+                                                    mapOf(
+                                                        "fileName" to "",
+                                                        "fileSize" to 0L,
+                                                        "storagePath" to "",
+                                                        "updatedAt" to System.currentTimeMillis()
+                                                    ),
+                                                    com.google.firebase.firestore.SetOptions.merge()
+                                                )
+                                                .addOnSuccessListener {
+                                                    fileBusy = false
+                                                    currentFileName = ""
+                                                    currentFileSize = 0L
+                                                    currentStoragePath = ""
+                                                    onSaved(profile.copy(fileName = "", fileSize = 0L, storagePath = ""))
+                                                    onMessage("تم حذف ملف السيرة")
+                                                }
+                                                .addOnFailureListener {
+                                                    fileBusy = false
+                                                    onMessage("تم حذف الملف لكن تعذر تحديث البيانات")
+                                                }
+                                        }
+                                        .addOnFailureListener {
+                                            fileBusy = false
+                                            onMessage("تعذر حذف ملف السيرة")
+                                        }
+                                }
+                            },
+                            enabled = !fileBusy && !saving,
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("حذف")
+                        }
+                    }
+                }
+                if (fileBusy) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+                        Spacer(Modifier.width(8.dp))
+                        Text("جارٍ معالجة ملف السيرة…")
+                    }
+                }
+            }
+        }
 
         OutlinedTextField(
             value = headline,
@@ -4199,9 +4439,10 @@ private fun CvProfileScreen(
                     finalProfile.education.isEmpty() &&
                     finalProfile.experience.isEmpty() &&
                     finalProfile.skills.isEmpty() &&
-                    finalProfile.languages.isEmpty()
+                    finalProfile.languages.isEmpty() &&
+                    currentStoragePath.isEmpty()
                 ) {
-                    onMessage("أضف معلومة واحدة على الأقل إلى السيرة")
+                    onMessage("أضف معلومة واحدة على الأقل أو ارفع ملف السيرة")
                     return@Button
                 }
 
@@ -4215,6 +4456,9 @@ private fun CvProfileScreen(
                             "experience" to finalProfile.experience,
                             "skills" to finalProfile.skills,
                             "languages" to finalProfile.languages,
+                            "fileName" to currentFileName,
+                            "fileSize" to currentFileSize,
+                            "storagePath" to currentStoragePath,
                             "updatedAt" to System.currentTimeMillis()
                         ),
                         com.google.firebase.firestore.SetOptions.merge()
