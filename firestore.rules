@@ -258,7 +258,8 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly([
           "displayName", "email", "phone", "city", "role", "roleConfirmed",
           "companyName", "companyAbout", "companyCity",
-          "verificationStatus", "verificationRequestedAt", "verificationUpdatedAt", "verificationNote"
+          "verificationStatus", "verificationRequestedAt", "verificationUpdatedAt", "verificationNote",
+          "verificationDocumentName", "verificationDocumentPath", "verificationDocumentUpdatedAt"
         ])
         && request.resource.data.role == resource.data.role
         && request.resource.data.roleConfirmed == resource.data.roleConfirmed
@@ -282,6 +283,17 @@ service cloud.firestore {
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
               "verificationStatus", "verificationRequestedAt"
             ])
+          )
+          || (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+              "verificationDocumentName", "verificationDocumentPath", "verificationDocumentUpdatedAt"
+            ])
+            && request.resource.data.verificationDocumentName is string
+            && request.resource.data.verificationDocumentPath is string
+            && request.resource.data.verificationDocumentUpdatedAt is int
+            && request.resource.data.verificationDocumentPath.matches(
+              "employerVerificationDocs/" + userId + "/.*"
+            )
           )
         );
 
