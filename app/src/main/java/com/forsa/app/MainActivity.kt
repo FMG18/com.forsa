@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,15 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.filled.Work
+import androidx.compose.material.icons.filled.BookmarkBorder
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Description
+import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.RocketLaunch
+import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -80,9 +90,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -348,20 +360,184 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private object ForsaUi {
+    val Primary = Color(0xFF5B4BDB)
+    val PrimaryDark = Color(0xFF4536B8)
+    val PrimarySoft = Color(0xFFEAE7FF)
+    val Secondary = Color(0xFF0D9F86)
+    val SecondarySoft = Color(0xFFDDF7F0)
+    val Ink = Color(0xFF171721)
+    val Muted = Color(0xFF6C6C7A)
+    val Background = Color(0xFFF5F6FA)
+    val Surface = Color(0xFFFFFFFF)
+    val Border = Color(0xFFE4E5ED)
+    val Success = Color(0xFF14866B)
+    val SuccessSoft = Color(0xFFE2F6EF)
+    val Warning = Color(0xFFB7791F)
+    val WarningSoft = Color(0xFFFFF3D9)
+    val Danger = Color(0xFFC53D4A)
+    val DangerSoft = Color(0xFFFDE5E7)
+
+    val Gradient = Brush.linearGradient(
+        listOf(PrimaryDark, Primary, Color(0xFF7665EC))
+    )
+
+    val CardShape = ForsaUi.CardShape
+    val SheetShape = RoundedCornerShape(28.dp)
+    val FieldShape = ForsaUi.FieldShape
+    val SmallShape = ForsaUi.SmallShape
+    val PillShape = RoundedCornerShape(999.dp)
+    val NavShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+}
+
+private val ForsaShapes = androidx.compose.material3.Shapes(
+    small = ForsaUi.SmallShape,
+    medium = ForsaUi.FieldShape,
+    large = ForsaUi.CardShape,
+    extraLarge = ForsaUi.SheetShape
+)
+
+private val ForsaTypography = androidx.compose.material3.Typography(
+    displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 34.sp, lineHeight = 40.sp, letterSpacing = (-0.6).sp),
+    displayMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 30.sp, lineHeight = 36.sp, letterSpacing = (-0.4).sp),
+    headlineLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp, lineHeight = 33.sp, letterSpacing = (-0.25).sp),
+    headlineMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 23.sp, lineHeight = 29.sp),
+    titleLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 26.sp),
+    titleMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 22.sp),
+    bodyLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontSize = 15.sp, lineHeight = 23.sp),
+    bodyMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontSize = 13.sp, lineHeight = 20.sp),
+    labelLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, lineHeight = 18.sp),
+    labelMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 16.sp)
+)
+
 @Composable
 private fun ForsaTheme(content: @Composable () -> Unit) {
     val colors = androidx.compose.material3.lightColorScheme(
-        primary = Color(0xFF5B3CC4),
+        primary = ForsaUi.Primary,
         onPrimary = Color.White,
-        secondary = Color(0xFF00A896),
-        background = Color(0xFFF7F7FB),
-        surface = Color.White,
-        onBackground = Color(0xFF19191F),
-        onSurface = Color(0xFF19191F)
+        primaryContainer = ForsaUi.PrimarySoft,
+        onPrimaryContainer = Color(0xFF2B246E),
+        secondary = ForsaUi.Secondary,
+        onSecondary = Color.White,
+        secondaryContainer = ForsaUi.SecondarySoft,
+        onSecondaryContainer = Color(0xFF084A3E),
+        tertiary = Color(0xFFE59D32),
+        background = ForsaUi.Background,
+        surface = ForsaUi.Surface,
+        surfaceVariant = Color(0xFFF0F1F6),
+        surfaceContainer = Color(0xFFF1F2F7),
+        outline = ForsaUi.Border,
+        onBackground = ForsaUi.Ink,
+        onSurface = ForsaUi.Ink,
+        onSurfaceVariant = ForsaUi.Muted,
+        error = ForsaUi.Danger,
+        errorContainer = ForsaUi.DangerSoft,
+        onErrorContainer = Color(0xFF5C141C)
     )
-
-    MaterialTheme(colorScheme = colors, content = content)
+    MaterialTheme(
+        colorScheme = colors,
+        typography = ForsaTypography,
+        shapes = ForsaShapes,
+        content = content
+    )
 }
+
+@Composable
+private fun ForsaCard(
+    modifier: Modifier = Modifier,
+    emphasis: Boolean = false,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Card(
+        modifier = modifier,
+        shape = ForsaUi.CardShape,
+        colors = CardDefaults.cardColors(
+            containerColor = if (emphasis) ForsaUi.PrimarySoft else ForsaUi.Surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        content = content
+    )
+}
+
+@Composable
+private fun ForsaMetaChip(
+    text: String,
+    icon: @Composable (() -> Unit)? = null,
+    selected: Boolean = false
+) {
+    Surface(
+        shape = ForsaUi.PillShape,
+        color = if (selected) ForsaUi.PrimarySoft else ForsaUi.Background,
+        contentColor = if (selected) ForsaUi.Primary else ForsaUi.Muted,
+        border = BorderStroke(1.dp, if (selected) ForsaUi.Primary.copy(alpha = .18f) else ForsaUi.Border)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 11.dp, vertical = 7.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            icon?.invoke()
+            Text(text, style = MaterialTheme.typography.labelMedium)
+        }
+    }
+}
+
+@Composable
+private fun ForsaActionTile(
+    title: String,
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        shape = ForsaUi.CardShape,
+        colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+    ) {
+        Row(
+            Modifier.padding(15.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(
+                Modifier.size(46.dp),
+                shape = ForsaUi.SmallShape,
+                color = ForsaUi.PrimarySoft,
+                contentColor = ForsaUi.Primary
+            ) {
+                androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Icon(icon, null, modifier = Modifier.size(22.dp))
+                }
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleMedium)
+                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted)
+            }
+            Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Muted)
+        }
+    }
+}
+
+@Composable
+private fun ForsaStatusPill(status: String) {
+    val (label, bg, fg) = when (status.lowercase()) {
+        "accepted", "verified", "paid" -> Triple("تم", ForsaUi.SuccessSoft, ForsaUi.Success)
+        "rejected" -> Triple("مرفوض", ForsaUi.DangerSoft, ForsaUi.Danger)
+        "pending", "review", "pending_payment" -> Triple("قيد المراجعة", ForsaUi.WarningSoft, ForsaUi.Warning)
+        "featured" -> Triple("مميز", ForsaUi.WarningSoft, ForsaUi.Warning)
+        else -> Triple(status.ifBlank { "الحالة" }, ForsaUi.PrimarySoft, ForsaUi.Primary)
+    }
+    Surface(shape = ForsaUi.PillShape, color = bg, contentColor = fg) {
+        Text(
+            label,
+            modifier = Modifier.padding(horizontal = 11.dp, vertical = 6.dp),
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
 
 private fun queryDisplayName(context: Context, uri: Uri): String? {
     return context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
@@ -1451,7 +1627,7 @@ private fun RoleChoiceSection(
                     Button(
                         onClick = { onSelect(option) },
                         modifier = Modifier.weight(1f).height(54.dp),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = ForsaUi.FieldShape
                     ) {
                         Icon(Icons.Default.CheckCircle, null)
                         Spacer(Modifier.width(6.dp))
@@ -1461,7 +1637,7 @@ private fun RoleChoiceSection(
                     OutlinedButton(
                         onClick = { onSelect(option) },
                         modifier = Modifier.weight(1f).height(54.dp),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = ForsaUi.FieldShape
                     ) {
                         Text(option)
                     }
@@ -1505,7 +1681,7 @@ private fun RoleSelectionScreen(
             onClick = { selectedRole?.let(onSelect) },
             enabled = selectedRole != null && !loading,
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             if (loading) {
                 CircularProgressIndicator(
@@ -1553,7 +1729,7 @@ private fun WelcomeScreen(
                 onClick = onGoogle,
                 enabled = !loading,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(16.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 if (loading) {
                     CircularProgressIndicator(
@@ -1571,7 +1747,7 @@ private fun WelcomeScreen(
             OutlinedButton(
                 onClick = onEmailLogin,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(16.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 Icon(Icons.Default.Email, null)
                 Spacer(Modifier.width(8.dp))
@@ -1583,7 +1759,7 @@ private fun WelcomeScreen(
                 onClick = onPhone,
                 enabled = !loading,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(16.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 Text("المتابعة برقم الهاتف")
             }
@@ -1872,7 +2048,7 @@ private fun HomeTab(
 
         Card(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(24.dp),
+            shape = ForsaUi.SheetShape,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Column(Modifier.padding(22.dp)) {
@@ -1897,7 +2073,7 @@ private fun HomeTab(
                     Button(
                         onClick = onJobs,
                         modifier = Modifier.weight(1f),
-                        shape = RoundedCornerShape(14.dp)
+                        shape = ForsaUi.FieldShape
                     ) {
                         Text("الوظائف")
                     }
@@ -1906,7 +2082,7 @@ private fun HomeTab(
                         OutlinedButton(
                             onClick = onPublish,
                             modifier = Modifier.weight(1f),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = ForsaUi.FieldShape
                         ) {
                             Text("نشر وظيفة")
                         }
@@ -1934,7 +2110,7 @@ private fun HomeTab(
                         Modifier
                             .fillMaxWidth()
                             .clickable { onSelectJob(job) },
-                        shape = RoundedCornerShape(18.dp)
+                        shape = ForsaUi.CardShape
                     ) {
                         Column(
                             Modifier.padding(16.dp),
@@ -1973,7 +2149,7 @@ private fun HomeTab(
 private fun SmallStat(title: String, value: String, modifier: Modifier) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(18.dp)
+        shape = ForsaUi.CardShape
     ) {
         Column(
             Modifier.padding(16.dp),
@@ -2085,7 +2261,7 @@ private fun JobsTab(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Search
             ),
-            shape = RoundedCornerShape(14.dp)
+            shape = ForsaUi.FieldShape
         )
 
         OutlinedTextField(
@@ -2099,7 +2275,7 @@ private fun JobsTab(
                     TextButton(onClick = { cityFilter = "" }) { Text("مسح") }
                 }
             },
-            shape = RoundedCornerShape(14.dp)
+            shape = ForsaUi.FieldShape
         )
 
         Row(
@@ -2223,7 +2399,7 @@ private fun JobCard(
 ) {
     Card(
         Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp)
+        shape = ForsaUi.CardShape
     ) {
         Column(
             Modifier.padding(18.dp),
@@ -2290,7 +2466,7 @@ private fun JobCard(
 
             if (alreadyApplied) {
                 Surface(
-                    shape = RoundedCornerShape(10.dp),
+                    shape = ForsaUi.SmallShape,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Row(
@@ -2359,7 +2535,7 @@ private fun JobDetailsScreen(
 
         Card(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(22.dp)
+            shape = ForsaUi.CardShape
         ) {
             Column(
                 Modifier.padding(20.dp),
@@ -2406,7 +2582,7 @@ private fun JobDetailsScreen(
             isOwner -> {
                 Surface(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = ForsaUi.FieldShape,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Text("هذا الإعلان منشور من حسابك.", Modifier.padding(16.dp))
@@ -2416,7 +2592,7 @@ private fun JobDetailsScreen(
             !canApply -> {
                 Surface(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = ForsaUi.FieldShape,
                     color = MaterialTheme.colorScheme.primaryContainer
                 ) {
                     Text(
@@ -2429,7 +2605,7 @@ private fun JobDetailsScreen(
             job.isExpired -> {
                 Surface(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = ForsaUi.FieldShape,
                     color = MaterialTheme.colorScheme.surfaceVariant
                 ) {
                     Text(
@@ -2442,7 +2618,7 @@ private fun JobDetailsScreen(
             alreadyApplied -> {
                 Surface(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = ForsaUi.FieldShape,
                     color = MaterialTheme.colorScheme.secondaryContainer
                 ) {
                     Row(
@@ -2476,7 +2652,7 @@ private fun JobDetailsScreen(
                     },
                     enabled = !submitting,
                     modifier = Modifier.fillMaxWidth().height(54.dp),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = ForsaUi.FieldShape
                 ) {
                     if (submitting) {
                         CircularProgressIndicator(
@@ -2620,7 +2796,7 @@ private fun PublishTab(
                 }
             },
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             Text("نشر الوظيفة", fontSize = 16.sp)
         }
@@ -2678,7 +2854,7 @@ private fun RoleRequiredScreen(
             textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(18.dp))
-        OutlinedButton(onClick = onBack, shape = RoundedCornerShape(14.dp)) {
+        OutlinedButton(onClick = onBack, shape = ForsaUi.FieldShape) {
             Text("رجوع")
         }
     }
@@ -2726,7 +2902,7 @@ private fun PromotionScreen(
 
         Card(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp)
+            shape = ForsaUi.CardShape
         ) {
             Column(Modifier.padding(18.dp)) {
                 Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -2741,7 +2917,7 @@ private fun PromotionScreen(
         plans.forEach { plan ->
             Card(
                 Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp)
+                shape = ForsaUi.CardShape
             ) {
                 Row(
                     Modifier.fillMaxWidth().padding(16.dp),
@@ -2785,7 +2961,7 @@ private fun PromotionScreen(
 
         Surface(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
+            shape = ForsaUi.FieldShape,
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Text(
@@ -2865,7 +3041,7 @@ private fun PromotionScreen(
             },
             enabled = !submitting,
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             if (submitting) {
                 CircularProgressIndicator(
@@ -3110,7 +3286,7 @@ private fun ProfileTab(
                     OutlinedButton(
                         onClick = { editing = true },
                         modifier = Modifier.fillMaxWidth().height(52.dp),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = ForsaUi.FieldShape
                     ) {
                         Icon(Icons.Default.Person, null)
                         Spacer(Modifier.width(8.dp))
@@ -3119,7 +3295,7 @@ private fun ProfileTab(
                     OutlinedButton(
                         onClick = onPasswordReset,
                         modifier = Modifier.fillMaxWidth().height(52.dp),
-                        shape = RoundedCornerShape(16.dp)
+                        shape = ForsaUi.FieldShape
                     ) {
                         Icon(Icons.Default.Lock, null)
                         Spacer(Modifier.width(8.dp))
@@ -3154,7 +3330,7 @@ private fun ProfileTab(
 
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = ForsaUi.FieldShape,
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     )
@@ -3293,7 +3469,7 @@ private fun ProfileActionCard(
 ) {
     Card(
         Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp)
+        shape = ForsaUi.CardShape
     ) {
         Column(
             Modifier.padding(16.dp),
@@ -3304,7 +3480,7 @@ private fun ProfileActionCard(
             OutlinedButton(
                 onClick = onClick,
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(14.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 Text(actionLabel)
             }
@@ -3391,7 +3567,7 @@ private fun CompanyProfileScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             Text("حفظ ملف الشركة", fontSize = 16.sp)
         }
@@ -3399,7 +3575,7 @@ private fun CompanyProfileScreen(
         OutlinedButton(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth().height(50.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             Text("إلغاء")
         }
@@ -3515,7 +3691,7 @@ private fun EmployerDashboardScreen(
 
         Card(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(20.dp)
+            shape = ForsaUi.CardShape
         ) {
             Column(
                 Modifier.padding(16.dp),
@@ -3535,14 +3711,14 @@ private fun EmployerDashboardScreen(
             Button(
                 onClick = onJobs,
                 modifier = Modifier.weight(1f).height(50.dp),
-                shape = RoundedCornerShape(14.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 Text("إعلاناتي")
             }
             OutlinedButton(
                 onClick = onApplications,
                 modifier = Modifier.weight(1f).height(50.dp),
-                shape = RoundedCornerShape(14.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 Text("الطلبات")
             }
@@ -3553,7 +3729,7 @@ private fun EmployerDashboardScreen(
         if (applications.isEmpty()) {
             Surface(
                 Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(16.dp),
+                shape = ForsaUi.FieldShape,
                 color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 Text(
@@ -3566,7 +3742,7 @@ private fun EmployerDashboardScreen(
             applications.take(5).forEach { application ->
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = ForsaUi.FieldShape
                 ) {
                     Column(
                         Modifier.padding(14.dp),
@@ -3594,7 +3770,7 @@ private fun DashboardStatCard(
 ) {
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(18.dp)
+        shape = ForsaUi.CardShape
     ) {
         Column(
             Modifier
@@ -3674,7 +3850,7 @@ private fun EmployerJobsScreen(
             myJobs.forEach { job ->
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp)
+                    shape = ForsaUi.CardShape
                 ) {
                     Column(
                         Modifier.padding(16.dp),
@@ -3683,7 +3859,7 @@ private fun EmployerJobsScreen(
                         Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
                         Text(job.company, color = MaterialTheme.colorScheme.primary)
                         Surface(
-                            shape = RoundedCornerShape(10.dp),
+                            shape = ForsaUi.SmallShape,
                             color = if (job.isActive) {
                                 MaterialTheme.colorScheme.secondaryContainer
                             } else {
@@ -3720,7 +3896,7 @@ private fun EmployerJobsScreen(
                             OutlinedButton(
                                 onClick = { onEditJob(job) },
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Icon(Icons.Default.Edit, null)
                                 Spacer(Modifier.width(6.dp))
@@ -3729,7 +3905,7 @@ private fun EmployerJobsScreen(
                             Button(
                                 onClick = onApplications,
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text("الطلبات")
                             }
@@ -3742,7 +3918,7 @@ private fun EmployerJobsScreen(
                             OutlinedButton(
                                 onClick = { onPromoteJob(job) },
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text(if (job.isFeatured) "مميز" else "ترقية الإعلان")
                             }
@@ -3750,7 +3926,7 @@ private fun EmployerJobsScreen(
                                 onClick = { onToggleJobActive(job) },
                                 enabled = !job.isExpired,
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text(
                                     when {
@@ -3763,7 +3939,7 @@ private fun EmployerJobsScreen(
                             OutlinedButton(
                                 onClick = { deleteTarget = job },
                                 modifier = Modifier.weight(1f),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Icon(Icons.Default.Delete, null)
                                 Spacer(Modifier.width(6.dp))
@@ -3898,7 +4074,7 @@ private fun EditJobScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             Text("حفظ التعديلات", fontSize = 16.sp)
         }
@@ -4029,7 +4205,7 @@ private fun EmployerApplicationsScreen(
             filteredApplications.forEach { app ->
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp)
+                    shape = ForsaUi.CardShape
                 ) {
                     Column(
                         Modifier.padding(16.dp),
@@ -4064,7 +4240,7 @@ private fun EmployerApplicationsScreen(
                             OutlinedButton(
                                 onClick = { selectedCv = app },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text("عرض السيرة الذاتية")
                             }
@@ -4086,7 +4262,7 @@ private fun EmployerApplicationsScreen(
                                         }
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text(
                                     "فتح ملف CV" +
@@ -4124,7 +4300,7 @@ private fun EmployerApplicationsScreen(
                                             }
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(14.dp)
+                                    shape = ForsaUi.FieldShape
                                 ) {
                                     Text("قبول")
                                 }
@@ -4153,7 +4329,7 @@ private fun EmployerApplicationsScreen(
                                             }
                                     },
                                     modifier = Modifier.weight(1f),
-                                    shape = RoundedCornerShape(14.dp)
+                                    shape = ForsaUi.FieldShape
                                 ) {
                                     Text("رفض")
                                 }
@@ -4184,7 +4360,7 @@ private fun EmployerApplicationsScreen(
                                         }
                                 },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text("إعادة للمراجعة")
                             }
@@ -4314,7 +4490,7 @@ private fun NotificationsScreen(
         if (notifications.isEmpty()) {
             Surface(
                 Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(18.dp),
+                shape = ForsaUi.CardShape,
                 color = MaterialTheme.colorScheme.surfaceVariant
             ) {
                 Text("ماكو إشعارات حالياً.", Modifier.padding(16.dp))
@@ -4323,7 +4499,7 @@ private fun NotificationsScreen(
             notifications.forEach { notification ->
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp)
+                    shape = ForsaUi.CardShape
                 ) {
                     Column(
                         Modifier.padding(16.dp),
@@ -4372,7 +4548,7 @@ private fun NotificationsScreen(
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(14.dp),
+                    shape = ForsaUi.FieldShape,
                 ) {
                     Text("تحديد الكل كمقروء")
                 }
@@ -4500,7 +4676,7 @@ private fun MyApplicationsScreen(
             filteredApplications.forEach { app ->
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp)
+                    shape = ForsaUi.CardShape
                 ) {
                     Column(
                         Modifier.padding(16.dp),
@@ -4522,7 +4698,7 @@ private fun MyApplicationsScreen(
                             OutlinedButton(
                                 onClick = { deleteTarget = app },
                                 modifier = Modifier.fillMaxWidth(),
-                                shape = RoundedCornerShape(14.dp)
+                                shape = ForsaUi.FieldShape
                             ) {
                                 Text("سحب الطلب")
                             }
@@ -4572,7 +4748,7 @@ private fun StatusBadge(status: String) {
     }
 
     Surface(
-        shape = RoundedCornerShape(10.dp),
+        shape = ForsaUi.SmallShape,
         color = MaterialTheme.colorScheme.secondaryContainer
     ) {
         Row(
@@ -4740,7 +4916,7 @@ private fun CvProfileScreen(
 
         Surface(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
+            shape = ForsaUi.FieldShape,
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
             Column(
@@ -4964,7 +5140,7 @@ private fun CvProfileScreen(
             },
             enabled = !saving,
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             if (saving) {
                 CircularProgressIndicator(
@@ -4979,7 +5155,7 @@ private fun CvProfileScreen(
 
         Surface(
             Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
+            shape = ForsaUi.FieldShape,
             color = MaterialTheme.colorScheme.primaryContainer
         ) {
             val currentProfile = CvProfile(
@@ -5071,7 +5247,7 @@ private fun SavedJobsScreen(
             saved.forEach { job ->
                 Card(
                     Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(18.dp)
+                    shape = ForsaUi.CardShape
                 ) {
                     Column(
                         Modifier.padding(16.dp),
@@ -5102,7 +5278,7 @@ private fun SavedJobsScreen(
                         OutlinedButton(
                             onClick = { onOpen(job) },
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(14.dp)
+                            shape = ForsaUi.FieldShape
                         ) {
                             Text("عرض الوظيفة")
                         }
@@ -5115,7 +5291,7 @@ private fun SavedJobsScreen(
 
 @Composable
 private fun ProfileInfo(label: String, value: String) {
-    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(16.dp)) {
+    Card(Modifier.fillMaxWidth(), shape = ForsaUi.FieldShape) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(value, fontSize = 16.sp, fontWeight = FontWeight.Medium)
@@ -5189,7 +5365,7 @@ private fun LoginScreen(
             },
             enabled = !loading,
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             if (loading) {
                 CircularProgressIndicator(
@@ -5306,7 +5482,7 @@ private fun RegisterScreen(
             },
             enabled = !loading,
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             if (loading) {
                 CircularProgressIndicator(
@@ -5419,7 +5595,7 @@ private fun PhoneAuthScreen(
                     keyboardType = KeyboardType.Phone,
                     imeAction = ImeAction.Done
                 ),
-                shape = RoundedCornerShape(14.dp)
+                shape = ForsaUi.FieldShape
             )
 
             Spacer(Modifier.height(8.dp))
@@ -5434,7 +5610,7 @@ private fun PhoneAuthScreen(
                 onClick = ::sendCode,
                 enabled = !loading,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(16.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 if (loading) {
                     CircularProgressIndicator(
@@ -5460,7 +5636,7 @@ private fun PhoneAuthScreen(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Done
                 ),
-                shape = RoundedCornerShape(14.dp)
+                shape = ForsaUi.FieldShape
             )
 
             Spacer(Modifier.height(18.dp))
@@ -5479,7 +5655,7 @@ private fun PhoneAuthScreen(
                 },
                 enabled = !loading && !verifying,
                 modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = RoundedCornerShape(16.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 if (loading || verifying) {
                     CircularProgressIndicator(
@@ -5500,7 +5676,7 @@ private fun PhoneAuthScreen(
                 },
                 enabled = !loading && !verifying,
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(14.dp)
+                shape = ForsaUi.FieldShape
             ) {
                 Text("تغيير الرقم")
             }
@@ -5594,7 +5770,7 @@ private fun ResetScreen(
             },
             enabled = !loading,
             modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = RoundedCornerShape(16.dp)
+            shape = ForsaUi.FieldShape
         ) {
             if (loading) {
                 CircularProgressIndicator(
@@ -5620,7 +5796,7 @@ private fun EmailField(value: String, onValueChange: (String) -> Unit) {
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next
         ),
-        shape = RoundedCornerShape(14.dp)
+        shape = ForsaUi.FieldShape
     )
 }
 
@@ -5637,7 +5813,7 @@ private fun NameField(value: String, onValueChange: (String) -> Unit) {
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next
         ),
-        shape = RoundedCornerShape(14.dp)
+        shape = ForsaUi.FieldShape
     )
 }
 
@@ -5669,7 +5845,7 @@ private fun PasswordField(
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done
         ),
-        shape = RoundedCornerShape(14.dp)
+        shape = ForsaUi.FieldShape
     )
 }
 
