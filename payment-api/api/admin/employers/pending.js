@@ -27,6 +27,8 @@ module.exports = async function handler(req, res) {
         companyCity: doc.get("companyCity") || "",
         verificationRequestedAt: doc.get("verificationRequestedAt") || 0,
         verificationStatus: doc.get("verificationStatus") || "pending",
+        verificationDocumentName: doc.get("verificationDocumentName") || "",
+        hasVerificationDocument: Boolean(doc.get("verificationDocumentPath")),
       })),
     });
   } catch (error) {
