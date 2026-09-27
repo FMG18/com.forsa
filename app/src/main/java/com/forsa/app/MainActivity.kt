@@ -279,7 +279,9 @@ private data class ApplicationItem(
     val cvSkills: String = "",
     val cvLanguages: String = "",
     val cvPhone: String = "",
-    val cvCity: String = ""
+    val cvCity: String = "",
+    val cvFileName: String = "",
+    val cvStoragePath: String = ""
 )
 
 private data class CvProfile(
@@ -1034,6 +1036,15 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             } else {
                 val applicationId = job.id + "_" + user.uid
                 val applicationRef = db.collection("applications").document(applicationId)
+                val applicationCvFileName = cvProfile.fileName.trim()
+                val applicationCvPath = if (
+                    cvProfile.storagePath.isNotBlank() && applicationCvFileName.isNotBlank()
+                ) {
+                    "applicationCvs/" + applicationId + "/" + applicationCvFileName
+                } else {
+                    ""
+                }
+
                 val applicationData = mapOf(
                     "jobId" to job.id,
                     "jobTitle" to job.title,
@@ -1052,37 +1063,87 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                     "cvSkills" to cvProfile.skills,
                     "cvLanguages" to cvProfile.languages,
                     "cvPhone" to profilePhone,
-                    "cvCity" to profileCity
+                    "cvCity" to profileCity,
+                    "cvFileName" to applicationCvFileName,
+                    "cvStoragePath" to applicationCvPath
                 )
 
-                db.runTransaction { transaction ->
-                    if (transaction.get(applicationRef).exists()) {
-                        throw IllegalStateException("ALREADY_APPLIED")
-                    }
-                    transaction.set(applicationRef, applicationData)
-                    null
-                }.addOnSuccessListener {
+                fun notifyApplicationCreated() {
                     appliedJobIds = appliedJobIds + job.id
                     createNotification(
                         targetUid = job.ownerUid,
                         type = "new_application",
                         title = "طلب تقديم جديد",
-                        body = user.displayName.orEmpty().ifBlank { "باحث عن عمل" } + " قدّم على وظيفة " + job.title,
+                        body = user.displayName.orEmpty().ifBlank { "باحث عن عمل" } +
+                            " قدّم على وظيفة " + job.title,
                         jobId = job.id,
                         applicationId = applicationId,
                         status = "pending"
                     )
                     message("تم إرسال طلب التقديم بنجاح")
                     selectedJob = null
-                }.addOnFailureListener { exception ->
-                    if (exception is IllegalStateException &&
-                        exception.message == "ALREADY_APPLIED"
-                    ) {
-                        appliedJobIds = appliedJobIds + job.id
-                        message("أنت مقدم على هذه الوظيفة مسبقاً")
-                    } else {
-                        message("تعذر إرسال طلب التقديم")
+                }
+
+                fun createApplicationRecord() {
+                    db.runTransaction { transaction ->
+                        if (transaction.get(applicationRef).exists()) {
+                            throw IllegalStateException("ALREADY_APPLIED")
+                        }
+                        transaction.set(applicationRef, applicationData)
+                        null
+                    }.addOnSuccessListener {
+                        if (applicationCvPath.isBlank()) {
+                            notifyApplicationCreated()
+                            return@addOnSuccessListener
+                        }
+
+                        FirebaseStorage.getInstance().reference
+                            .child(cvProfile.storagePath)
+                            .getBytes(10L * 1024L * 1024L)
+                            .addOnSuccessListener { bytes ->
+                                val extension = applicationCvFileName.substringAfterLast('.', "").lowercase()
+                                val contentType = when (extension) {
+                                    "pdf" -> "application/pdf"
+                                    "doc" -> "application/msword"
+                                    "docx" -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                                    else -> "application/octet-stream"
+                                }
+
+                                FirebaseStorage.getInstance().reference
+                                    .child(applicationCvPath)
+                                    .putBytes(
+                                        bytes,
+                                        com.google.firebase.storage.StorageMetadata.Builder()
+                                            .setContentType(contentType)
+                                            .build()
+                                    )
+                                    .addOnSuccessListener {
+                                        notifyApplicationCreated()
+                                    }
+                                    .addOnFailureListener {
+                                        applicationRef.delete().addOnCompleteListener {
+                                            message("تم إلغاء التقديم لأن ملف السيرة لم يُجهّز")
+                                        }
+                                    }
+                            }
+                            .addOnFailureListener {
+                                applicationRef.delete().addOnCompleteListener {
+                                    message("تعذر تجهيز ملف السيرة لهذا الطلب")
+                                }
+                            }
+                    }.addOnFailureListener { exception ->
+                        if (exception is IllegalStateException &&
+                            exception.message == "ALREADY_APPLIED"
+                        ) {
+                            appliedJobIds = appliedJobIds + job.id
+                            message("أنت مقدم على هذه الوظيفة مسبقاً")
+                        } else {
+                            message("تعذر إرسال طلب التقديم")
+                        }
                     }
+                }
+
+                createApplicationRecord()
                 }
             }
         },
@@ -3581,6 +3642,8 @@ private fun EmployerApplicationsScreen(
     var applications by remember { mutableStateOf<List<ApplicationItem>>(emptyList()) }
     var statusFilter by remember { mutableStateOf("الكل") }
     var selectedCv by remember { mutableStateOf<ApplicationItem?>(null) }
+    val context = LocalContext.current
+    val storage = remember { FirebaseStorage.getInstance() }
 
     val filteredApplications = applications.filter { app ->
         statusFilter == "الكل" || app.status == statusFilter
@@ -3623,7 +3686,9 @@ private fun EmployerApplicationsScreen(
                                 cvSkills = doc.getString("cvSkills").orEmpty(),
                                 cvLanguages = doc.getString("cvLanguages").orEmpty(),
                                 cvPhone = doc.getString("cvPhone").orEmpty(),
-                                cvCity = doc.getString("cvCity").orEmpty()
+                                cvCity = doc.getString("cvCity").orEmpty(),
+                                cvFileName = doc.getString("cvFileName").orEmpty(),
+                                cvStoragePath = doc.getString("cvStoragePath").orEmpty()
                             )
                         }
                         ?.sortedByDescending { it.createdAt }
@@ -3729,6 +3794,31 @@ private fun EmployerApplicationsScreen(
                                 shape = RoundedCornerShape(14.dp)
                             ) {
                                 Text("عرض السيرة الذاتية")
+                            }
+                        }
+
+                        if (app.cvStoragePath.isNotBlank()) {
+                            OutlinedButton(
+                                onClick = {
+                                    storage.reference.child(app.cvStoragePath).downloadUrl
+                                        .addOnSuccessListener { url ->
+                                            try {
+                                                context.startActivity(Intent(Intent.ACTION_VIEW, url))
+                                            } catch (_: Exception) {
+                                                onMessage("تعذر فتح ملف السيرة")
+                                            }
+                                        }
+                                        .addOnFailureListener {
+                                            onMessage("تعذر الوصول إلى ملف السيرة")
+                                        }
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(14.dp)
+                            ) {
+                                Text(
+                                    "فتح ملف CV" +
+                                        if (app.cvFileName.isNotBlank()) " — " + app.cvFileName else ""
+                                )
                             }
                         }
 
