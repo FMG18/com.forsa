@@ -1,6 +1,6 @@
 status=PASS
-commit=fa1404c595a1d84b4fcae20f803585998c30d4f7
-run=36286260904
+commit=e852aa20804b376992431532d63e0ab6e9981b80
+run=36286457087
 attempt=1
 build_exit_code=0
 smoke_exit_code=0
@@ -21,10 +21,10 @@ Daemon will be stopped at the end of the build
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
+> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
 > Task :app:parseDebugLocalResources
-> Task :app:mergeDebugResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
 > Task :app:javaPreCompileDebug
@@ -48,22 +48,21 @@ Daemon will be stopped at the end of the build
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
 > Task :app:mergeExtDexDebug
-
 > Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2071:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2104:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2264:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2460:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3067:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3201:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3389:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3555:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3713:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4035:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4184:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4457:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4769:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4861:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2157:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2190:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2350:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2546:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3153:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3287:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3475:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3641:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3799:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4121:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4270:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4543:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4855:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4947:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
 > Task :app:compileDebugJavaWithJavac
 > Task :app:dexBuilderDebug
@@ -74,129 +73,129 @@ w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790473269124.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790473509640.json
 
-BUILD SUCCESSFUL in 56s
+BUILD SUCCESSFUL in 1m
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
-09-27 01:43:34.593  1526  2669 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.593  1526  2669 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.593   554   829 W BestClock: java.time.DateTimeException: Missing network time fix
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.595  1526  1984 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.596   554   989 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:43:34.596   554   989 D PackageManager: Clear ephemeral installer activity
-09-27 01:43:34.596   554  1522 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:43:34.596   554  1522 D PackageManager: Clear ephemeral installer activity
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.603  1526  2666 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.604  1526  2668 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.605  1383  1428 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=0feba6a4-9419-4a0f-aeb9-b2e4530500a6, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker,TikTokWorker#com.google.android.apps.wellbeing.widget.WidgetFlagCheckWorker } ]
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.608  1526  2664 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.626   554  1522 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-27 01:43:34.626   554  1522 D PackageManager: Clear ephemeral installer activity
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.627  1526  2667 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.628  1526  2678 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: Timeout on service connection
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: java.lang.Throwable
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at bewl.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):44)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at anbi.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):126)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at anbi.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at dhgf.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):39)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at dhfi.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):7)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at dhfi.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):3)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at ajis.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):5)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at angs.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):50)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at angs.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):76)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at anmg.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
-09-27 01:43:34.629  1526  2676 W GoogleHttpServiceClient: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 01:43:34.633  2714  2714 V GraphicsEnvironment: Currently set values for:
-09-27 01:43:34.633  2714  2714 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
-09-27 01:43:34.633  2714  2714 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
-09-27 01:43:34.633  2714  2714 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
-09-27 01:43:34.633  2714  2714 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+09-27 01:47:54.894  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.nfc.SecureNfcPreferenceController
+09-27 01:47:54.895  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.specialaccess.DefaultPaymentSettingsPreferenceController
+09-27 01:47:54.895  1101  1176 V SettingsSearchProvider: com.android.settings.connecteddevice.NfcAndPaymentFragment$1@513c470 tried to add an empty non-indexable key
+09-27 01:47:54.896  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.security.EncryptionStatusPreferenceController
+09-27 01:47:54.896  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.security.CredentialManagementAppPreferenceController
+09-27 01:47:54.896  1101  1176 W PrefCtrlListHelper: encryption_and_credentials_encryption_status already has a controller
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.gestures.SystemNavigationPreferenceController
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.language.LanguagePreferenceController
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.inputmethod.KeyboardPreferenceController
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.inputmethod.TrackpadSettingsController
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.gestures.GesturesSettingPreferenceController
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.datetime.DateTimePreferenceController
+09-27 01:47:54.900  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.update.GoogleSystemUpdatePreferenceController
+09-27 01:47:54.901  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.update.SoftwareUpdateController
+09-27 01:47:54.901  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.users.MultiUserPreferenceController
+09-27 01:47:54.901  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.system.DeveloperOptionsController
+09-27 01:47:54.901  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.repairmode.RepairModePreferenceController
+09-27 01:47:54.901  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.system.GoogleDeviceDiagnosticsPreferenceController
+09-27 01:47:54.901  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.system.ResetPreferenceController
+--------- beginning of system
+09-27 01:47:54.907   558  1556 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-27 01:47:54.911   558  1556 D PackageManager: Clear ephemeral installer activity
+09-27 01:47:54.926  1538  2062 W SearchServiceCore: Abort, client detached.
+09-27 01:47:54.926  1538  2062 W SearchServiceCore: Abort, client detached.
+09-27 01:47:54.933  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.applications.specialaccess.vrlistener.VrListenerScreenPreferenceController
+09-27 01:47:54.934  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.gestures.columbus.ColumbusEnabledPreferenceController
+09-27 01:47:54.934  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.gestures.columbus.ColumbusActionsPreferenceController
+09-27 01:47:54.934  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.gestures.columbus.ColumbusLowSensitivityPreferenceController
+09-27 01:47:54.934  1101  1176 V SettingsSearchProvider: com.google.android.settings.gestures.columbus.ColumbusSettings$1@a5b3d7a tried to add an empty non-indexable key
+09-27 01:47:54.939  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.fuelgauge.reversecharging.ReverseChargingSwitchPreferenceController
+09-27 01:47:54.941  2968  2968 I AidlLazyServiceRegistrar: Process has 0 (of 1 available) client(s) in use after notification android.hardware.drm.IDrmFactory/clearkey has clients: 0
+09-27 01:47:54.941  2968  2968 I AidlLazyServiceRegistrar: Trying to shut down the service. No clients in use for any service in process.
+09-27 01:47:54.941  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.fuelgauge.reversecharging.ReverseChargingTopIntroController
+09-27 01:47:54.941  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.fuelgauge.reversecharging.ReverseChargingSeekBarController
+09-27 01:47:54.941  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.fuelgauge.reversecharging.ReverseChargingAutoTurnOnSwitchPreferenceController
+--------- beginning of kernel
+09-27 01:47:55.129     0     0 I servicemanager: Notifying android.hardware.drm.IDrmFactory/clearkey they don't (previously: do) have clients when we now have no record of a client
+09-27 01:47:55.137     0     0 I servicemanager: Caller(pid=2968,uid=1013,sid=u:r:hal_drm_clearkey_aidl:s0) Unregistering android.hardware.drm.IDrmFactory/clearkey
+09-27 01:47:54.951  2968  2968 I AidlLazyServiceRegistrar: Unregistered all clients and exiting
+09-27 01:47:55.144     0     0 I BpBinder: onLastStrongRef automatically unlinking death recipients:
+09-27 01:47:54.955  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.SecurityStatusPreferenceController
+09-27 01:47:54.955  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.PrimarySecurityWarningPreferenceController
+09-27 01:47:54.955  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.FingerprintStatusGooglePreferenceController
+09-27 01:47:54.961  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.FaceStatusGooglePreferenceController
+09-27 01:47:54.964  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.security.CombinedBiometricStatusGooglePreferenceController
+09-27 01:47:55.151     0     0 I init    : Service 'vendor.drm-clearkey-service' (pid 2968) exited with status 0 oneshot service took 2.601000 seconds in background
+09-27 01:47:55.156     0     0 I init    : Sending signal 9 to service 'vendor.drm-clearkey-service' (pid 2968) process group...
+09-27 01:47:54.966  1101  1176 W PrefCtrlListHelper: security_show_more_warnings already has a controller
+09-27 01:47:54.968  1101  1176 V SettingsSearchProvider: com.google.android.settings.security.SecurityHubDashboard$1@f3e3721 tried to add an empty non-indexable key
+09-27 01:47:55.161     0     0 I libprocessgroup: Removed cgroup /sys/fs/cgroup/uid_1013/pid_2968
+09-27 01:47:54.969  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.notification.ClearCallingTogglePreferenceController
+09-27 01:47:54.969  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.notification.ClearCallingTipsButtonPreferenceController
+09-27 01:47:54.969  1101  1176 V SettingsSearchProvider: com.android.settings.search.BaseSearchIndexProvider@66c8d07 tried to add an empty non-indexable key
+09-27 01:47:54.969  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.touch.AdaptiveTouchSensitivityPreferenceController
+09-27 01:47:54.969  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.touch.TouchSensitivityPreferenceController
+09-27 01:47:54.970  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.fuelgauge.batterysaver.BatterySaverSchedulePreferenceController
+09-27 01:47:54.970  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.android.settings.fuelgauge.batterysaver.BatterySaverStickyPreferenceController
+09-27 01:47:54.970  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.fuelgauge.batterysaver.BatterySaverReminderPreferenceController
+09-27 01:47:54.970  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.accessibility.AdaptiveVibrationTogglePreferenceController
+09-27 01:47:54.970  1101  1176 W PrefCtrlListHelper: Cannot instantiate controller from reflection: com.google.android.settings.accessibility.AdaptiveVibrationTogglePreferenceController
+09-27 01:47:54.970  1101  1176 D PrefCtrlListHelper: Could not find Context-only controller for pref: com.google.android.settings.accessibility.AdaptiveVibrationFooterPreferenceController
+09-27 01:47:54.978  3007  3058 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:54.979  3007  3046 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.015  1388  2112 I gle.android.gms: IncrementDisableThreadFlip blocked for 42.006ms
+09-27 01:47:55.030  3007  3107 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.android.traceur/settings/indexables_xml_res
+09-27 01:47:55.031  3007  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.034   558  1853 I AppsFilter: interaction: PackageSetting{981f6eb com.android.microdroid.empty_payload/10191} -> PackageSetting{4491200 com.google.android.apps.messaging/10135} BLOCKED
+09-27 01:47:55.034   558  1853 I AppsFilter: interaction: PackageSetting{a53ec48 com.forsa.app/10209} -> PackageSetting{4491200 com.google.android.apps.messaging/10135} BLOCKED
+09-27 01:47:55.036   558  1853 D CompatChangeReporter: Compat change id reported: 151861875; UID 10135; state: ENABLED
+09-27 01:47:55.041  3007  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.053  3007  3107 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.android.traceur/settings/dynamic_indexables_raw
+09-27 01:47:55.053  3007  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.055   359   359 D Zygote  : Forked child process 3115
+09-27 01:47:55.060  2697  2705 D CompatChangeReporter: Compat change id reported: 183155436; UID 10126; state: ENABLED
+09-27 01:47:55.073   558   828 D CompatChangeReporter: Compat change id reported: 151861875; UID 10184; state: ENABLED
+09-27 01:47:55.074  3007  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.074   558   995 I AppsFilter: interaction: PackageSetting{981f6eb com.android.microdroid.empty_payload/10191} -> PackageSetting{709d8f4 com.google.android.apps.safetyhub/10130} BLOCKED
+09-27 01:47:55.074   558   995 I AppsFilter: interaction: PackageSetting{a53ec48 com.forsa.app/10209} -> PackageSetting{709d8f4 com.google.android.apps.safetyhub/10130} BLOCKED
+09-27 01:47:55.075   558   995 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10130, packageName = null, attributionTag = null, token = android.os.Binder@931c96b, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-27 01:47:55.076  3007  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.082   558   597 I ActivityManager: Start proc 3115:com.google.android.apps.messaging/u0a135 for content provider {com.google.android.apps.messaging/com.google.android.apps.messaging.settings.search.MessagesSearchIndexablesProvider}
+09-27 01:47:55.108  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.110   359   359 D Zygote  : Forked child process 3120
+09-27 01:47:55.113   558   871 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0
+09-27 01:47:55.113   558   871 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10135 package com.google.android.apps.messaging isStopped false
+09-27 01:47:55.113   558   871 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_UNSTOPPED on user 0
+09-27 01:47:55.113   558   871 I AppWidgetServiceImpl: Updating package stopped masked state for uid 10130 package com.google.android.apps.safetyhub isStopped false
+09-27 01:47:55.115   558   597 W ActivityManager: Slow operation: 52ms so far, now at startProcess: returned from zygote!
+09-27 01:47:55.115  3007  3111 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.117  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.121   558   654 D CompatChangeReporter: Compat change id reported: 151861875; UID 10167; state: ENABLED
+09-27 01:47:55.121   558   654 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10167, packageName = null, attributionTag = null, token = android.os.Binder@931c96b, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-27 01:47:55.124  3007  3113 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.android.cellbroadcastreceiver/settings/dynamic_indexables_raw
+09-27 01:47:55.124  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.126   558   597 W ActivityManager: Slow operation: 63ms so far, now at startProcess: done updating battery stats
+09-27 01:47:55.126   558   597 W ActivityManager: Slow operation: 63ms so far, now at startProcess: building log message
+09-27 01:47:55.127  3007  3057 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.128  3007  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.128  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.128  3007  3058 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.132  1351  1386 I SettingsSearchIndexablesProvider: SettingsSearchIndexablesProvider.queryXmlResources():84 queryXmlResources
+09-27 01:47:55.133  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.133  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.133  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.133  3007  3113 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.settings.intelligence.routines.impl/settings/dynamic_indexables_raw
+09-27 01:47:55.133  3007  3113 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.126   558   597 I ActivityManager: Start proc 3120:com.google.android.gms.ui/u0a143 for content provider {com.google.android.gms/com.google.android.gms.app.search.GmsSearchIndexablesProvider}
+09-27 01:47:55.133   558   597 W ActivityManager: Slow operation: 71ms so far, now at startProcess: starting to update pids map
+09-27 01:47:55.133   558   597 W ActivityManager: Slow operation: 71ms so far, now at startProcess: done updating pids map
+09-27 01:47:55.133   558   597 W ActivityManager: Slow operation: 61ms so far, now at startProcess: asking zygote to start proc
+09-27 01:47:55.141   359   359 D Zygote  : Forked child process 3123
+09-27 01:47:55.141  3007  3053 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-27 01:47:55.145   558   597 W ActivityManager: Slow operation: 72ms so far, now at startProcess: returned from zygote!
+09-27 01:47:55.145   558   597 W ActivityManager: Slow operation: 72ms so far, now at startProcess: done updating battery stats
+09-27 01:47:55.145   558   597 W ActivityManager: Slow operation: 72ms so far, now at startProcess: building log message
+09-27 01:47:55.145   558   597 I ActivityManager: Start proc 3123:com.google.android.healthconnect.controller/u0a184 for content provider {com.google.android.healthconnect.controller/com.android.healthconnect.controller.searchindexables.HealthConnectSearchIndexablesProvider}
+09-27 01:47:55.145   558   597 W ActivityManager: Slow operation: 72ms so far, now at startProcess: starting to update pids map
+09-27 01:47:55.149  1351  1386 I SettingsSearchIndexablesProvider: SettingsSearchIndexablesProvider.queryRawData():92 queryRawData
+09-27 01:47:55.152   558   597 W ActivityManager: Slow operation: 80ms so far, now at startProcess: done updating pids map
+09-27 01:47:55.153   558   597 W ActivityManager: Slow operation: 78ms so far, now at startProcess: asking zygote to start proc
