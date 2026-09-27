@@ -2093,57 +2093,88 @@ private fun HomeTab(
     onSelectJob: (Job) -> Unit
 ) {
     val name = userName.trim().ifEmpty { "مستخدم فرصة" }
+    val suggestions = if (role == "باحث عن عمل") recommendedJobs(jobs, cvProfile, profileCity) else emptyList()
 
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(horizontal = 18.dp, vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Text("مرحباً، $name 👋", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-        Text(
-            "حسابك: $role",
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Text("مرحباً، $name 👋", style = MaterialTheme.typography.headlineLarge)
+                Text(
+                    if (role == "صاحب عمل") "لوحة فرصك وإعلاناتك" else "اكتشف الفرصة الأقرب لك",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = ForsaUi.Muted,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+            Surface(
+                Modifier.size(48.dp),
+                shape = CircleShape,
+                color = ForsaUi.PrimarySoft,
+                contentColor = ForsaUi.Primary
+            ) {
+                androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text((name.firstOrNull() ?: 'م').uppercase(), style = MaterialTheme.typography.titleLarge)
+                }
+            }
+        }
 
-        Card(
+        Surface(
             Modifier.fillMaxWidth(),
             shape = ForsaUi.SheetShape,
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
+            color = Color.Transparent
         ) {
-            Column(Modifier.padding(22.dp)) {
-                Text(
-                    "خلك قريب من فرصتك الجاية",
-                    color = Color.White,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    if (canPublish) {
-                        "ابحث عن وظيفة مناسبة أو انشر فرصة عمل جديدة."
-                    } else {
-                        "ابحث عن الوظيفة المناسبة وتابع طلباتك من حسابك."
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .background(ForsaUi.Gradient, ForsaUi.SheetShape)
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                ForsaMetaChip(
+                    if (canPublish) "حساب موثق وجاهز للنشر" else "جاهز لاكتشاف الفرص",
+                    icon = {
+                        Icon(
+                            if (canPublish) Icons.Default.Verified else Icons.Default.Work,
+                            null,
+                            Modifier.size(15.dp)
+                        )
                     },
-                    color = Color.White.copy(alpha = .9f),
-                    lineHeight = 24.sp
+                    selected = true
                 )
-                Spacer(Modifier.height(18.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text("خلك أقرب لخطوتك الجاية", color = Color.White, style = MaterialTheme.typography.headlineMedium)
+                Text(
+                    if (canPublish) "انشر وظيفة، تابع الطلبات، وروّج إعلانك من نفس المكان."
+                    else "ابحث، احفظ الوظائف، وقدّم وتابع حالة طلباتك بدون تعقيد.",
+                    color = Color.White.copy(alpha = .84f),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
                     Button(
                         onClick = onJobs,
-                        modifier = Modifier.weight(1f),
-                        shape = ForsaUi.FieldShape
+                        modifier = Modifier.weight(1f).height(50.dp),
+                        shape = ForsaUi.FieldShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            contentColor = ForsaUi.Primary
+                        )
                     ) {
-                        Text("الوظائف")
+                        Icon(Icons.Default.Search, null, Modifier.size(18.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text("استكشاف")
                     }
-
                     if (canPublish) {
                         OutlinedButton(
                             onClick = onPublish,
-                            modifier = Modifier.weight(1f),
-                            shape = ForsaUi.FieldShape
+                            modifier = Modifier.weight(1f).height(50.dp),
+                            shape = ForsaUi.FieldShape,
+                            border = BorderStroke(1.dp, Color.White.copy(alpha = .55f)),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White)
                         ) {
                             Text("نشر وظيفة")
                         }
@@ -2152,59 +2183,64 @@ private fun HomeTab(
             }
         }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            SmallStat("إجمالي الوظائف", jobsCount.toString(), Modifier.weight(1f))
-            SmallStat("المدن", "العراق", Modifier.weight(1f))
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            SmallStat("وظائف متاحة", jobsCount.toString(), Modifier.weight(1f))
+            SmallStat("السوق", "العراق", Modifier.weight(1f))
         }
 
-        if (role == "باحث عن عمل") {
-            val suggestions = recommendedJobs(jobs, cvProfile, profileCity)
-            if (suggestions.isNotEmpty()) {
-                Text("وظائف مناسبة لك", fontSize = 19.sp, fontWeight = FontWeight.Bold)
-                Text(
-                    "الاقتراحات تعتمد على بيانات سيرتك ومدينتك الحالية.",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontSize = 12.sp
-                )
-                suggestions.take(3).forEach { job ->
-                    Card(
-                        Modifier
-                            .fillMaxWidth()
-                            .clickable { onSelectJob(job) },
-                        shape = ForsaUi.CardShape
-                    ) {
-                        Column(
-                            Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ForsaSectionTitle(
+            if (canPublish) "وصول سريع" else "اختصاراتك",
+            if (canPublish) "الأدوات الأساسية لإدارة حضورك." else "كل ما تحتاجه للوصول إلى فرصك."
+        )
+        ForsaActionTile(
+            title = if (canPublish) "إدارة الوظائف" else "تصفح الوظائف",
+            subtitle = if (canPublish) "الإعلانات والطلبات والترويج" else "بحث وفلترة ومشاهدة التفاصيل",
+            icon = Icons.Default.Search,
+            onClick = onJobs
+        )
+
+        if (suggestions.isNotEmpty()) {
+            ForsaSectionTitle("مقترحة لك", "اقتراحات حسب السيرة الذاتية والمدينة.")
+            suggestions.take(3).forEach { job ->
+                Card(
+                    Modifier.fillMaxWidth().clickable { onSelectJob(job) },
+                    shape = ForsaUi.CardShape,
+                    colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                ) {
+                    Row(Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Surface(
+                            Modifier.size(46.dp),
+                            shape = ForsaUi.FieldShape,
+                            color = if (job.isFeatured) ForsaUi.WarningSoft else ForsaUi.PrimarySoft,
+                            contentColor = if (job.isFeatured) ForsaUi.Warning else ForsaUi.Primary
                         ) {
-                            Text(job.title, fontSize = 17.sp, fontWeight = FontWeight.Bold)
-                            Text(job.company, color = MaterialTheme.colorScheme.primary)
-                            Text(
-                                job.city + " • " + job.type,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 13.sp
-                            )
+                            androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                Icon(
+                                    if (job.isFeatured) Icons.Default.RocketLaunch else Icons.Default.BusinessCenter,
+                                    null,
+                                    Modifier.size(21.dp)
+                                )
+                            }
                         }
+                        Spacer(Modifier.width(11.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(job.title, style = MaterialTheme.typography.titleMedium)
+                            Text(job.company, color = ForsaUi.Primary, style = MaterialTheme.typography.bodyMedium)
+                            Text(job.city + " • " + job.type, color = ForsaUi.Muted, style = MaterialTheme.typography.labelMedium)
+                        }
+                        Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Muted)
                     }
                 }
             }
         }
-
-        Text(
-            if (canPublish) "إدارة حسابك من الأسفل" else "تابع فرصك من الحساب",
-            fontSize = 18.sp,
-            fontWeight = FontWeight.SemiBold
-        )
-        Text(
-            if (canPublish) {
-                "من الحساب تقدر تدير إعلاناتك وتشوف طلبات المتقدمين."
-            } else {
-                "من الحساب تقدر تشوف طلباتك وحالتها وتحدث بياناتك."
-            },
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
+        Spacer(Modifier.height(10.dp))
     }
 }
+
 
 @Composable
 private fun SmallStat(title: String, value: String, modifier: Modifier) {
