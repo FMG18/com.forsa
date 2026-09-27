@@ -1,11 +1,11 @@
-status=PASS
-commit=eaf614f4624c5fc60f63e4776010838eb758c56e
-run=36285265918
+status=FAIL
+commit=95730dbaee842bb32c497cfbf16af3104e707d99
+run=36285454855
 attempt=1
-build_exit_code=0
-smoke_exit_code=0
-smoke_outcome=success
-summary=APK built successfully and launched on Android Emulator without a detected crash.
+build_exit_code=1
+smoke_exit_code=1
+smoke_outcome=failure
+summary=APK build failed with exit code 1.
 
 --- build log tail ---
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
@@ -16,14 +16,14 @@ Daemon will be stopped at the end of the build
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
 > Task :app:generateDebugResValues
-> Task :app:checkDebugAarMetadata
 > Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
+> Task :app:mergeDebugResources
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
@@ -36,8 +36,8 @@ Daemon will be stopped at the end of the build
 > Task :app:desugarDebugFileDependencies
 > Task :app:processDebugManifestForPackage
 > Task :app:checkDebugDuplicateClasses
-> Task :app:mergeLibDexDebug
 > Task :app:mergeDebugJniLibFolders
+> Task :app:mergeLibDexDebug
 > Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
 > Task :app:validateSigningDebug
@@ -49,154 +49,30 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 
 > Task :app:mergeExtDexDebug
 
-> Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1885:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1918:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2078:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2274:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2881:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3015:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3203:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3369:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3523:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3820:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3969:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4242:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4554:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4646:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:398:21 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:405:29 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:420:41 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:423:41 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:426:41 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:430:33 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:441:25 Unresolved reference 'message'.
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790472319032.json
 
-> Task :app:compileDebugJavaWithJavac
-> Task :app:dexBuilderDebug
-> Task :app:mergeDebugGlobalSynthetics
-> Task :app:processDebugJavaRes
-> Task :app:mergeProjectDexDebug
-> Task :app:mergeDebugJavaResource
-> Task :app:packageDebug
-> Task :app:createDebugApkListingFileRedirect
-> Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790472100112.json
+FAILURE: Build failed with an exception.
 
-BUILD SUCCESSFUL in 47s
-38 actionable tasks: 38 executed
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 38s
+30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.023  1219  1228 W .gms.persistent: Missing inline cache for fowt anht.k(android.content.Context, boolean, int, java.lang.Integer, anic, eqdz)
-09-27 01:24:07.025   921   962 V WindowManagerShell: onTransitionReady (#12) android.os.BinderProxy@97951a: {id=12 t=CHANGE f=0x0 trk=1 r=[] c=[]}
-09-27 01:24:07.025   921   962 V WindowManagerShell: No transition roots in (#12) android.os.BinderProxy@97951a@1 so abort
-09-27 01:24:07.026   921   962 V WindowManagerShell: Transition animation finished (aborted=true), notifying core (#12) android.os.BinderProxy@97951a@1
-09-27 01:24:07.027   921   962 V WindowManagerShell: Track 1 became idle
-09-27 01:24:07.027   921   962 V WindowManagerShell: All active transition animations finished
-09-27 01:24:07.027   921   962 V WindowManagerShell: Transition requested (#13): android.os.BinderProxy@2de228 TransitionRequestInfo { type = CLOSE, triggerTask = null, pipTask = null, remoteTransition = RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@161ab41, appThread = null, debugName = null }, displayChange = null, flags = 0, debugId = 13 }
-09-27 01:24:07.027   921   962 V WindowManagerShell: RemoteTransition directly requested for (#13) android.os.BinderProxy@2de228: RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@161ab41, appThread = null, debugName = null }
-09-27 01:24:07.028  1784  1789 I .android.as.oss: Background concurrent mark compact GC freed 4884KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 7542KB/14MB, paused 174us,382us total 277.806ms
-09-27 01:24:07.029   921  2220 V WindowManagerShell: onTransitionReady(transaction=2439541424566)
-09-27 01:24:07.029   921   962 V WindowManagerShell: onTransitionReady (#13) android.os.BinderProxy@2de228: {id=13 t=CLOSE f=0x0 trk=2 r=[] c=[]}
-09-27 01:24:07.030   921   962 V WindowManagerShell: No transition roots in (#13) android.os.BinderProxy@2de228@2 so abort
-09-27 01:24:07.030   921   962 V WindowManagerShell: Transition animation finished (aborted=true), notifying core (#13) android.os.BinderProxy@2de228@2
-09-27 01:24:07.030   921   962 V WindowManagerShell: Track 2 became idle
-09-27 01:24:07.030   921   962 V WindowManagerShell: All active transition animations finished
-09-27 01:24:07.031  1572  1981 W gle.android.gms: Long monitor contention with owner lowpool[15] (2953) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:695) waiters=3 in boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long) for 379ms
-09-27 01:24:07.031  1572  2492 W gle.android.gms: Long monitor contention with owner lowpool[15] (2953) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:695) waiters=4 in boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long) for 334ms
-09-27 01:24:07.034  1572  2521 W gle.android.gms: Long monitor contention with owner [com.google.android.gms.chimera.container.intentoperation.GmsIntentOperationChimeraService-Executor] processing com.google.android.gms.icing.proxy.UpdateIcingCorporaIntentOperation for action com.google.android.gms.icing.proxy.ACTION_UPDATE (1939) at void pkf.run()(:com.google.android.gms@242335041@24.23.35 (190800-646585959):73) waiters=0 in void pkf.run() for 238ms
-09-27 01:24:07.039   568   588 V WindowManager: Finish Transition (#12): created at 09-27 01:24:06.911 collect-started=6.989ms request-sent=8.996ms started=11.434ms ready=51.312ms sent=55.3ms finished=115.026ms
-09-27 01:24:07.039   568   588 V WindowManager: Sent Transition (#13) createdAt=09-27 01:24:06.931 via request=TransitionRequestInfo { type = CLOSE, triggerTask = null, pipTask = null, remoteTransition = RemoteTransition { remoteTransition = android.window.IRemoteTransition$Stub$Proxy@4a376cc, appThread = null, debugName = null }, displayChange = null, flags = 0, debugId = 13 }
-09-27 01:24:07.039   568   588 V WindowManager:     startWCT=WindowContainerTransaction { changes = {} hops = [] errorCallbackToken=null taskFragmentOrganizer=null }
-09-27 01:24:07.039   568   588 V WindowManager:     info={id=13 t=CLOSE f=0x0 trk=2 r=[] c=[]}
-09-27 01:24:07.039   568   588 V WindowManager: Finish Transition (#13): created at 09-27 01:24:06.931 collect-started=36.226ms request-sent=37.107ms started=96.224ms ready=96.209ms sent=98.443ms finished=99.396ms
-09-27 01:24:07.045   568  2251 D WifiNl80211Manager: Scan result ready event
-09-27 01:24:07.045   568  2251 D WifiNative: Scan result ready event
-09-27 01:24:07.047   366   406 I netd    : tetherGetStats() -> {[]} <6.55ms>
-09-27 01:24:07.061  3219  3219 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
-09-27 01:24:07.063  3212  3321 I BugleDataModel: DatabaseHelperUtils: insertSelfParticipant. participantId: 1, selfParticipantId: 1, subId: -1
-09-27 01:24:07.064   568  1922 W UserManagerService: Requested status bar icon for non-badged user 0
-09-27 01:24:07.068   568  2244 W UserManagerService: Requested status bar icon for non-badged user 0
-09-27 01:24:07.071  3212  3321 I BugleShortcuts: Clearing shortcuts for DB recreation
-09-27 01:24:07.071   568   650 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.apps.messaging, forceRescan=false , isNewApp=false
-09-27 01:24:07.072   568   652 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.apps.messaging, forceRescan=false , isNewApp=false
-09-27 01:24:07.073   568   836 I HalDevMgr: bestIfaceCreationProposal is null, requestIface=STA, existingIface=[name=wlan0 type=STA]
-09-27 01:24:07.074   568  2247 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.apps.messaging, forceRescan=false , isNewApp=false
-09-27 01:24:07.076   568  2247 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.apps.messaging, forceRescan=false , isNewApp=false
-09-27 01:24:07.078   568  2247 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.apps.messaging, forceRescan=false , isNewApp=false
-09-27 01:24:07.083  1424  1424 W JobService: onNetworkChanged() not implemented in com.google.android.apps.miphone.aiai.common.superpacks.impl.AiAiPersistentDownloadJobService. Must override in a subclass.
-09-27 01:24:07.084  3212  3296 W .apps.messaging: Long monitor contention with owner Blocking Thread #8 (3325) at java.lang.Object ddfw.a(java.lang.String)(PG:52) waiters=0 in java.lang.Object ddfw.a(java.lang.String) for 303ms
-09-27 01:24:07.094   568  1117 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-09-27 01:24:07.098  1572  2342 W gle.android.gms: Long monitor contention with owner lowpool[15] (2953) at boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long)(MessageQueue.java:695) waiters=1 in boolean android.os.MessageQueue.enqueueMessage(android.os.Message, long) for 455ms
-09-27 01:24:07.108   568  1851 W JobInfo : Job 'com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService#1728' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
-09-27 01:24:07.112   568   835 W system_server: Long monitor contention with owner NetworkStats (832) at void android.net.connectivity.com.android.server.net.NetworkStatsService.performPoll(int, android.net.connectivity.com.android.server.net.NetworkStatsEventLogger$PollEvent)(NetworkStatsService.java:2590) waiters=1 in void android.net.connectivity.com.android.server.net.NetworkStatsService.noteUidForeground(int, boolean) for 353ms
-09-27 01:24:07.116   568  2251 W ParceledListSlice: Element #25 is 19828 bytes.
-09-27 01:24:07.124   568  2251 W ParceledListSlice: Element #26 is 19864 bytes.
-09-27 01:24:07.125   568  2251 W ParceledListSlice: Element #27 is 19708 bytes.
-09-27 01:24:07.125   568  2251 W ParceledListSlice: Element #28 is 19616 bytes.
-09-27 01:24:07.125   568  2251 W ParceledListSlice: Element #29 is 19728 bytes.
-09-27 01:24:07.126   568   834 W system_server: Long monitor contention with owner NetworkStats (832) at void android.net.connectivity.com.android.server.net.NetworkStatsService.performPoll(int, android.net.connectivity.com.android.server.net.NetworkStatsEventLogger$PollEvent)(NetworkStatsService.java:2590) waiters=0 in android.net.NetworkStatsHistory android.net.connectivity.com.android.server.net.NetworkStatsService.internalGetHistoryForNetwork(android.net.NetworkTemplate, int, int, int, int, long, long) for 372ms
-09-27 01:24:07.127  1179  1236 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
-09-27 01:24:07.127  1179  1236 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at com.android.launcher3.model.WidgetItem.<init>(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:4)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at com.android.launcher3.model.WidgetsModel.update(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:72)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at com.android.launcher3.p0.execute(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:16)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at com.android.launcher3.LauncherModel.a(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:27)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at com.android.launcher3.t0.run(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:12)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.os.Handler.handleCallback(Handler.java:959)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.os.Handler.dispatchMessage(Handler.java:100)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.os.Looper.loopOnce(Looper.java:232)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.os.Looper.loop(Looper.java:317)
-09-27 01:24:07.127  1179  1236 W PackageManager: 	at android.os.HandlerThread.run(HandlerThread.java:85)
-09-27 01:24:07.128   568  1117 I AppWidgetServiceImpl: getWidgetPreview() 0
-09-27 01:24:07.130   568   885 W system_server: Long monitor contention with owner android.bg (599) at java.util.List com.android.server.pm.ShortcutService$LocalService.getShortcuts(int, java.lang.String, long, java.lang.String, java.util.List, java.util.List, android.content.ComponentName, int, int, int, int)(ShortcutService.java:3015) waiters=0 in void com.android.server.pm.ShortcutService.lambda$notifyListenerRunnable$2(int, java.lang.String) for 401ms
-09-27 01:24:07.132   568  1117 I AppWidgetServiceImpl: getWidgetPreview() 0
-09-27 01:24:07.133  1572  1572 I WakefulBroadcastRcvr: Processing wakeful broadcast: com.google.android.gms.checkin.CHECKIN_START_ACTION
-09-27 01:24:07.139  3216  3216 D CompatChangeReporter: Compat change id reported: 3400644; UID 10129; state: ENABLED
-09-27 01:24:07.149  1572  2521 I Checkin : [CheckinIntentOperation] onHandleIntent, Intent { act=com.google.android.gms.checkin.CHECKIN_START_ACTION cat=[targeted_intent_op_prefix:.checkin.CheckinIntentOperation] cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }
-09-27 01:24:07.153   568   885 D ShortcutService: Saving package item com.android.settings to /data/system_ce/0/shortcut_service/packages/com.android.settings.xml
-09-27 01:24:07.156   568  2251 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
-09-27 01:24:07.163  1572  2521 W GmsTaskScheduler: ScheduledCheckinGmsTaskService is not available. This may cause the task to be lost.
-09-27 01:24:07.166  3219  3357 I GMS_MM_Logger: Start time: 156258
-09-27 01:24:07.166  3219  3357 I GMS_MM_Logger: Started.
-09-27 01:24:07.169   568  2244 W ParceledListSlice: Element #25 is 19828 bytes.
-09-27 01:24:07.169   568  2244 W ParceledListSlice: Element #26 is 19864 bytes.
-09-27 01:24:07.172   568  1117 W ParceledListSlice: Element #27 is 19708 bytes.
-09-27 01:24:07.173   987   993 I webview_zygote: Background concurrent mark compact GC freed 392KB AllocSpace bytes, 0(0B) LOS objects, 49% free, 1897KB/3794KB, paused 31us,303us total 240.180ms
-09-27 01:24:07.173   568  1117 W ParceledListSlice: Element #28 is 19616 bytes.
-09-27 01:24:07.173   568  1117 W ParceledListSlice: Element #29 is 19728 bytes.
-09-27 01:24:07.175  1572  1961 W gle.android.gms: Long monitor contention with owner highpool[5] (2342) at void bpjc.a(bpkq)(:com.google.android.gms@242335041@24.23.35 (190800-646585959):42) waiters=0 in void bpjg.f(bpky) for 378ms
-09-27 01:24:07.179  1179  1236 W PackageManager: Failure retrieving text 0x7f130786 in package com.android.systemui
-09-27 01:24:07.179  1179  1236 W PackageManager: android.content.res.Resources$NotFoundException: String resource ID #0x7f130786
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.content.res.Resources.getText(Resources.java:466)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.app.ApplicationPackageManager.getText(ApplicationPackageManager.java:2405)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.appwidget.AppWidgetProviderInfo.loadDescription(AppWidgetProviderInfo.java:484)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at com.android.launcher3.model.WidgetItem.<init>(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:4)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at com.android.launcher3.model.WidgetsModel.update(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:72)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at com.android.launcher3.p0.execute(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:16)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at com.android.launcher3.LauncherModel.a(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:27)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at com.android.launcher3.t0.run(go/retraceme 31f9979659277bb965985aff1272c33e3c3c9e755b77166d20a2465454178f2c:12)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.os.Handler.handleCallback(Handler.java:959)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.os.Handler.dispatchMessage(Handler.java:100)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.os.Looper.loopOnce(Looper.java:232)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.os.Looper.loop(Looper.java:317)
-09-27 01:24:07.179  1179  1236 W PackageManager: 	at android.os.HandlerThread.run(HandlerThread.java:85)
-09-27 01:24:07.179   568  1117 I AppWidgetServiceImpl: getWidgetPreview() 0
-09-27 01:24:07.182   568   599 D ShortcutService: Getting shortcuts for launcher= com.google.android.apps.nexuslauncheruser=0 pkg=com.android.settings
-09-27 01:24:07.192  1219  2139 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.auth.account.be.legacy.AuthCronService finished executing. cause:1 result: 3 elapsed_millis: 932 uptime_millis: 932 exec_start_elapsed_seconds: 49 [CONTEXT service_id=218 ]
-09-27 01:24:07.194  3219  3219 I GmsApplication: [gms_startup_benchmark] Static start time (ms): 49974, Startup latency (ms): 786, Is system user: true
-09-27 01:24:07.196  3219  3219 W ebcf    : Primes not initialized, returning default (no-op) Primes instance which will ignore all calls. Please call Primes.initialize(...) before using any Primes API.
-09-27 01:24:07.241  1179  1184 I s.nexuslauncher: NativeAlloc concurrent mark compact GC freed 1953KB AllocSpace bytes, 42(4580KB) LOS objects, 49% free, 8489KB/16MB, paused 267us,267.862ms total 762.828ms
-09-27 01:24:07.245   568   599 D ShortcutService: Getting shortcuts for launcher= com.android.systemuiuser=0 pkg=com.android.settings
-09-27 01:24:07.245   568   599 D ShortcutService: Getting shortcuts for launcher= com.google.android.asuser=0 pkg=com.android.settings
-09-27 01:24:07.245   568   599 D ShortcutService: Getting shortcuts for launcher= com.google.android.apps.nexuslauncheruser=0 pkg=com.google.android.apps.messaging
-09-27 01:24:07.246   568   599 D ShortcutService: Getting shortcuts for launcher= com.android.systemuiuser=0 pkg=com.google.android.apps.messaging
-09-27 01:24:07.246   568   599 D ShortcutService: Getting shortcuts for launcher= com.google.android.asuser=0 pkg=com.google.android.apps.messaging
-09-27 01:24:07.246  1082  1089 W m.android.phone: Suspending all threads took: 9.548ms
-09-27 01:24:07.247   568  2244 I AppWidgetServiceImpl: getWidgetPreview() 0
