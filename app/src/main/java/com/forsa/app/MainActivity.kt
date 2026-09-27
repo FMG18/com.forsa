@@ -253,6 +253,7 @@ private data class Job(
     val type: String,
     val description: String,
     val ownerUid: String,
+    val createdAt: Long = 0L,
     val expiresAt: Long = 0L,
     val isExpired: Boolean = false,
     val isActive: Boolean = true,
@@ -557,6 +558,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                                             type = type,
                                             description = description,
                                             ownerUid = ownerUid,
+                                            createdAt = createdAt,
                                             expiresAt = expiresAt,
                                             isExpired = isExpired,
                                             isActive = isActive,
@@ -1950,7 +1952,9 @@ private fun JobsTab(
     }
 
     var query by remember { mutableStateOf("") }
+    var cityFilter by remember { mutableStateOf("") }
     var typeFilter by remember { mutableStateOf("الكل") }
+    var sortOption by remember { mutableStateOf("الأحدث") }
 
     val filteredJobs = jobs.filter { job ->
         val currentlyOpen = job.isActive && (job.expiresAt == 0L || job.expiresAt > now)
@@ -1964,13 +1968,24 @@ private fun JobsTab(
             job.city.contains(q, ignoreCase = true) ||
             job.description.contains(q, ignoreCase = true)
 
+        val cityQ = cityFilter.trim()
+        val matchesCity = cityQ.isEmpty() || job.city.contains(cityQ, ignoreCase = true)
         val matchesType = typeFilter == "الكل" || job.type == typeFilter
-        matchesQuery && matchesType
-    }.sortedWith(
-        compareByDescending<Job> { it.isFeatured }
-            .thenByDescending { it.promotionExpiresAt }
-            .thenByDescending { it.id }
-    )
+        matchesQuery && matchesCity && matchesType
+    }.let { list ->
+        when (sortOption) {
+            "الأقرب انتهاءً" -> list.sortedWith(
+                compareByDescending<Job> { it.isFeatured }
+                    .thenBy { if (it.expiresAt == 0L) Long.MAX_VALUE else it.expiresAt }
+                    .thenByDescending { it.createdAt }
+            )
+            "الأحدث" -> list.sortedWith(
+                compareByDescending<Job> { it.isFeatured }
+                    .thenByDescending { it.createdAt }
+            )
+            else -> list.sortedWith(compareByDescending<Job> { it.isFeatured }.thenByDescending { it.createdAt })
+        }
+    }
 
     Column(
         Modifier
@@ -1995,13 +2010,57 @@ private fun JobsTab(
             shape = RoundedCornerShape(14.dp)
         )
 
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedTextField(
+            value = cityFilter,
+            onValueChange = { cityFilter = it },
+            modifier = Modifier.fillMaxWidth(),
+            label = { Text("فلترة حسب المدينة") },
+            singleLine = true,
+            trailingIcon = {
+                if (cityFilter.isNotBlank()) {
+                    TextButton(onClick = { cityFilter = "" }) { Text("مسح") }
+                }
+            },
+            shape = RoundedCornerShape(14.dp)
+        )
+
+        Row(
+            Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             listOf("الكل", "دوام كامل", "دوام جزئي", "عن بُعد").forEach { option ->
                 FilterChip(
                     selected = typeFilter == option,
                     onClick = { typeFilter = option },
                     label = { Text(option) }
                 )
+            }
+        }
+
+        Row(
+            Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("الترتيب:", fontSize = 13.sp)
+            listOf("الأحدث", "الأقرب انتهاءً").forEach { option ->
+                FilterChip(
+                    selected = sortOption == option,
+                    onClick = { sortOption = option },
+                    label = { Text(option) }
+                )
+            }
+            if (query.isNotBlank() || cityFilter.isNotBlank() || typeFilter != "الكل" || sortOption != "الأحدث") {
+                TextButton(
+                    onClick = {
+                        query = ""
+                        cityFilter = ""
+                        typeFilter = "الكل"
+                        sortOption = "الأحدث"
+                    }
+                ) {
+                    Text("مسح الكل")
+                }
             }
         }
 
@@ -2437,6 +2496,7 @@ private fun PublishTab(
                             type = type,
                             description = cleanDescription,
                             ownerUid = userUid,
+                            createdAt = System.currentTimeMillis(),
                             expiresAt = System.currentTimeMillis() + durationDays * MILLIS_PER_DAY,
                             isActive = true
                         )
