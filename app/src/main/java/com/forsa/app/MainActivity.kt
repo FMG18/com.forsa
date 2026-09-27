@@ -561,6 +561,8 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                             .orEmpty()
                             .ifBlank { "unverified" }
                         verificationNote = document.getString("verificationNote").orEmpty()
+                        verificationDocumentName = document.getString("verificationDocumentName").orEmpty()
+                        verificationDocumentPath = document.getString("verificationDocumentPath").orEmpty()
                         profilePhone = document.getString("phone").orEmpty()
                             .ifBlank { auth.currentUser?.phoneNumber.orEmpty() }
                         profileCity = document.getString("city").orEmpty()
