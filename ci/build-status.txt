@@ -1,6 +1,6 @@
 status=FAIL
-commit=bcee47dbeaff7dbd1289b83a5b37a18f5c63ac5a
-run=36359962425
+commit=705cec26962a7f031775201232d00d60cbc17bdc
+run=36360171492
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -8,70 +8,63 @@ smoke_outcome=failure
 summary=APK build failed with exit code 1.
 
 --- build log tail ---
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2681:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2694:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2728:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2872:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2930:50 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2957:57 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2964:44 Unresolved reference 'background'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2966:59 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2974:9 Unresolved reference 'ForsaSectionTitle'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2978:85 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2980:59 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2999:50 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3027:93 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3264:33 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3273:33 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3308:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3454:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3459:51 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3554:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3562:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3678:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3698:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3705:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3716:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3729:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3757:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3837:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3846:37 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3883:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3892:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3905:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3913:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3926:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4061:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4192:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4227:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4249:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4287:45 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4316:45 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4347:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4477:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4486:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4535:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4663:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4685:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4913:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5137:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5152:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5244:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5275:37 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5288:43 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5306:61 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5366:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5483:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5596:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5611:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5637:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5656:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5677:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5771:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5797:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5814:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5846:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790552982179.json
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
+> Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:desugarDebugFileDependencies
+> Task :app:mergeDebugJniLibFolders
+> Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugNativeLibs
+> Task :app:processDebugResources
+> Task :app:mergeLibDexDebug
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
+
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:mergeExtDexDebug
+
+> Task :app:compileDebugKotlin FAILED
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:403:20 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:404:21 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:405:21 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:406:22 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:407:18 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:408:19 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:409:17 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:410:18 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:411:18 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:412:19 Unresolved reference 'TextStyle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1920:17 No parameter with name 'shadowElevation' found.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2195:9 Unresolved reference 'ForsaSectionTitle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2207:13 Unresolved reference 'ForsaSectionTitle'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2975:9 Unresolved reference 'ForsaSectionTitle'.
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790553212729.json
 
 FAILURE: Build failed with an exception.
 
@@ -86,7 +79,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 41s
+BUILD FAILED in 40s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
