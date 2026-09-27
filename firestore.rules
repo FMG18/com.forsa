@@ -94,7 +94,7 @@ service cloud.firestore {
           "jobId", "jobTitle", "company", "applicantUid", "applicantName",
           "applicantEmail", "employerUid", "note", "status", "createdAt",
           "cvHeadline", "cvAbout", "cvEducation", "cvExperience",
-          "cvSkills", "cvLanguages", "cvPhone", "cvCity"
+          "cvSkills", "cvLanguages", "cvPhone", "cvCity", "cvFileName", "cvStoragePath"
         ])
         && request.resource.data.jobId is string
         && request.resource.data.jobId.size() > 0
@@ -113,6 +113,13 @@ service cloud.firestore {
         && request.resource.data.cvLanguages is string
         && request.resource.data.cvPhone is string
         && request.resource.data.cvCity is string
+        && request.resource.data.cvFileName is string
+        && request.resource.data.cvStoragePath is string
+        && (
+          request.resource.data.cvStoragePath == ""
+          || request.resource.data.cvStoragePath ==
+             "applicationCvs/" + applicationId + "/" + request.resource.data.cvFileName
+        )
         && request.resource.data.employerUid ==
           get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data.ownerUid
         && jobIsOpen(get(/databases/$(database)/documents/jobs/$(request.resource.data.jobId)).data)
@@ -143,6 +150,8 @@ service cloud.firestore {
               get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.skills
             && request.resource.data.cvLanguages ==
               get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.languages
+            && request.resource.data.cvFileName ==
+              get(/databases/$(database)/documents/cvProfiles/$(request.auth.uid)).data.fileName
           )
         );
 
