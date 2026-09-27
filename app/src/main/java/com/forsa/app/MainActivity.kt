@@ -4823,28 +4823,37 @@ private fun MyApplicationsScreen(
 
 @Composable
 private fun StatusBadge(status: String) {
-    val label = when (status) {
+    val normalized = status.lowercase()
+    val label = when (normalized) {
         "accepted" -> "مقبول"
         "rejected" -> "مرفوض"
+        "interview" -> "مقابلة"
+        "shortlisted" -> "القائمة المختصرة"
+        "withdrawn" -> "مسحوب"
+        "verified" -> "موثق"
         else -> "قيد المراجعة"
     }
-
-    Surface(
-        shape = ForsaUi.SmallShape,
-        color = MaterialTheme.colorScheme.secondaryContainer
-    ) {
-        Row(
-            Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(Icons.Default.CheckCircle, null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(7.dp))
-            Text(label, fontWeight = FontWeight.SemiBold)
+    val bg = when (normalized) {
+        "accepted", "verified" -> ForsaUi.SuccessSoft
+        "rejected" -> ForsaUi.DangerSoft
+        "pending", "submitted", "viewed" -> ForsaUi.WarningSoft
+        else -> ForsaUi.PrimarySoft
+    }
+    val fg = when (normalized) {
+        "accepted", "verified" -> ForsaUi.Success
+        "rejected" -> ForsaUi.Danger
+        "pending", "submitted", "viewed" -> ForsaUi.Warning
+        else -> ForsaUi.Primary
+    }
+    Surface(shape = ForsaUi.PillShape, color = bg, contentColor = fg) {
+        Row(Modifier.padding(horizontal = 10.dp, vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(if (normalized == "accepted" || normalized == "verified") Icons.Default.CheckCircle else Icons.Default.Schedule, null, modifier = Modifier.size(15.dp))
+            Spacer(Modifier.width(5.dp))
+            Text(label, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold)
         }
     }
 }
 
-@Composable
 private fun CvProfileScreen(
     profile: CvProfile,
     userUid: String,
