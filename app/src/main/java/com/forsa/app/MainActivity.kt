@@ -404,6 +404,10 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
     val db = remember { FirebaseFirestore.getInstance() }
     val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
 
+    fun message(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
     val verificationDocumentPicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -453,10 +457,6 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             loading = false
             message("تعذر رفع مستند التوثيق")
         }
-    }
-
-    fun message(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
     androidx.compose.runtime.LaunchedEffect(paymentIntent) {
@@ -1767,6 +1767,8 @@ private fun MainScaffold(
                     role = role,
                     verificationStatus = verificationStatus,
                     verificationNote = verificationNote,
+                    verificationDocumentName = verificationDocumentName,
+                    verificationDocumentPicker = verificationDocumentPicker,
                     jobs = jobs,
                     savedJobIds = savedJobIds,
                     cvProfile = cvProfile,
@@ -2886,6 +2888,8 @@ private fun ProfileTab(
     role: String,
     verificationStatus: String,
     verificationNote: String,
+    verificationDocumentName: String,
+    verificationDocumentPicker: androidx.activity.compose.ManagedActivityResultLauncher<Array<String>, Uri?>,
     jobs: List<Job>,
     savedJobIds: Set<String>,
     cvProfile: CvProfile,
