@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>فرصة — إدارة توثيق أصحاب العمل</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{margin:0;background:#0b1020;color:#f6f7fb}
+    .wrap{max-width:1100px;margin:auto;padding:24px}
+    .card{background:#141b2f;border:1px solid #25304a;border-radius:20px;padding:20px;margin-bottom:16px}
+    h1,h2{margin:0 0 10px}
+    p{line-height:1.7;color:#aeb7cb}
+    input,textarea{width:100%;box-sizing:border-box;background:#0e1527;border:1px solid #303d5b;color:#fff;border-radius:12px;padding:12px;margin:6px 0 10px}
+    button{border:0;border-radius:12px;padding:11px 16px;cursor:pointer;font-weight:700}
+    .primary{background:#6d5dfc;color:white}.danger{background:#d94b64;color:white}.ghost{background:#232d46;color:white}
+    .row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}
+    .muted{color:#8f9ab3;font-size:13px}
+    .status{display:inline-block;padding:6px 10px;border-radius:999px;background:#26324b;color:#dbe3f7;font-size:12px}
+    .hidden{display:none}
+    .company{font-size:20px;font-weight:800}.field{margin-top:8px}.actions{margin-top:14px}
+    .error{color:#ff8799}.success{color:#78e6b0}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card" id="loginCard">
+      <h1>فرصة — إدارة التوثيق</h1>
+      <p>سجّل دخولك بحساب Firebase مخصص للإدارة. صلاحية الإدارة لا تُمنح من هذه الصفحة؛ الخادم يتحقق من <code>ADMIN_UIDS</code>.</p>
+      <form id="loginForm">
+        <input id="email" type="email" autocomplete="username" placeholder="البريد الإلكتروني" required>
+        <input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور" required>
+        <button class="primary" type="submit">تسجيل الدخول</button>
+      </form>
+      <p id="loginMessage" class="muted"></p>
+    </section>
+
+    <section class="card hidden" id="appCard">
+      <div class="top">
+        <div>
+          <h1>طلبات توثيق أصحاب العمل</h1>
+          <div class="muted" id="adminUid"></div>
+        </div>
+        <div class="row" style="max-width:260px">
+          <button class="ghost" id="refreshBtn">تحديث</button>
+          <button class="ghost" id="logoutBtn">تسجيل الخروج</button>
+        </div>
+      </div>
+      <p id="appMessage" class="muted"></p>
+      <div id="list"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAYFHsBeODGtuvT-j8o55HyRMTj3sO3I0s",
+      authDomain: "forsa-73786.firebaseapp.com",
+      projectId: "forsa-73786",
+      storageBucket: "forsa-73786.firebasestorage.app",
+      messagingSenderId: "527827665262"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const $ = (id) => document.getElementById(id);
+    const loginCard = $("loginCard");
+    const appCard = $("appCard");
+    const list = $("list");
+
+    function showLoginMessage(message, type = "muted") {
+      $("loginMessage").className = type;
+      $("loginMessage").textContent = message;
+    }
+
+    function showAppMessage(message, type = "muted") {
+      $("appMessage").className = type;
+      $("appMessage").textContent = message;
+    }
+
+    async function api(path, options = {}) {
+      const user = auth.currentUser;
+      if (!user) throw new Error("NO_AUTH");
+      const token = await user.getIdToken();
+      const response = await fetch(path, {
+        ...options,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token,
+          ...(options.headers || {})
+        }
+      });
+      const body = await response.json().catch(() => ({}));
+      if (!response.ok || body.success !== true) {
+        throw new Error(body.error || "REQUEST_FAILED");
+      }
+      return body.data;
+    }
+
+    function safe(text) {
+      return String(text ?? "").replace(/[&<>"']/g, ch => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+      }[ch]));
+    }
+
+    function employerCard(employer) {
+      const requested = employer.verificationRequestedAt
+        ? new Date(employer.verificationRequestedAt).toLocaleString("ar-IQ")
+        : "غير معروف";
+
+      const wrapper = document.createElement("article");
+      wrapper.className = "card";
+      wrapper.innerHTML = `
+        <div class="top">
+          <div>
+            <div class="company">${safe(employer.companyName || "بدون اسم شركة")}</div>
+            <div class="muted">${safe(employer.displayName || "بدون اسم")} — ${safe(employer.email)}</div>
+          </div>
+          <span class="status">قيد المراجعة</span>
+        </div>
+        <div class="field"><b>UID:</b> <span class="muted">${safe(employer.uid)}</span></div>
+        <div class="field"><b>مدينة الشركة:</b> ${safe(employer.companyCity || "غير مضافة")}</div>
+        <div class="field"><b>نبذة:</b><div class="muted">${safe(employer.companyAbout || "غير مضافة")}</div></div>
+        <div class="field muted">تاريخ الطلب: ${safe(requested)}</div>
+        <div class="actions">
+          <textarea class="note" rows="3" placeholder="ملاحظة للقرار (اختياري)"></textarea>
+          <div class="row">
+            <button class="primary verify">اعتماد التوثيق</button>
+            <button class="danger reject">رفض الطلب</button>
+          </div>
+        </div>
+      `;
+
+      const decision = async (value) => {
+        const note = wrapper.querySelector(".note").value.trim();
+        wrapper.querySelectorAll("button").forEach(button => button.disabled = true);
+        try {
+          await api("/api/admin/employers/review", {
+            method: "POST",
+            body: JSON.stringify({ uid: employer.uid, decision: value, note })
+          });
+          showAppMessage(
+            value === "verify" ? "تم اعتماد صاحب العمل." : "تم رفض طلب التوثيق.",
+            "success"
+          );
+          await loadPending();
+        } catch (error) {
+          showAppMessage(
+            error.message === "Unauthorized"
+              ? "ليس لديك صلاحية إدارية."
+              : "تعذر تنفيذ القرار.",
+            "error"
+          );
+          wrapper.querySelectorAll("button").forEach(button => button.disabled = false);
+        }
+      };
+
+      wrapper.querySelector(".verify").addEventListener("click", () => decision("verify"));
+      wrapper.querySelector(".reject").addEventListener("click", () => decision("reject"));
+      return wrapper;
+    }
+
+    async function loadPending() {
+      list.innerHTML = '<div class="card"><p>جارٍ تحميل الطلبات…</p></div>';
+      try {
+        const data = await api("/api/admin/employers/pending");
+        list.innerHTML = "";
+        if (!data.length) {
+          list.innerHTML = '<div class="card"><p>لا توجد طلبات توثيق معلقة حالياً.</p></div>';
+          return;
+        }
+        data.forEach(employer => list.appendChild(employerCard(employer)));
+        showAppMessage("تم تحميل " + data.length + " طلب.");
+      } catch (error) {
+        list.innerHTML = '<div class="card"><p class="error">تعذر تحميل الطلبات. تأكد من صلاحية حساب الإدارة.</p></div>';
+        showAppMessage("فشل تحميل طلبات التوثيق.", "error");
+      }
+    }
+
+    $("loginForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      showLoginMessage("جارٍ تسجيل الدخول…");
+      try {
+        await signInWithEmailAndPassword(auth, $("email").value.trim(), $("password").value);
+      } catch (error) {
+        showLoginMessage("تعذر تسجيل الدخول. تأكد من البيانات.", "error");
+      }
+    });
+
+    $("refreshBtn").addEventListener("click", loadPending);
+    $("logoutBtn").addEventListener("click", () => signOut(auth));
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        loginCard.classList.remove("hidden");
+        appCard.classList.add("hidden");
+        return;
+      }
+
+      loginCard.classList.add("hidden");
+      appCard.classList.remove("hidden");
+      $("adminUid").textContent = "UID الحالي: " + user.uid;
+      await loadPending();
+    });
+  </script>
+</body>
+</html>
