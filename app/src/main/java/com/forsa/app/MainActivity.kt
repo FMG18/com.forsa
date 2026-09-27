@@ -113,6 +113,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.UUID
@@ -244,6 +247,11 @@ private enum class MainTab { Home, Jobs, Publish, Profile }
 
 private const val JOB_DEFAULT_EXPIRY_DAYS = 30L
 private const val MILLIS_PER_DAY = 24L * 60L * 60L * 1000L
+
+private fun formatForsaDate(timestamp: Long): String {
+    if (timestamp <= 0L) return "غير محدد"
+    return SimpleDateFormat("dd/MM/yyyy", Locale.US).format(Date(timestamp))
+}
 
 private data class Job(
     val id: String,
@@ -2194,6 +2202,22 @@ private fun JobCard(
                 maxLines = 3
             )
 
+            if (job.expiresAt > 0L) {
+                Text(
+                    if (job.isExpired) {
+                        "منتهي: " + formatForsaDate(job.expiresAt)
+                    } else {
+                        "ينتهي: " + formatForsaDate(job.expiresAt)
+                    },
+                    color = if (job.isExpired) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    fontSize = 12.sp
+                )
+            }
+
             if (alreadyApplied) {
                 Surface(
                     shape = RoundedCornerShape(10.dp),
@@ -2277,6 +2301,28 @@ private fun JobDetailsScreen(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     AssistChip(onClick = {}, label = { Text(job.city) })
                     AssistChip(onClick = {}, label = { Text(job.type) })
+                }
+
+                Text(
+                    if (job.isExpired) {
+                        "انتهى الإعلان في " + formatForsaDate(job.expiresAt)
+                    } else {
+                        "ينتهي الإعلان في " + formatForsaDate(job.expiresAt)
+                    },
+                    color = if (job.isExpired) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    fontSize = 13.sp
+                )
+
+                if (job.isFeatured && job.promotionExpiresAt > 0L) {
+                    Text(
+                        "الترويج فعال حتى " + formatForsaDate(job.promotionExpiresAt),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 13.sp
+                    )
                 }
 
                 HorizontalDivider()
