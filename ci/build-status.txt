@@ -1,92 +1,202 @@
-status=FAIL
-commit=f431dfa4c739c4c5d59b68592e6f38708ec21da2
-run=36285880440
+status=PASS
+commit=0e442b4082b8f956f1ee18686abcc26f49a35fd0
+run=36286071568
 attempt=1
-build_exit_code=1
-smoke_exit_code=1
-smoke_outcome=failure
-summary=APK build failed with exit code 1.
+build_exit_code=0
+smoke_exit_code=0
+smoke_outcome=success
+summary=APK built successfully and launched on Android Emulator without a detected crash.
 
 --- build log tail ---
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1292:48 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1294:25 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1297:25 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1300:10 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:9 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:19 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:21 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:21 Function declaration must have a name.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:23 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:27 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1302:17 Unresolved reference 'profileRole'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1302:46 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1302:62 Unresolved reference 'auth'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1303:17 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1305:17 Unresolved reference 'db'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1305:48 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1307:25 Cannot infer type for type parameter 'V'. Specify it explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1308:37 Cannot infer type for type parameter 'B'. Specify it explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1308:40 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1309:39 Cannot infer type for type parameter 'B'. Specify it explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1309:42 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1310:36 Cannot infer type for type parameter 'B'. Specify it explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1310:39 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1311:36 Cannot infer type for type parameter 'B'. Specify it explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1311:39 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1312:43 Cannot infer type for type parameter 'B'. Specify it explicitly.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1312:46 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1316:25 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1319:25 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1322:10 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:9 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:27 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:29 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:29 Function declaration must have a name.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:31 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:35 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1324:17 Unresolved reference 'profileRole'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1324:46 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1324:62 Unresolved reference 'auth'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1325:17 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1326:24 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1327:17 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1329:17 Unresolved reference 'db'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1329:48 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1330:42 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1332:25 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1332:37 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1335:25 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1338:10 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:9 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:22 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:24 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:24 Function declaration must have a name.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:26 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:30 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1340:17 Unresolved reference 'profileRole'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1340:46 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1340:62 Unresolved reference 'auth'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1341:17 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1343:17 Unresolved reference 'promotionTarget'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1343:35 Unresolved reference 'job'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1346:5 Syntax error: Expecting a top level declaration.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1347:1 Syntax error: Expecting a top level declaration.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790472828286.json
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
+> Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:mergeDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:desugarDebugFileDependencies
+> Task :app:mergeDebugJniLibFolders
+> Task :app:checkDebugDuplicateClasses
+> Task :app:mergeDebugNativeLibs
+> Task :app:processDebugManifestForPackage
+> Task :app:mergeLibDexDebug
 
-FAILURE: Build failed with an exception.
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-* What went wrong:
-Execution failed for task ':app:compileDebugKotlin'.
-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-   > Compilation error. See log for more details
+> Task :app:processDebugResources
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
+> Task :app:mergeExtDexDebug
 
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
-> Run with --scan to get full insights.
-> Get more help at https://help.gradle.org.
+> Task :app:compileDebugKotlin
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2071:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2104:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2264:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2460:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3067:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3201:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3389:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3555:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3713:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4035:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4184:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4457:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4769:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4861:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
-BUILD FAILED in 35s
-30 actionable tasks: 30 executed
+> Task :app:compileDebugJavaWithJavac
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:processDebugJavaRes
+> Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790473056007.json
+
+BUILD SUCCESSFUL in 41s
+38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
+09-27 01:39:47.009  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.009  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.010  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.FederatedJobHistoryService.FederatedJobHistoryService is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.014  2958  2958 D nativeloader: Configuring clns-shared-7 for other apk /apex/com.android.rkpd/priv-app/rkpdapp.google@350820300/rkpdapp.google.apk. target_sdk_version=34, uses_libraries=, library_path=/apex/com.android.rkpd/priv-app/rkpdapp.google@350820300/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.rkpdapp:/apex/com.android.rkpd/priv-app/rkpdapp.google@350820300:/system/lib64:/system_ext/lib64
+09-27 01:39:47.015  1201  2115 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+09-27 01:39:47.016  2958  2958 D nativeloader: InitApexLibraries:
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_adservices: libhpke_jni.so:libtflite_support_classifiers_native.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_appsearch: libicing.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_art: libartservice.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_btservices: libbluetooth_jni.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_conscrypt: libjavacrypto.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_mediaprovider: libpdfclient.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_nfcservices: libnfc_nci_jni.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_ondevicepersonalization: libfcp_cpp_dep_jni.so:libfcp_hpke_jni.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_os_statsd: libstats_jni.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libcrypto.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libmainlinecronet.121.0.6167.71.so:libservice-connectivity.so:libservice-thread-jni.so:libssl.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_uwb: libuwb_uci_jni_rust.so
+09-27 01:39:47.016  2958  2958 D nativeloader:   com_android_virt: libvirtualizationservice_jni.so:libvirtualmachine_jni.so
+09-27 01:39:47.017   364   364 I netd    : bandwidthRemoveInterfaceQuota(eth0) <0.48ms>
+09-27 01:39:47.018   364   364 I netd    : bandwidthSetInterfaceQuota(eth0, 9223372036854775807) <0.35ms>
+09-27 01:39:47.018  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.018  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.BrellaInvocationService.BrellaInvocationServiceFirstPopulation is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.018  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.BrellaInvocationService.BrellaInvocationServiceSecondPopulation is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.018  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.BrellaInvocationService.BrellaInvocationServiceThirdPopulation is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.018  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.BrellaInvocationService.BrellaInvocationServiceFourthPopulation is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.018  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.BrellaInvocationService.BrellaInvocationServiceFifthPopulation is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.020  1201  1201 I NearbyDiscovery: DiscoveryService onStartCommand action: com.google.android.gms.nearby.discovery:ACTION_PERMISSION_CHANGE [CONTEXT service_id=265 ]
+09-27 01:39:47.020  1201  2460 I Nearby  : is blocked device type false, isAuto=false, isIot=false, isLatchsky=false, isChinaWearable=false, isTv=false, isWearable=false (supportWearOs=false), isChromeOsDevice=false (supportChromeOs=false) [CONTEXT service_id=49 ]
+09-27 01:39:47.021  1201  1843 I NearbySharing: Broadcasting NearbySharing state change. [CONTEXT service_id=194 ]
+09-27 01:39:47.022  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.023   364   364 I netd    : bandwidthRemoveInterfaceQuota(eth0) <0.21ms>
+09-27 01:39:47.023  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.regionfetcher.RegionMddMaintenanceService.RegionMddMaintenanceTask is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.023  1395  1728 I Icing   : Storage manager: low false usage 0 Bytes avail 6.90GB capacity 7.73GB
+09-27 01:39:47.024   364   364 I netd    : bandwidthSetInterfaceQuota(eth0, 9223372036854775807) <0.24ms>
+09-27 01:39:47.024  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.federated.regionfetcher.RegionMddDownloadScheduleService.RegionMddRefreshDownloadTask is scheduled to run EVERY_6_HOURS [CONTEXT service_id=173 ]
+09-27 01:39:47.026  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.026  1201  2649 I Nearby  : is blocked device type false, isAuto=false, isIot=false, isLatchsky=false, isChinaWearable=false, isTv=false, isWearable=false (supportWearOs=false), isChromeOsDevice=false (supportChromeOs=false) [CONTEXT service_id=49 ]
+09-27 01:39:47.026  1201  2649 I NearbyDiscovery: DiscoveryController, showNotification, itemSize=0 [CONTEXT service_id=265 ]
+09-27 01:39:47.026  1201  1201 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.nearby.connection.service.START pkg=com.google.android.gms }
+09-27 01:39:47.026  1201  1201 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.nearby.connection.service.START pkg=com.google.android.gms }
+09-27 01:39:47.027  1201  2649 I NearbyDiscovery: Show notifications: 0 total, no changes since last shown, no-op. [CONTEXT service_id=265 ]
+09-27 01:39:47.027  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.029  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.029  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.030   561   577 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-27 01:39:47.030  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.032  1201  1843 W NearbySharing: Cannot set visibility on DisabledNearbySharingProvider. [CONTEXT service_id=194 ]
+09-27 01:39:47.034  1020  1020 D TrafficStats: tagSocket(131) with statsTag=0xffffffff, statsUid=-1
+09-27 01:39:47.035   561   577 D PackageManager: Clear ephemeral installer activity
+09-27 01:39:47.038  1020  2943 D NetworkMonitor/100: PROBE_DNS www.google.com 274ms OK 142.251.153.119,142.251.154.119,142.251.156.119,142.251.155.119,142.251.157.119,142.251.152.119,142.251.150.119,142.251.151.119,2001:4860:482a:7700::,2001:4860:482b:7700::,2001:4860:4826:7700::,2001:4860:4827:7700::,2001:4860:482d:7700::,2001:4860:4828:7700::,2001:4860:4829:7700::,2001:4860:482c:7700::
+09-27 01:39:47.038  1395  1881 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
+09-27 01:39:47.038  1395  1881 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
+09-27 01:39:47.038  1597  2331 W SearchServiceCore: Abort, client detached.
+09-27 01:39:47.039  1597  2331 W SearchServiceCore: Abort, client detached.
+09-27 01:39:47.042  2958  2958 V GraphicsEnvironment: Currently set values for:
+09-27 01:39:47.042  2958  2958 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-27 01:39:47.042  2958  2958 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-27 01:39:47.042  2958  2958 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+09-27 01:39:47.042  2958  2958 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+09-27 01:39:47.044  2958  2958 D WM-WrkMgrInitializer: Initializing WorkManager with default configuration.
+09-27 01:39:47.044   561   908 D NetworkStatsObservers: Unregistering RequestInfo from pid/uid:561/1000(android) for DataUsageRequest [ requestId=4, networkTemplate=NetworkTemplate: matchRule=MOBILE, matchSubscriberIds=[310260...], matchWifiNetworkKeys=[], metered=YES, defaultNetwork=NO, thresholdInBytes=3575183 ] accessLevel:3
+09-27 01:39:47.045  1597  2011 I SRMClientSgtnModule: SRMc: Instantiating SodaResourceManagerClient with non-account-scope.
+09-27 01:39:47.045  1597  2011 I SRMClientSgtnModule: SRMc: Instantiating SodaResourceManagerClient with non-account-scope.
+09-27 01:39:47.045   561   822 D NetworkStatsObservers: Registering observer for RequestInfo from pid/uid:561/1000(android) for DataUsageRequest [ requestId=5, networkTemplate=NetworkTemplate: matchRule=MOBILE, matchSubscriberIds=[310260...], matchWifiNetworkKeys=[], metered=YES, defaultNetwork=NO, thresholdInBytes=3573831 ] accessLevel:3
+09-27 01:39:47.048  2154  2959 D WM-PackageManagerHelper: androidx.work.impl.background.systemjob.SystemJobService enabled
+09-27 01:39:47.048  2154  2959 D WM-Schedulers: Created SystemJobScheduler and enabled SystemJobService
+09-27 01:39:47.049  2154  2970 D WM-ForceStopRunnable: The default process name was not specified.
+09-27 01:39:47.049  2154  2970 D WM-ForceStopRunnable: Performing cleanup operations.
+09-27 01:39:47.052  1597  1597 I CtfBroadcastReceiver: (REDACTED) #onReceive: %s
+09-27 01:39:47.054   364  2971 I resolv  : GetAddrInfoHandler::run: {100 983140 100 983140 1073 1}
+09-27 01:39:47.055   364  2972 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+09-27 01:39:47.055   364  2972 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7de640666710
+09-27 01:39:47.055   364  2973 I resolv  : res_nmkquery: (QUERY, IN, A)
+09-27 01:39:47.055   364  2972 I resolv  : doQuery: rcode=0, ancount=8, return value=256
+09-27 01:39:47.055   364  2973 I resolv  : resolv_cache_lookup: FOUND IN CACHE entry=0x7de48066d9b0
+09-27 01:39:47.056   364  2973 I resolv  : doQuery: rcode=0, ancount=8, return value=160
+09-27 01:39:47.057  1020  2943 D TrafficStats: tagSocket(131) with statsTag=0xffffff81, statsUid=-1
+09-27 01:39:47.058  1346  1346 I extservices: AdServices files cleanup receiver received BOOT_COMPLETED broadcast for user 0
+09-27 01:39:47.059  1346  1346 D extservices: AdServices files cleanup receiver data deletion success: true
+09-27 01:39:47.059  1346  1346 D extservices: Scheduling AdServicesAppsearchDeleteJobService ...
+09-27 01:39:47.059  1346  1346 W JobInfo : Requested flex +15m0s0ms for job 27 is too small; raising to +8h24m0s0ms
+09-27 01:39:47.059  1346  1346 D CompatChangeReporter: Compat change id reported: 311402873; UID 10195; state: ENABLED
+09-27 01:39:47.059  1346  1346 D CompatChangeReporter: Compat change id reported: 323349338; UID 10195; state: ENABLED
+09-27 01:39:47.060   561   577 D CompatChangeReporter: Compat change id reported: 311402873; UID 10195; state: ENABLED
+09-27 01:39:47.060   561   577 D CompatChangeReporter: Compat change id reported: 323349338; UID 10195; state: ENABLED
+09-27 01:39:47.061   561   577 D ConnectivityService: requestNetwork for uid/pid:1000/561 asUid: 10195 activeRequest: null callbackRequest: 83 [NetworkRequest [ REQUEST id=84, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10195 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false
+09-27 01:39:47.061  1346  1346 D extservices: Scheduled AdServicesAppsearchDeleteJobService with job id: 27
+09-27 01:39:47.062   561   639 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-27 01:39:47.062   561   639 D PackageManager: Clear ephemeral installer activity
+09-27 01:39:47.062  1346  1346 D extservices: Disabled AdServices files cleanup receiver
+09-27 01:39:47.063   561   824 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=84, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10195 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-27 01:39:47.063   561   824 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=84, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10195 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-27 01:39:47.063   561   824 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=84, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10195 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-27 01:39:47.063   561   831 D ConnectivityService: NetReassign [84 : null → 100] [c 0] [a 1] [i 0]
+09-27 01:39:47.063   561   824 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=84, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10195 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-27 01:39:47.066   561   593 D CompatChangeReporter: Compat change id reported: 151861875; UID 10192; state: ENABLED
+09-27 01:39:47.066   561   593 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10192, packageName = null, attributionTag = null, token = android.os.Binder@28ffb7f, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-27 01:39:47.067   561   582 D DisplayManagerService: Drop pending events for gone uid 10195
+09-27 01:39:47.068   561   617 I ActivityManager: Killing 1346:com.google.android.ext.services/u0a195 (adj 905): change com.google.android.ext.services
+09-27 01:39:47.078   365   365 D Zygote  : Forked child process 2977
+09-27 01:39:47.085  1471  1471 I AiAiEcho: AppFetcherImpl onPackageChanged com.google.android.ext.services.
+09-27 01:39:47.085  1201  2460 I AlarmManager: set [name: SystemMemoryCache type: 2 triggerAtMillis: 315360038514 windowMillis: -1 intervalMillis: 0]
+09-27 01:39:47.085   561   594 I ActivityManager: Start proc 2977:com.google.android.federatedcompute/u0a192 for broadcast {com.google.android.federatedcompute/com.android.federatedcompute.services.FederatedComputeBroadcastReceiver}
+09-27 01:39:47.086  1471  2151 I AiAiEcho: AppIndexer Package:[com.google.android.ext.services] UserProfile:[0] Enabled:[true].
+09-27 01:39:47.086  1471  2151 I AiAiEcho: AppFetcherImplV2 updateApps package:[com.google.android.ext.services], userId:[0], reason:[package is updated.].
+09-27 01:39:47.089  2154  2970 D CompatChangeReporter: Compat change id reported: 312399441; UID 10184; state: ENABLED
+09-27 01:39:47.092  1395  1881 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+09-27 01:39:47.092  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.db.backup.OdlhBackupService.OdlhBackup is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.093  1395  2527 I SemanticLocation: [Scheduler] Periodic Task com.google.android.gms.semanticlocationhistory.edit.EditUploadJob.EditUploadJob is scheduled to run EVERY_DAY [CONTEXT service_id=173 ]
+09-27 01:39:47.093  1020  1027 W rkstack.process: Missing inline cache for int android.net.connectivity.android.net.util.DnsUtils.findScope(java.net.InetAddress)
+09-27 01:39:47.101  1201  1843 I NearbySharing: Not qualified for default opt-in. Multiple accounts are found. [CONTEXT service_id=194 ]
+09-27 01:39:47.102  1201  2730 W GLSUser : [DeviceKeyStore] Cannot load key: Device key file not found.
+09-27 01:39:47.103  2581  2581 D CarrierDefaultBroadcastReceiver: onReceive intent: android.telephony.action.CARRIER_SIGNAL_RESET
+09-27 01:39:47.105  1201  1843 I NearbySharing: Broadcasting NearbySharing state change. [CONTEXT service_id=194 ]
+09-27 01:39:47.105  1201  1843 I NearbySharing: Screen is unlocked [CONTEXT service_id=194 ]
+09-27 01:39:47.106  2581  2581 D CarrierDefaultBroadcastReceiver: apply carrier action idx: 6
+09-27 01:39:47.106  2581  2581 D CarrierActionUtils: onCancelAllNotifications
+09-27 01:39:47.106  1201  2730 W GLSUser : [DeviceKeyStore] Cannot load key: Device key file not found.
+09-27 01:39:47.106  2581  2581 D CarrierDefaultBroadcastReceiver: apply carrier action idx: 8
+09-27 01:39:47.106  2581  2581 D CarrierActionUtils: onDisableDefaultURLHandler
