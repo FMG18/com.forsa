@@ -3540,23 +3540,32 @@ private fun ProfileActionCard(
     actionLabel: String,
     onClick: () -> Unit
 ) {
+    val icon = when {
+        title.contains("الإشعارات") -> Icons.Default.Notifications
+        title.contains("المحفوظة") -> Icons.Default.Bookmark
+        title.contains("السيرة") -> Icons.Default.Description
+        title.contains("الشركة") || title.contains("التوثيق") -> Icons.Default.BusinessCenter
+        else -> Icons.Default.ArrowForward
+    }
     Card(
-        Modifier.fillMaxWidth(),
-        shape = ForsaUi.CardShape
+        Modifier.fillMaxWidth().clickable(onClick = onClick),
+        shape = ForsaUi.CardShape,
+        colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
-        Column(
-            Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(title, fontSize = 19.sp, fontWeight = FontWeight.Bold)
-            Text(description, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            OutlinedButton(
-                onClick = onClick,
-                modifier = Modifier.fillMaxWidth(),
-                shape = ForsaUi.FieldShape
-            ) {
-                Text(actionLabel)
+        Row(Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
+            Surface(Modifier.size(44.dp), shape = ForsaUi.SmallShape, color = ForsaUi.PrimarySoft, contentColor = ForsaUi.Primary) {
+                androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Icon(icon, null, Modifier.size(21.dp))
+                }
             }
+            Spacer(Modifier.width(11.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(title, style = MaterialTheme.typography.titleMedium)
+                Text(description, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted, maxLines = 2)
+                Text(actionLabel, style = MaterialTheme.typography.labelLarge, color = ForsaUi.Primary, modifier = Modifier.padding(top = 3.dp))
+            }
+            Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Muted)
         }
     }
 }
