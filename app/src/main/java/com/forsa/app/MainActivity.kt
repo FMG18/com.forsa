@@ -13,6 +13,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -383,10 +384,10 @@ private object ForsaUi {
         listOf(PrimaryDark, Primary, Color(0xFF7665EC))
     )
 
-    val CardShape = ForsaUi.CardShape
+    val CardShape = RoundedCornerShape(22.dp)
     val SheetShape = RoundedCornerShape(28.dp)
-    val FieldShape = ForsaUi.FieldShape
-    val SmallShape = ForsaUi.SmallShape
+    val FieldShape = RoundedCornerShape(16.dp)
+    val SmallShape = RoundedCornerShape(12.dp)
     val PillShape = RoundedCornerShape(999.dp)
     val NavShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
 }
