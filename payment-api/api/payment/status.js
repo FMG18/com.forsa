@@ -42,6 +42,31 @@ module.exports = async function handler(req, res) {
       return res.status(403).json({ success: false, error: "Forbidden" });
     }
 
+    let promotionExpiresAt = Number(order.promotionExpiresAt || 0);
+    let promotionActive = order.status === "paid" && promotionExpiresAt > Date.now();
+
+    if (
+      order.status === "paid" &&
+      promotionExpiresAt > 0 &&
+      promotionExpiresAt <= Date.now()
+    ) {
+      const jobRef = getDb().collection("jobs").doc(String(order.jobId || ""));
+      const jobSnap = await jobRef.get();
+
+      if (
+        jobSnap.exists &&
+        jobSnap.data().ownerUid === decoded.uid &&
+        jobSnap.data().promotionExpiresAt === promotionExpiresAt
+      ) {
+        await jobRef.update({
+          isFeatured: false,
+          promotionStatus: "expired",
+        });
+      }
+
+      promotionActive = false;
+    }
+
     return res.status(200).json({
       success: true,
       data: {
@@ -50,7 +75,8 @@ module.exports = async function handler(req, res) {
         jobId: order.jobId || "",
         planId: order.planId || "",
         amountIqd: order.amountIqd || 0,
-        promotionExpiresAt: order.promotionExpiresAt || 0,
+        promotionExpiresAt,
+        promotionActive,
       },
     });
   } catch (error) {
