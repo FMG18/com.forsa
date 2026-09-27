@@ -10,6 +10,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: forsa-android-main
+  cancel-in-progress: true
+
 jobs:
   build-and-smoke-test:
     runs-on: ubuntu-latest
