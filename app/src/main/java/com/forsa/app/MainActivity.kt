@@ -364,6 +364,12 @@ private fun ForsaTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
+private fun queryDisplayName(context: Context, uri: Uri): String? {
+    return context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
+        if (cursor.moveToFirst()) cursor.getString(0) else null
+    }
+}
+
 private fun ForsaApp(paymentIntent: Intent? = null) {
     val context = LocalContext.current
     val activity = context.findActivity()
@@ -383,6 +389,8 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
     var profileRole by remember { mutableStateOf("") }
     var verificationStatus by remember { mutableStateOf("unverified") }
     var verificationNote by remember { mutableStateOf("") }
+    var verificationDocumentName by remember { mutableStateOf("") }
+    var verificationDocumentPath by remember { mutableStateOf("") }
     var companyName by remember { mutableStateOf("") }
     var companyAbout by remember { mutableStateOf("") }
     var companyCity by remember { mutableStateOf("") }
@@ -395,6 +403,57 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
     var unreadNotificationsCount by remember { mutableStateOf(0) }
     val db = remember { FirebaseFirestore.getInstance() }
     val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
+
+    val verificationDocumentPicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        val user = auth.currentUser ?: return@rememberLauncherForActivityResult
+        if (uri == null) return@rememberLauncherForActivityResult
+        val mime = context.contentResolver.getType(uri).orEmpty()
+        val allowed = setOf("application/pdf", "image/jpeg", "image/png")
+        if (mime !in allowed) {
+            message("ارفع PDF أو JPG أو PNG فقط")
+            return@rememberLauncherForActivityResult
+        }
+        val originalName = queryDisplayName(context, uri) ?: "document"
+        val extension = originalName.substringAfterLast('.', "").lowercase().ifBlank {
+            when (mime) {
+                "application/pdf" -> "pdf"
+                "image/jpeg" -> "jpg"
+                else -> "png"
+            }
+        }
+        val finalName = "verification_" + System.currentTimeMillis() + "." + extension
+        val path = "employerVerificationDocs/" + user.uid + "/" + finalName
+        val ref = FirebaseStorage.getInstance().reference.child(path)
+        loading = true
+        ref.putFile(
+            uri,
+            com.google.firebase.storage.StorageMetadata.Builder()
+                .setContentType(mime)
+                .build()
+        ).addOnSuccessListener {
+            db.collection("users").document(user.uid).set(
+                mapOf(
+                    "verificationDocumentName" to originalName,
+                    "verificationDocumentPath" to path,
+                    "verificationDocumentUpdatedAt" to System.currentTimeMillis()
+                ),
+                com.google.firebase.firestore.SetOptions.merge()
+            ).addOnSuccessListener {
+                verificationDocumentName = originalName
+                verificationDocumentPath = path
+                loading = false
+                message("تم رفع مستند التوثيق")
+            }.addOnFailureListener {
+                loading = false
+                message("تم رفع الملف لكن تعذر حفظ بياناته")
+            }
+        }.addOnFailureListener {
+            loading = false
+            message("تعذر رفع مستند التوثيق")
+        }
+    }
 
     fun message(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
@@ -808,6 +867,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             companyName.trim().length < 2 -> message("أضف اسم الشركة أو الجهة أولاً")
             companyCity.trim().length < 2 -> message("أضف مدينة الشركة أولاً")
             companyAbout.trim().length < 10 -> message("أضف نبذة واضحة عن الشركة أولاً")
+            verificationDocumentPath.isBlank() -> message("ارفع مستند إثبات الشركة أولاً")
             else -> {
                 loading = true
                 db.collection("users").document(user.uid)
@@ -899,6 +959,8 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             profileRole = ""
             verificationStatus = "unverified"
             verificationNote = ""
+            verificationDocumentName = ""
+            verificationDocumentPath = ""
             companyName = ""
             companyAbout = ""
             companyCity = ""
@@ -3128,6 +3190,16 @@ private fun ProfileTab(
                                 else -> onRequestEmployerVerification()
                             }
                         }
+                    )
+                    ProfileActionCard(
+                        title = "مستند إثبات الشركة",
+                        description = if (verificationDocumentName.isBlank()) {
+                            "ارفع مستنداً يثبت بيانات الشركة حتى تقدر الإدارة تراجع طلب التوثيق."
+                        } else {
+                            "المستند المرفوع: $verificationDocumentName"
+                        },
+                        actionLabel = if (verificationDocumentName.isBlank()) "رفع المستند" else "استبدال المستند",
+                        onClick = { verificationDocumentPicker.launch(arrayOf("application/pdf", "image/jpeg", "image/png")) }
                     )
                     ProfileActionCard(
                         title = "ملف الشركة",
