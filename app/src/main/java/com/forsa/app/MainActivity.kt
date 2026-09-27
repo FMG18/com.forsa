@@ -182,6 +182,62 @@ private suspend fun startForsaPayment(
     }
 }
 
+private data class PaymentStatusResponse(
+    val orderId: String,
+    val status: String,
+    val jobId: String,
+    val planId: String,
+    val promotionExpiresAt: Long
+)
+
+private suspend fun fetchForsaPaymentStatus(
+    baseUrl: String,
+    idToken: String,
+    orderId: String
+): PaymentStatusResponse = withContext(Dispatchers.IO) {
+    val cleanBaseUrl = baseUrl.trim().trimEnd('/')
+    if (cleanBaseUrl.isBlank()) throw IllegalStateException("PAYMENT_API_NOT_CONFIGURED")
+    if (orderId.isBlank()) throw IllegalStateException("ORDER_ID_REQUIRED")
+
+    val url = URL(
+        cleanBaseUrl + "/api/payment/status?orderId=" +
+            java.net.URLEncoder.encode(orderId, "UTF-8")
+    )
+    val connection = (url.openConnection() as HttpURLConnection).apply {
+        requestMethod = "GET"
+        connectTimeout = 15_000
+        readTimeout = 20_000
+        setRequestProperty("Authorization", "Bearer " + idToken)
+        setRequestProperty("Accept", "application/json")
+    }
+
+    try {
+        val code = connection.responseCode
+        val stream = if (code in 200..299) connection.inputStream else connection.errorStream
+        val body = stream?.let { input ->
+            BufferedReader(InputStreamReader(input, Charsets.UTF_8)).use { it.readText() }
+        }.orEmpty()
+        val json = if (body.isBlank()) JSONObject() else JSONObject(body)
+        if (code !in 200..299 || !json.optBoolean("success", false)) {
+            throw IllegalStateException(
+                json.optString("error").ifBlank { "PAYMENT_STATUS_FAILED" }
+            )
+        }
+        val data = json.optJSONObject("data")
+            ?: throw IllegalStateException("PAYMENT_STATUS_FAILED")
+
+        PaymentStatusResponse(
+            orderId = data.optString("orderId", orderId),
+            status = data.optString("status", "pending"),
+            jobId = data.optString("jobId"),
+            planId = data.optString("planId"),
+            promotionExpiresAt = data.optLong("promotionExpiresAt", 0L)
+        )
+    } finally {
+        connection.disconnect()
+    }
+}
+
 private enum class AuthScreen { Welcome, Login, Register, Phone, RoleSelection, ResetPassword }
 private enum class MainTab { Home, Jobs, Publish, Profile }
 
@@ -259,15 +315,24 @@ private data class NotificationItem(
 )
 
 class MainActivity : ComponentActivity() {
+    private var paymentIntentState by mutableStateOf<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        paymentIntentState = intent
         setContent {
             ForsaTheme {
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                    ForsaApp()
+                    ForsaApp(paymentIntent = paymentIntentState)
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        paymentIntentState = intent
     }
 }
 
@@ -287,7 +352,7 @@ private fun ForsaTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun ForsaApp() {
+private fun ForsaApp(paymentIntent: Intent? = null) {
     val context = LocalContext.current
     val activity = context.findActivity()
     val auth = remember { FirebaseAuth.getInstance() }
@@ -317,6 +382,67 @@ private fun ForsaApp() {
     var cvProfile by remember { mutableStateOf(CvProfile()) }
     var unreadNotificationsCount by remember { mutableStateOf(0) }
     val db = remember { FirebaseFirestore.getInstance() }
+    val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
+
+    androidx.compose.runtime.LaunchedEffect(paymentIntent) {
+        val uri = paymentIntent?.data
+        if (
+            uri?.scheme.equals("forsa", ignoreCase = true) &&
+            uri?.host.equals("payment", ignoreCase = true)
+        ) {
+            val orderId = uri?.getQueryParameter("orderId").orEmpty()
+            val user = auth.currentUser
+
+            if (orderId.isBlank() || user == null) {
+                if (orderId.isNotBlank()) {
+                    message("تعذر ربط نتيجة الدفع بالحساب الحالي")
+                }
+            } else {
+                user.getIdToken(false)
+                    .addOnSuccessListener { tokenResult ->
+                        val idToken = tokenResult.token
+                        if (idToken.isNullOrBlank()) {
+                            message("تعذر التحقق من جلسة الدفع")
+                            return@addOnSuccessListener
+                        }
+
+                        scope.launch {
+                            try {
+                                val result = fetchForsaPaymentStatus(
+                                    baseUrl = paymentApiBaseUrl,
+                                    idToken = idToken,
+                                    orderId = orderId
+                                )
+                                when (result.status) {
+                                    "paid" -> {
+                                        promotionTarget = null
+                                        tab = MainTab.Profile
+                                        message("تم تأكيد الدفع وتفعيل ترقية الإعلان")
+                                    }
+                                    "failed", "refunded", "partially_refunded" -> {
+                                        message("عملية الدفع لم تكتمل: " + result.status)
+                                    }
+                                    else -> {
+                                        message("الدفع قيد التحقق، راح تتحدث الحالة تلقائياً")
+                                    }
+                                }
+                            } catch (exception: Exception) {
+                                message(
+                                    if (exception.message == "PAYMENT_API_NOT_CONFIGURED") {
+                                        "خادم الدفع غير مربوط بعد"
+                                    } else {
+                                        "تعذر التحقق من نتيجة الدفع"
+                                    }
+                                )
+                            }
+                        }
+                    }
+                    .addOnFailureListener {
+                        message("تعذر التحقق من جلسة الدفع")
+                    }
+            }
+        }
+    }
 
     fun message(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
