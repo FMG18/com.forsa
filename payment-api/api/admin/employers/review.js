@@ -45,6 +45,16 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    if (decision === "verify") {
+      const documentPath = clean(user.verificationDocumentPath);
+      if (!documentPath || !documentPath.startsWith("employerVerificationDocs/" + uid + "/")) {
+        return res.status(400).json({
+          success: false,
+          error: "Verification document is required before approval",
+        });
+      }
+    }
+
     const nextStatus = decision === "verify" ? "verified" : "rejected";
     const now = Date.now();
 
