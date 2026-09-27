@@ -2495,92 +2495,68 @@ private fun JobCard(
     onDelete: () -> Unit
 ) {
     Card(
-        Modifier.fillMaxWidth(),
-        shape = ForsaUi.CardShape
+        Modifier.fillMaxWidth().clickable(onClick = onOpen),
+        shape = ForsaUi.CardShape,
+        colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (job.isFeatured) 3.dp else 1.dp)
     ) {
-        Column(
-            Modifier.padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Top
-            ) {
-                Column(Modifier.weight(1f)) {
-                    Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(4.dp))
-                    Text(job.company, color = MaterialTheme.colorScheme.primary)
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(11.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+                Surface(
+                    Modifier.size(48.dp),
+                    shape = ForsaUi.FieldShape,
+                    color = if (job.isFeatured) ForsaUi.WarningSoft else ForsaUi.PrimarySoft,
+                    contentColor = if (job.isFeatured) ForsaUi.Warning else ForsaUi.Primary
+                ) {
+                    androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Icon(if (job.isFeatured) Icons.Default.RocketLaunch else Icons.Default.BusinessCenter, null, Modifier.size(22.dp))
+                    }
                 }
-
+                Spacer(Modifier.width(11.dp))
+                Column(Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(job.title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+                        if (job.isFeatured) ForsaStatusPill("featured")
+                    }
+                    Text(job.company, color = ForsaUi.Primary, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 2.dp))
+                }
                 IconButton(onClick = onToggleSaved) {
                     Icon(
-                        imageVector = if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                        contentDescription = if (isSaved) "إزالة من المحفوظة" else "حفظ الوظيفة"
+                        if (isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                        contentDescription = if (isSaved) "إزالة من المحفوظة" else "حفظ الوظيفة",
+                        tint = if (isSaved) ForsaUi.Primary else ForsaUi.Muted
                     )
                 }
-
                 if (canDelete) {
                     IconButton(onClick = onDelete) {
-                        Icon(Icons.Default.Delete, contentDescription = "حذف")
+                        Icon(Icons.Default.Delete, contentDescription = "حذف", tint = ForsaUi.Danger)
                     }
                 }
             }
-
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AssistChip(onClick = {}, label = { Text(job.city) })
-                AssistChip(onClick = {}, label = { Text(job.type) })
-                if (job.isFeatured) {
-                    AssistChip(onClick = {}, label = { Text("مميز") })
-                }
-                if (job.isExpired) {
-                    AssistChip(onClick = {}, label = { Text("منتهي") })
-                } else if (!job.isActive) {
-                    AssistChip(onClick = {}, label = { Text("موقوف") })
-                }
+            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+                ForsaMetaChip(job.city, icon = { Icon(Icons.Default.LocationOn, null, Modifier.size(14.dp)) })
+                ForsaMetaChip(job.type, icon = { Icon(Icons.Default.Schedule, null, Modifier.size(14.dp)) })
+                if (job.isExpired) ForsaMetaChip("منتهي") else if (!job.isActive) ForsaMetaChip("موقوف")
             }
-
-            Text(
-                job.description,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 3
-            )
-
-            if (job.expiresAt > 0L) {
-                Text(
-                    if (job.isExpired) {
-                        "منتهي: " + formatForsaDate(job.expiresAt)
-                    } else {
-                        "ينتهي: " + formatForsaDate(job.expiresAt)
-                    },
-                    color = if (job.isExpired) {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
-                    fontSize = 12.sp
-                )
-            }
-
-            if (alreadyApplied) {
-                Surface(
-                    shape = ForsaUi.SmallShape,
-                    color = MaterialTheme.colorScheme.secondaryContainer
-                ) {
-                    Row(
-                        Modifier.padding(horizontal = 10.dp, vertical = 7.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(Icons.Default.CheckCircle, null, modifier = Modifier.size(17.dp))
-                        Spacer(Modifier.width(5.dp))
-                        Text("تم التقديم")
+            Text(job.description, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted, maxLines = 3)
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                if (job.expiresAt > 0L) {
+                    Text(
+                        if (job.isExpired) "انتهى " + formatForsaDate(job.expiresAt) else "ينتهي " + formatForsaDate(job.expiresAt),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = if (job.isExpired) ForsaUi.Danger else ForsaUi.Muted,
+                        modifier = Modifier.weight(1f)
+                    )
+                } else Spacer(Modifier.weight(1f))
+                if (alreadyApplied) {
+                    ForsaMetaChip("تم التقديم", icon = { Icon(Icons.Default.CheckCircle, null, Modifier.size(14.dp)) }, selected = true)
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text("عرض التفاصيل", style = MaterialTheme.typography.labelLarge, color = ForsaUi.Primary)
+                        Spacer(Modifier.width(4.dp))
+                        Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Primary, modifier = Modifier.size(18.dp))
                     }
                 }
-            }
-
-            TextButton(onClick = onOpen) {
-                Text("عرض تفاصيل الوظيفة")
-                Spacer(Modifier.width(4.dp))
-                Icon(Icons.Default.ArrowForward, null)
             }
         }
     }
