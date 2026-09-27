@@ -1,201 +1,92 @@
-status=PASS
-commit=7cb3f25d710a6e4497acad20e5960a03308f1435
-run=36285609297
+status=FAIL
+commit=f431dfa4c739c4c5d59b68592e6f38708ec21da2
+run=36285880440
 attempt=1
-build_exit_code=0
-smoke_exit_code=0
-smoke_outcome=success
-summary=APK built successfully and launched on Android Emulator without a detected crash.
+build_exit_code=1
+smoke_exit_code=1
+smoke_outcome=failure
+summary=APK build failed with exit code 1.
 
 --- build log tail ---
-To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
-Daemon will be stopped at the end of the build 
-> Task :app:preBuild UP-TO-DATE
-> Task :app:preDebugBuild UP-TO-DATE
-> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
-> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateDebugBuildConfig
-> Task :app:generateDebugResValues
-> Task :app:processDebugGoogleServices
-> Task :app:checkDebugAarMetadata
-> Task :app:mapDebugSourceSetPaths
-> Task :app:generateDebugResources
-> Task :app:packageDebugResources
-> Task :app:createDebugCompatibleScreenManifests
-> Task :app:extractDeepLinksDebug
-> Task :app:parseDebugLocalResources
-> Task :app:mergeDebugResources
-> Task :app:processDebugMainManifest
-> Task :app:processDebugManifest
-> Task :app:javaPreCompileDebug
-> Task :app:mergeDebugShaders
-> Task :app:compileDebugShaders NO-SOURCE
-> Task :app:generateDebugAssets UP-TO-DATE
-> Task :app:mergeDebugAssets
-> Task :app:compressDebugAssets
-> Task :app:desugarDebugFileDependencies
-> Task :app:processDebugManifestForPackage
-> Task :app:checkDebugDuplicateClasses
-> Task :app:mergeDebugJniLibFolders
-> Task :app:mergeLibDexDebug
-> Task :app:mergeDebugNativeLibs
-> Task :app:processDebugResources
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1292:48 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1294:25 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1297:25 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1300:10 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:9 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:19 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:21 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:21 Function declaration must have a name.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:23 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1301:27 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1302:17 Unresolved reference 'profileRole'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1302:46 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1302:62 Unresolved reference 'auth'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1303:17 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1305:17 Unresolved reference 'db'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1305:48 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1307:25 Cannot infer type for type parameter 'V'. Specify it explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1308:37 Cannot infer type for type parameter 'B'. Specify it explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1308:40 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1309:39 Cannot infer type for type parameter 'B'. Specify it explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1309:42 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1310:36 Cannot infer type for type parameter 'B'. Specify it explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1310:39 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1311:36 Cannot infer type for type parameter 'B'. Specify it explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1311:39 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1312:43 Cannot infer type for type parameter 'B'. Specify it explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1312:46 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1316:25 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1319:25 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1322:10 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:9 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:27 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:29 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:29 Function declaration must have a name.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:31 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1323:35 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1324:17 Unresolved reference 'profileRole'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1324:46 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1324:62 Unresolved reference 'auth'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1325:17 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1326:24 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1327:17 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1329:17 Unresolved reference 'db'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1329:48 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1330:42 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1332:25 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1332:37 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1335:25 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1338:10 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:9 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:22 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:24 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:24 Function declaration must have a name.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:26 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1339:30 Syntax error: Unexpected tokens (use ';' to separate expressions on the same line).
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1340:17 Unresolved reference 'profileRole'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1340:46 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1340:62 Unresolved reference 'auth'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1341:17 Unresolved reference 'message'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1343:17 Unresolved reference 'promotionTarget'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1343:35 Unresolved reference 'job'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1346:5 Syntax error: Expecting a top level declaration.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1347:1 Syntax error: Expecting a top level declaration.
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790472828286.json
 
-> Task :app:stripDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
+FAILURE: Build failed with an exception.
 
-> Task :app:mergeExtDexDebug
-> Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2011:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2044:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2204:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2400:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3007:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3141:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3329:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3495:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3649:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3946:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4095:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4368:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4680:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4772:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
 
-> Task :app:compileDebugJavaWithJavac
-> Task :app:dexBuilderDebug
-> Task :app:mergeDebugGlobalSynthetics
-> Task :app:processDebugJavaRes
-> Task :app:mergeProjectDexDebug
-> Task :app:mergeDebugJavaResource
-> Task :app:packageDebug
-> Task :app:createDebugApkListingFileRedirect
-> Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790472501572.json
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
 
-BUILD SUCCESSFUL in 57s
-38 actionable tasks: 38 executed
+BUILD FAILED in 35s
+30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
-09-27 01:30:50.444   564  1573 I Telecom : TelecomServiceImpl$1: registerPhoneAccount: account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AHk🔒
-09-27 01:30:50.445   564  1573 I Telecom : PhoneAccountRegistrar: Modify account: [ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}]: TSI.rPA(cap)@AHk🔒
-09-27 01:30:50.445   564  1573 I Telecom : CallsManager: handlePhoneAccountChanged: phoneAccount=[[X] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AHk🔒
-09-27 01:30:50.446  1349  1380 I putmethod.latin: Background concurrent mark compact GC freed 8753KB AllocSpace bytes, 2(104KB) LOS objects, 49% free, 9281KB/18MB, paused 167us,439us total 144.764ms
-09-27 01:30:50.447   564  1573 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.rPA(cap)@AHk🔒
-09-27 01:30:50.447   564  1573 I Telecom : PhoneAccountRegistrar: Notifying telephony of voice service override change for 1 SIMs, hasService = false: TSI.rPA(cap)@AHk🔒
-09-27 01:30:50.448  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Camera2/Camera2.apk' with 1 weak references
-09-27 01:30:50.448  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~j2GlQHJRP6SLNwqP5KJqjA==/com.android.chrome-C5eyTuu5TnJkTWrbohOxEg==/Chrome.apk' with 1 weak references
-09-27 01:30:50.449  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /data/app/~~Su3p4JJqMHeZZA6QqyequQ==/com.google.android.trichromelibrary_636771938-MZxExUPb3v2MOVSItvMXEA==/TrichromeLibrary.apk' with 1 weak references
-09-27 01:30:50.449  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk' with 1 weak references
-09-27 01:30:50.449  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '/product/overlay/SettingsGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
-09-27 01:30:50.449  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Drive/Drive.apk' with 1 weak references
-09-27 01:30:50.450  1098  1098 I PhoneInterfaceManager: setVoiceServiceStateOverride: subId=1, phone=Handler (com.android.internal.telephony.GsmCdmaPhone) {b9d33b1}, hasService=false, callingPackage=com.android.server.telecom
-09-27 01:30:50.453  1238  1523 I NearbyConnections: Client 251963754 requested setting downloads directory to null.
-09-27 01:30:50.453  1238  1523 I NearbyConnections: Client 251963754 with package name 0p:com.google.android.gms.nearby.sharing and sdk version 242335000 has connected, downloads dir is set to null.
-09-27 01:30:50.453  1098  1098 I Telephony: TelecomAccountRegistry$AccountEntry: Registered phoneAccount: [[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with handle: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}
-09-27 01:30:50.453  1098  1098 I Telephony: PstnIncomingCallNotifier: Registering: [0]
-09-27 01:30:50.453  1098  1098 D Telephony: Registering: Handler (com.android.internal.telephony.GsmCdmaPhone) {b9d33b1}
-09-27 01:30:50.453  1098  1098 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
-09-27 01:30:50.453  1098  1098 W Telephony: registerImsRegistrationCallback: registration failed, no ImsService available. Exception: code: 1
-09-27 01:30:50.453  1098  1098 D Telephony: Finished registering mSimultaneousCallingTrackerListener for phoneId = 0; subId = 1
-09-27 01:30:50.457  1436  2792 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
-09-27 01:30:50.460  1098  1098 D CarrierConfigLoader: Connected to config app: com.android.carrierconfig/.DefaultCarrierConfigService
-09-27 01:30:50.464  1238  1238 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.cast.firstparty.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
-09-27 01:30:50.465  1238  1238 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.cast.firstparty.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
-09-27 01:30:50.469  1436  2794 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
-09-27 01:30:50.477  1436  2791 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
-09-27 01:30:50.480  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Maps/Maps.apk' with 1 weak references
-09-27 01:30:50.480  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/PrebuiltBugle/PrebuiltBugle.apk' with 1 weak references
-09-27 01:30:50.480  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/Photos/Photos.apk' with 1 weak references
-09-27 01:30:50.480  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTubeMusicPrebuilt/YouTubeMusicPrebuilt.apk' with 1 weak references
-09-27 01:30:50.480  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/CalendarGooglePrebuilt/CalendarGooglePrebuilt.apk' with 1 weak references
-09-27 01:30:50.481  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/GoogleContacts/GoogleContacts.apk' with 1 weak references
-09-27 01:30:50.481  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltDeskClockGoogle/PrebuiltDeskClockGoogle.apk' with 1 weak references
-09-27 01:30:50.481  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/GoogleDialer/GoogleDialer.apk' with 1 weak references
-09-27 01:30:50.481  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/PrebuiltGmail/PrebuiltGmail.apk' with 1 weak references
-09-27 01:30:50.481  1436  1450 W gle.android.gms: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/YouTube/YouTube.apk' with 1 weak references
-09-27 01:30:50.483  1098  1098 I PhoneGlobals: Dismissing depersonal panelLOADED
-09-27 01:30:50.483  1098  1098 W AlarmManager: Unrecognized alarm listener com.android.internal.telephony.data.AutoDataSwitchController$$ExternalSyntheticLambda0@ab1e369
-09-27 01:30:50.484  1238  1619 I NearbySharing: Bluetooth is enabled [CONTEXT service_id=194 ]
-09-27 01:30:50.484  1238  1238 V MediaRouter: Selecting route: RouteInfo{ name=Phone, description=null, status=null, category=RouteCategory{ name=System types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
-09-27 01:30:50.485  1238  1238 I MediaRouter: Skip setBluetoothA2dpOn(): types=8388615, isPlaybackActive()=false, BT route=null
-09-27 01:30:50.487  1098  1098 D MultiSimSettingController: onSubscriptionsChanged
-09-27 01:30:50.489  1098  1098 D MultiSimSettingController: Carrier config subId 1 is not loaded.
-09-27 01:30:50.490  1098  1098 D MultiSimSettingController: isReadyToReevaluate: subInfoInitialized=true, carrierConfigsLoaded=false, satelliteEnabledOrBeingEnabled=false
-09-27 01:30:50.490  1238  1238 I GlobalMediaRouter: Found default route: MediaRouter.RouteInfo{ uniqueId=DEFAULT_ROUTE, name=Phone, description=null, iconUri=null, enabled=true, isSystemRoute=true, connectionState=0, canDisconnect=false, playbackType=0, playbackStream=3, deviceType=0, volumeHandling=1, volume=5, volumeMax=15, presentationDisplayId=-1, extras=null, settingsIntent=null, providerPackageName=android }
-09-27 01:30:50.490  1098  1098 D CallNotifier: updatePhoneStateListeners: update CF notifications.
-09-27 01:30:50.490  1098  1098 I NotificationMgr: updateCfi: subId= 1, visible=N
-09-27 01:30:50.496  1238  1238 I GlobalMediaRouter: Unselecting the current route because it is no longer selectable: null
-09-27 01:30:50.496  1098  1098 I NotificationMgr: updateMwi(): subId 1 update to false
-09-27 01:30:50.499  1436  2796 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
-09-27 01:30:50.501  1436  2793 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
-09-27 01:30:50.503  1436  2572 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
-09-27 01:30:50.508  1238  1619 I NearbySharing: Stopping scanning because Nearby Sharing is disabled. [CONTEXT service_id=194 ]
-09-27 01:30:50.509   564   885 D ShortcutService: Saving package item com.google.android.gm to /data/system_ce/0/shortcut_service/packages/com.google.android.gm.xml
-09-27 01:30:50.512  1238  1619 I NearbySharing: Stopping Fast Init advertisement because we're not scanning in the foreground. [CONTEXT service_id=194 ]
-09-27 01:30:50.517  1238  1619 I NearbySharing: Stopping advertising because Nearby Sharing is disabled. [CONTEXT service_id=194 ]
-09-27 01:30:50.523  1677  1941 D CompatChangeReporter: Compat change id reported: 263076149; UID 10144; state: ENABLED
-09-27 01:30:50.529   564  1714 I AppWidgetServiceImpl: getAppWidgetIds() 0
-09-27 01:30:50.540  1677  1908 W A       : No value provided for the places model index flag.
-09-27 01:30:50.540  1677  1908 W A       : No value provided for the places model index flag.
-09-27 01:30:50.540  1677  1677 I A       : Start work
-09-27 01:30:50.540  1677  1908 W A       : No value provided for the places model index flag.
-09-27 01:30:50.553  1677  1908 I SRMClientSgtnModule: SRMc: Instantiating SodaResourceManagerClient with non-account-scope.
-09-27 01:30:50.553  1677  1908 I SRMClientSgtnModule: SRMc: Instantiating SodaResourceManagerClient with non-account-scope.
-09-27 01:30:50.569  1238  1238 V MediaRouter: Selecting route: RouteInfo{ name=Phone, description=null, status=null, category=RouteCategory{ name=System types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
-09-27 01:30:50.570   366   398 I netd    : tetherGetStats() -> {[]} <1.13ms>
-09-27 01:30:50.573  2795  2795 I com.android.nfc: Using CollectorTypeCMC GC.
-09-27 01:30:50.575  2795  2795 W com.android.nfc: Unexpected CPU variant for x86: x86_64.
-09-27 01:30:50.575  2795  2795 W com.android.nfc: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
-09-27 01:30:50.577  2795  2795 E com.android.nfc: Not starting debugger since process cannot load the jdwp agent.
-09-27 01:30:50.581  2795  2795 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
-09-27 01:30:50.631   564   885 D ShortcutService: Saving package item com.google.android.dialer to /data/system_ce/0/shortcut_service/packages/com.google.android.dialer.xml
-09-27 01:30:50.637  1677  1908 I CPController: register the profile change listener
-09-27 01:30:50.647   564   885 D ShortcutService: Saving package item com.google.android.apps.docs to /data/system_ce/0/shortcut_service/packages/com.google.android.apps.docs.xml
-09-27 01:30:50.662  1238  1523 I NearbyConnections: Client 251963754 requested setting downloads directory to Quick Share.
-09-27 01:30:50.664  1098  1104 W m.android.phone: Suspending all threads took: 165.961ms
-09-27 01:30:50.670  1677  2086 I A       : (REDACTED) Updating user context. Event: %s
-09-27 01:30:50.672  1098  1098 I Telephony: TelecomAccountRegistry: onSubscriptionsChanged - update accounts
-09-27 01:30:50.672  1098  1098 I Telephony: PstnIncomingCallNotifier: Unregistering: [0]
-09-27 01:30:50.680  1436  1654 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
-09-27 01:30:50.680  1436  1654 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
-09-27 01:30:50.680  1436  1654 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
-09-27 01:30:50.692  1098  1098 W m.android.phone: Weak pointer dereference blocked for 20 milliseconds.
-09-27 01:30:50.696   564   885 D ShortcutService: Saving package item com.google.android.apps.maps to /data/system_ce/0/shortcut_service/packages/com.google.android.apps.maps.xml
-09-27 01:30:50.729  2795  2795 D nativeloader: Configuring clns-shared-7 for other apk /apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043/NfcNciApexGoogle.apk. target_sdk_version=35, uses_libraries=, library_path=/apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.nfc:/apex/com.android.nfcservices/priv-app/NfcNciApexGoogle@AE3A.240806.043:/system/lib64:/system_ext/lib64
-09-27 01:30:50.730  2795  2795 D nativeloader: InitApexLibraries:
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_adservices: libhpke_jni.so:libtflite_support_classifiers_native.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_appsearch: libicing.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_art: libartservice.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_btservices: libbluetooth_jni.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_conscrypt: libjavacrypto.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_mediaprovider: libpdfclient.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_nfcservices: libnfc_nci_jni.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_ondevicepersonalization: libfcp_cpp_dep_jni.so:libfcp_hpke_jni.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_os_statsd: libstats_jni.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_tethering: libandroid_net_connectivity_com_android_net_module_util_jni.so:libcrypto.so:libframework-connectivity-jni.so:libframework-connectivity-tiramisu-jni.so:libmainlinecronet.121.0.6167.71.so:libservice-connectivity.so:libservice-thread-jni.so:libssl.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_uwb: libuwb_uci_jni_rust.so
-09-27 01:30:50.730  2795  2795 D nativeloader:   com_android_virt: libvirtualizationservice_jni.so:libvirtualmachine_jni.so
-09-27 01:30:50.730  2795  2795 D CompatChangeReporter: Compat change id reported: 202956589; UID 1027; state: ENABLED
-09-27 01:30:50.736  1098  1098 D Telephony: Unregistering: Handler (com.android.internal.telephony.GsmCdmaPhone) {b9d33b1}
-09-27 01:30:50.736  1098  1098 I PhoneInterfaceManager: unregisterMmTelCapabilityCallback: 1 is inactive, ignoring unregister.
-09-27 01:30:50.736  1098  1098 I PhoneInterfaceManager: unregisterImsRegistrationCallback: 1is inactive, ignoring unregister.
-09-27 01:30:50.737  1098  1098 I Telephony: TelecomAccountRegistry: setupAccounts: Found 1 phones.  Attempting to register.
-09-27 01:30:50.737  1098  1098 I Telephony: TelecomAccountRegistry: setupAccounts: Phone with subscription id 1
-09-27 01:30:50.738  1098  1098 V SimultaneousCallingTracker: Device is not simultaneous calling capable
-09-27 01:30:50.738  1098  1098 D Telephony: isEmergencyPreferredAccount: subId=1, activeData=-1
-09-27 01:30:50.738  1098  1098 D Telephony: isEmergencyPreferredAccount: Device does not require preference.
-09-27 01:30:50.738  1098  1098 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
-09-27 01:30:50.738  1098  1098 I Telephony:  isRttSupported: false
-09-27 01:30:50.738  1098  1098 I Telephony:  alwaysAllowWhileRoaming: false
-09-27 01:30:50.738  1098  1098 I Telephony:  isRoaming: false
-09-27 01:30:50.738  1098  1098 I Telephony:  isOnWfc: false
-09-27 01:30:50.744  1436  2346 I GmsModuleFndr: Beginning GMS chimera module scan
-09-27 01:30:50.750   564   885 D ShortcutService: Saving package item com.google.android.contacts to /data/system_ce/0/shortcut_service/packages/com.google.android.contacts.xml
-09-27 01:30:50.756  1238  1238 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.semanticlocation.service.START_ODLH pkg=com.google.android.gms }
-09-27 01:30:50.760  1238  1238 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.semanticlocation.service.START_ODLH pkg=com.google.android.gms }
-09-27 01:30:50.764   564   582 I AppWidgetServiceImpl: getAppWidgetIds() 0
-09-27 01:30:50.767  1436  1640 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=36
-09-27 01:30:50.771  1677  1908 I SS3PSurfacesSuggestAggr: Neither TNG Smartspace widget nor OEM is enabled.
