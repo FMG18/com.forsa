@@ -1,11 +1,11 @@
-status=FAIL
-commit=8221b2e68ac2d11420cb7409aff07b06055a9999
-run=36358727065
+status=PASS
+commit=878ec1d0a8f4f91cb12004c3e4ac4148540c66b0
+run=36358882183
 attempt=1
-build_exit_code=1
-smoke_exit_code=1
-smoke_outcome=failure
-summary=APK build failed with exit code 1.
+build_exit_code=0
+smoke_exit_code=0
+smoke_outcome=success
+summary=APK built successfully and launched on Android Emulator without a detected crash.
 
 --- build log tail ---
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
@@ -21,12 +21,13 @@ Daemon will be stopped at the end of the build
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
-> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
 > Task :app:parseDebugLocalResources
+> Task :app:mergeDebugResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
 > Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
@@ -37,37 +38,164 @@ Daemon will be stopped at the end of the build
 > Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs
-> Task :app:processDebugManifestForPackage
+> Task :app:processDebugResources
 > Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
-> Task :app:processDebugResources
 > Task :app:validateSigningDebug
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
+> Task :app:compileDebugKotlin
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2310:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2343:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2525:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2722:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3341:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3475:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3663:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3829:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3987:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4309:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4458:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4731:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5043:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5135:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
-> Task :app:compileDebugKotlin FAILED
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1770:48 Unresolved reference 'verificationDocumentName'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1771:50 Unresolved reference 'verificationDocumentPicker'.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790551650613.json
+> Task :app:compileDebugJavaWithJavac
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:processDebugJavaRes
+> Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790551810269.json
 
-FAILURE: Build failed with an exception.
-
-* What went wrong:
-Execution failed for task ':app:compileDebugKotlin'.
-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-   > Compilation error. See log for more details
-
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
-> Run with --scan to get full insights.
-> Get more help at https://help.gradle.org.
-
-BUILD FAILED in 29s
-30 actionable tasks: 30 executed
+BUILD SUCCESSFUL in 57s
+38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/all-non-url-email-cut-translate, session=smartselect/prod/train/en/all-non-url-email-cut-translate]
+09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/all-non-url-email-cut-translate, session=smartselect/prod/train/en/all-non-url-email-cut-translate]
+09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/all/all, session=smartselect/prod/train/all/all]
+09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/all/all, session=smartselect/prod/train/all/all]
+09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps, session=smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps, session=smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/pasted-to-translate-apps, session=smartselect/prod/train/en/pasted-to-translate-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/pasted-to-translate-apps, session=smartselect/prod/train/en/pasted-to-translate-apps]
+09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
+09-27 23:32:36.290  1585  1958 I Backup  : [TargetEnabler] Setting target components to enabled = false
