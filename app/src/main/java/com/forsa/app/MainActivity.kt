@@ -1144,7 +1144,6 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                 }
 
                 createApplicationRecord()
-                }
             }
         },
         onTab = { tab = it },
