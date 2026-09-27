@@ -1604,43 +1604,50 @@ private fun RoleChoiceSection(
     selectedRole: String?,
     onSelect: (String) -> Unit
 ) {
-    Column(
-        Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text("اختار نوع الحساب", style = MaterialTheme.typography.titleLarge)
         Text(
-            "نوع الحساب — مطلوب",
-            fontSize = 17.sp,
-            fontWeight = FontWeight.Bold
+            "اختيارك يحدد الصلاحيات والواجهة المناسبة لك.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = ForsaUi.Muted
         )
-        Text(
-            "اختار الدور الذي راح تستخدمه داخل فرصة. هذا الاختيار يُحفظ مع الحساب.",
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontSize = 13.sp
-        )
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            listOf("باحث عن عمل", "صاحب عمل").forEach { option ->
-                val selected = selectedRole == option
-                if (selected) {
-                    Button(
-                        onClick = { onSelect(option) },
-                        modifier = Modifier.weight(1f).height(54.dp),
-                        shape = ForsaUi.FieldShape
+        listOf(
+            Triple("باحث عن عمل", "اكتشف الوظائف وقدّم على الفرص وتابع طلباتك.", Icons.Default.Person),
+            Triple("صاحب عمل", "انشر الوظائف وأدر المتقدمين ووسّع وصول إعلانك.", Icons.Default.BusinessCenter)
+        ).forEach { (option, description, icon) ->
+            val selected = selectedRole == option
+            Card(
+                modifier = Modifier.fillMaxWidth().clickable { onSelect(option) },
+                shape = ForsaUi.CardShape,
+                colors = CardDefaults.cardColors(
+                    containerColor = if (selected) ForsaUi.PrimarySoft else ForsaUi.Surface
+                ),
+                border = if (selected) BorderStroke(1.5.dp, ForsaUi.Primary.copy(alpha = .40f)) else BorderStroke(1.dp, ForsaUi.Border),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+            ) {
+                Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Surface(
+                        Modifier.size(50.dp),
+                        shape = ForsaUi.FieldShape,
+                        color = if (selected) ForsaUi.Primary else ForsaUi.Background,
+                        contentColor = if (selected) Color.White else ForsaUi.Primary
                     ) {
-                        Icon(Icons.Default.CheckCircle, null)
-                        Spacer(Modifier.width(6.dp))
-                        Text(option)
+                        androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Icon(icon, null, Modifier.size(23.dp))
+                        }
                     }
-                } else {
-                    OutlinedButton(
-                        onClick = { onSelect(option) },
-                        modifier = Modifier.weight(1f).height(54.dp),
-                        shape = ForsaUi.FieldShape
-                    ) {
-                        Text(option)
+                    Spacer(Modifier.width(13.dp))
+                    Column(Modifier.weight(1f)) {
+                        Text(option, style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = ForsaUi.Muted,
+                            modifier = Modifier.padding(top = 3.dp)
+                        )
+                    }
+                    if (selected) {
+                        Icon(Icons.Default.CheckCircle, null, tint = ForsaUi.Primary, modifier = Modifier.size(24.dp))
                     }
                 }
             }
@@ -1705,73 +1712,101 @@ private fun WelcomeScreen(
     onPhone: () -> Unit,
     onRegister: () -> Unit
 ) {
-    Surface(Modifier.fillMaxSize()) {
+    Surface(Modifier.fillMaxSize(), color = ForsaUi.Background) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
+                .verticalScroll(rememberScrollState())
                 .navigationBarsPadding()
-                .imePadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .imePadding()
+                .padding(horizontal = 20.dp, vertical = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(Modifier.height(18.dp))
             BrandMark()
-            Spacer(Modifier.height(20.dp))
-            Text("فرصة", fontSize = 42.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(18.dp))
+            Text("فرصة", style = MaterialTheme.typography.displayMedium)
             Text(
-                "منصة فرص العمل في العراق",
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center
+                "مساحتك لاكتشاف فرص العمل وبناء مسارك المهني",
+                style = MaterialTheme.typography.bodyLarge,
+                color = ForsaUi.Muted,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 8.dp)
             )
-            Spacer(Modifier.height(30.dp))
+            Spacer(Modifier.height(28.dp))
 
-            Button(
-                onClick = onGoogle,
-                enabled = !loading,
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = ForsaUi.FieldShape
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = ForsaUi.SheetShape,
+                color = ForsaUi.Surface,
+                border = BorderStroke(1.dp, ForsaUi.Border)
             ) {
-                if (loading) {
-                    CircularProgressIndicator(
-                        Modifier.size(22.dp),
-                        strokeWidth = 2.dp,
-                        color = MaterialTheme.colorScheme.onPrimary
+                Column(
+                    Modifier.padding(18.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ForsaMetaChip(
+                        "حساب آمن",
+                        icon = { Icon(Icons.Default.Verified, null, Modifier.size(15.dp)) },
+                        selected = true
                     )
-                } else Text("المتابعة باستخدام Google", fontSize = 16.sp)
+                    Text("ابدأ بالطريقة اللي تناسبك", style = MaterialTheme.typography.titleLarge)
+                    Text(
+                        "سجل دخولك أو أنشئ حساب جديد خلال خطوات بسيطة.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = ForsaUi.Muted
+                    )
+                    Button(
+                        onClick = onGoogle,
+                        enabled = !loading,
+                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        shape = ForsaUi.FieldShape
+                    ) {
+                        if (loading) {
+                            CircularProgressIndicator(
+                                Modifier.size(20.dp),
+                                strokeWidth = 2.dp,
+                                color = Color.White
+                            )
+                        } else {
+                            Text("المتابعة باستخدام Google")
+                        }
+                    }
+                    OutlinedButton(
+                        onClick = onEmailLogin,
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                        shape = ForsaUi.FieldShape
+                    ) {
+                        Icon(Icons.Default.Email, null, Modifier.size(19.dp))
+                        Spacer(Modifier.width(8.dp))
+                        Text("الدخول بالبريد الإلكتروني")
+                    }
+                    OutlinedButton(
+                        onClick = onPhone,
+                        enabled = !loading,
+                        modifier = Modifier.fillMaxWidth().height(50.dp),
+                        shape = ForsaUi.FieldShape
+                    ) {
+                        Text("المتابعة برقم الهاتف")
+                    }
+                    AuthDivider()
+                    TextButton(onClick = onRegister, modifier = Modifier.fillMaxWidth()) {
+                        Text("ليس لديك حساب؟ إنشاء حساب")
+                    }
+                }
             }
-
             Spacer(Modifier.height(14.dp))
-            AuthDivider()
-            Spacer(Modifier.height(14.dp))
-
-            OutlinedButton(
-                onClick = onEmailLogin,
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = ForsaUi.FieldShape
-            ) {
-                Icon(Icons.Default.Email, null)
-                Spacer(Modifier.width(8.dp))
-                Text("تسجيل الدخول بالبريد الإلكتروني")
-            }
-
-            Spacer(Modifier.height(10.dp))
-            OutlinedButton(
-                onClick = onPhone,
-                enabled = !loading,
-                modifier = Modifier.fillMaxWidth().height(54.dp),
-                shape = ForsaUi.FieldShape
-            ) {
-                Text("المتابعة برقم الهاتف")
-            }
-
-            Spacer(Modifier.height(4.dp))
-            TextButton(onClick = onRegister) {
-                Text("ليس لديك حساب؟ إنشاء حساب")
-            }
+            Text(
+                "ابدأ حسابك، أكمل ملفك، وخلي فرصتك أقرب.",
+                style = MaterialTheme.typography.labelMedium,
+                color = ForsaUi.Muted,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
         }
     }
 }
+
 
 @Composable
 private fun BrandMark() {
