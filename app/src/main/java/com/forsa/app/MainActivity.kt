@@ -4756,6 +4756,7 @@ private fun StatusBadge(status: String) {
     }
 }
 
+@Composable
 private fun CvProfileScreen(
     profile: CvProfile,
     userUid: String,
