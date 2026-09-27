@@ -1,6 +1,6 @@
 status=FAIL
-commit=a5b866e689c5040f9757cc1e2ccfdbc36fffeba0
-run=36358263357
+commit=d300988968e82d61c0db7f00eb5c53f7cd179d68
+run=36358565284
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -8,6 +8,33 @@ smoke_outcome=failure
 summary=APK build failed with exit code 1.
 
 --- build log tail ---
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateDebugBuildConfig
+> Task :app:generateDebugResValues
+> Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
+> Task :app:mapDebugSourceSetPaths
+> Task :app:generateDebugResources
+> Task :app:packageDebugResources
+> Task :app:createDebugCompatibleScreenManifests
+> Task :app:extractDeepLinksDebug
+> Task :app:mergeDebugResources
+> Task :app:parseDebugLocalResources
+> Task :app:processDebugMainManifest
+> Task :app:processDebugManifest
+> Task :app:javaPreCompileDebug
+> Task :app:mergeDebugShaders
+> Task :app:processDebugManifestForPackage
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:compressDebugAssets
+> Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs
@@ -23,55 +50,15 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:mergeExtDexDebug
 
 > Task :app:compileDebugKotlin FAILED
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:373:13 Functions which invoke @Composable functions must be marked with the @Composable annotation
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:374:32 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:376:16 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:377:29 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:378:17 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:380:23 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:383:16 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:384:20 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:385:26 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:386:21 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:387:25 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:388:24 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:389:24 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:390:31 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:391:29 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:392:37 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:393:37 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:394:24 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:395:25 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:396:24 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:397:17 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:398:24 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:399:28 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:400:26 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:401:24 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:402:22 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:403:37 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:404:14 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:407:38 @Composable invocations can only happen from the context of a @Composable function
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:415:13 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:418:28 @Composable invocations can only happen from the context of a @Composable function
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:447:17 Unresolved reference 'message'.
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:450:17 Unresolved reference 'message'.
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:454:13 Unresolved reference 'message'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:462:30 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:524:5 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:982:35 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:990:33 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1001:36 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1011:41 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1016:33 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1026:41 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1038:9 @Composable invocations can only happen from the context of a @Composable function
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:1054:5 @Composable invocations can only happen from the context of a @Composable function
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3198:43 Unresolved reference 'verificationDocumentName'.
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3201:48 Unresolved reference 'verificationDocumentName'.
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3203:43 Unresolved reference 'verificationDocumentName'.
 e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3204:37 Unresolved reference 'verificationDocumentPicker'.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790551153844.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790551469893.json
 
 FAILURE: Build failed with an exception.
 
@@ -86,7 +73,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 36s
+BUILD FAILED in 35s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
