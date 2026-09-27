@@ -1,5 +1,7 @@
 const admin = require("firebase-admin");
 const { getFirebaseAdmin, getDb } = require("../../lib/firebase");
+const { getClaim } = require("../../lib/zaincash");
+const { inquiry, reconcileOrder } = require("../../lib/payment");
 
 function setCors(res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -42,11 +44,47 @@ module.exports = async function handler(req, res) {
       return res.status(403).json({ success: false, error: "Forbidden" });
     }
 
+    let resolvedStatus = order.status || "pending";
     let promotionExpiresAt = Number(order.promotionExpiresAt || 0);
-    let promotionActive = order.status === "paid" && promotionExpiresAt > Date.now();
 
     if (
-      order.status === "paid" &&
+      (resolvedStatus === "pending_payment" || resolvedStatus === "payment_initializing") &&
+      order.transactionId
+    ) {
+      try {
+        const inquiryBody = await inquiry(order.transactionId);
+        const gatewayStatus =
+          inquiryBody.currentStatus ||
+          inquiryBody.status ||
+          inquiryBody.data?.currentStatus ||
+          inquiryBody.data?.status ||
+          "";
+
+        if (String(gatewayStatus).trim()) {
+          const normalized = String(gatewayStatus).trim().toUpperCase();
+          if (normalized === "SUCCESS" || normalized === "FAILED" || normalized === "EXPIRED" || normalized === "REFUNDED" || normalized === "PARTIALLY_REFUNDED") {
+            const reconciled = await reconcileOrder({
+              orderId,
+              callbackPayload: {
+                orderId,
+                transactionId: order.transactionId,
+                currentStatus: normalized,
+              },
+              callbackStatus: normalized === "SUCCESS" ? "success" : "failure",
+            });
+            resolvedStatus = reconciled.status || resolvedStatus;
+            promotionExpiresAt = Number(reconciled.expiresAt || order.promotionExpiresAt || 0);
+          }
+        }
+      } catch {
+        // Keep the stored order status when the gateway is temporarily unavailable.
+      }
+    }
+
+    let promotionActive = resolvedStatus === "paid" && promotionExpiresAt > Date.now();
+
+    if (
+      resolvedStatus === "paid" &&
       promotionExpiresAt > 0 &&
       promotionExpiresAt <= Date.now()
     ) {
@@ -71,7 +109,7 @@ module.exports = async function handler(req, res) {
       success: true,
       data: {
         orderId,
-        status: order.status || "pending",
+        status: resolvedStatus || "pending",
         jobId: order.jobId || "",
         planId: order.planId || "",
         amountIqd: order.amountIqd || 0,
