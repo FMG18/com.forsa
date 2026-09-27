@@ -97,6 +97,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -459,6 +460,14 @@ private fun ForsaCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         content = content
     )
+}
+
+@Composable
+private fun ForsaSectionTitle(title: String, subtitle: String? = null) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(title, style = MaterialTheme.typography.headlineMedium)
+        subtitle?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted) }
+    }
 }
 
 @Composable
@@ -1917,7 +1926,6 @@ private fun MainScaffold(
             NavigationBar(
                 containerColor = ForsaUi.Surface,
                 tonalElevation = 1.dp,
-                shadowElevation = 5.dp,
                 modifier = Modifier.background(ForsaUi.Surface, ForsaUi.NavShape)
             ) {
                 visibleTabs.forEach { item ->
