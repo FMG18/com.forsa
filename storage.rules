@@ -17,5 +17,24 @@ service firebase.storage {
       allow delete: if request.auth != null
         && request.auth.uid == userId;
     }
+    match /applicationCvs/{applicationId}/{fileName} {
+      allow read: if request.auth != null
+        && (
+          get(/databases/(default)/documents/applications/$(applicationId)).data.applicantUid == request.auth.uid
+          || get(/databases/(default)/documents/applications/$(applicationId)).data.employerUid == request.auth.uid
+        );
+
+      allow create, update: if request.auth != null
+        && get(/databases/(default)/documents/applications/$(applicationId)).data.applicantUid == request.auth.uid
+        && request.resource.size > 0
+        && request.resource.size <= 10 * 1024 * 1024
+        && request.resource.contentType.matches(
+          'application/pdf|application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/octet-stream'
+        );
+
+      allow delete: if request.auth != null
+        && get(/databases/(default)/documents/applications/$(applicationId)).data.applicantUid == request.auth.uid;
+    }
+
   }
 }
