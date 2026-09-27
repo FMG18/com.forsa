@@ -2942,11 +2942,7 @@ private fun PromotionScreen(
     onDone: () -> Unit,
     onMessage: (String) -> Unit
 ) {
-    val plans = listOf(
-        Triple("boost_7", "مميز 7 أيام", 5000L),
-        Triple("top_7", "تثبيت 7 أيام", 8000L),
-        Triple("urgent_48", "عاجل 48 ساعة", 3000L)
-    )
+    val plans = listOf(Triple("boost_7", "مميز 7 أيام", 5000L), Triple("top_7", "تثبيت 7 أيام", 8000L), Triple("urgent_48", "عاجل 48 ساعة", 3000L))
     var selectedPlan by remember { mutableStateOf(plans.first()) }
     var submitting by remember { mutableStateOf(false) }
     var activeOrderId by remember { mutableStateOf("") }
@@ -2955,177 +2951,83 @@ private fun PromotionScreen(
     val context = LocalContext.current
     val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .imePadding()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).imePadding().padding(horizontal = 18.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onBack, modifier = Modifier.size(42.dp)) {
+                Surface(Modifier.fillMaxSize(), shape = ForsaUi.SmallShape, color = ForsaUi.Surface, border = BorderStroke(1.dp, ForsaUi.Border)) { androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Icon(Icons.Default.ArrowForward, "رجوع") } }
             }
-            Text("ترويج الإعلان", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+            Spacer(Modifier.width(8.dp))
+            Text("روّج إعلانك", style = MaterialTheme.typography.headlineLarge)
         }
 
-        Card(
-            Modifier.fillMaxWidth(),
-            shape = ForsaUi.CardShape
-        ) {
-            Column(Modifier.padding(18.dp)) {
-                Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-                Text(job.company, color = MaterialTheme.colorScheme.primary)
-                Text(
-                    "اختَر خدمة الترويج المناسبة لإعلانك.",
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+        Surface(Modifier.fillMaxWidth(), shape = ForsaUi.SheetShape, color = Color.Transparent) {
+            Column(Modifier.fillMaxWidth().background(ForsaUi.Gradient, ForsaUi.SheetShape).padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Surface(Modifier.size(46.dp), shape = ForsaUi.FieldShape, color = Color.White.copy(alpha = .16f), contentColor = Color.White) { androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Icon(Icons.Default.RocketLaunch, null, Modifier.size(22.dp)) } }
+                    Spacer(Modifier.width(11.dp))
+                    Column(Modifier.weight(1f)) { Text(job.title, color = Color.White, style = MaterialTheme.typography.titleLarge); Text(job.company, color = Color.White.copy(alpha = .78f), style = MaterialTheme.typography.bodyMedium) }
+                }
+                Text("اختر طريقة الترويج المناسبة لإعلانك.", color = Color.White.copy(alpha = .86f), style = MaterialTheme.typography.bodyMedium)
             }
         }
 
+        ForsaSectionTitle("اختر الترقية", "الأسعار الحالية كما هي، والتصميم فقط تم تحديثه.")
         plans.forEach { plan ->
-            Card(
-                Modifier.fillMaxWidth(),
-                shape = ForsaUi.CardShape
-            ) {
-                Row(
-                    Modifier.fillMaxWidth().padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(plan.second, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                        Text(
-                            "السعر: " + plan.third + " د.ع",
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                    FilterChip(
-                        selected = selectedPlan.first == plan.first,
-                        onClick = { selectedPlan = plan },
-                        label = { Text("اختيار") }
-                    )
+            val selected = selectedPlan.first == plan.first
+            val description = when (plan.first) { "boost_7" -> "شارة مميز لمدة 7 أيام."; "top_7" -> "رفع الإعلان للأعلى لمدة 7 أيام."; else -> "تمييز عاجل لمدة 48 ساعة." }
+            Card(Modifier.fillMaxWidth().clickable { selectedPlan = plan }, shape = ForsaUi.CardShape, colors = CardDefaults.cardColors(containerColor = if (selected) ForsaUi.PrimarySoft else ForsaUi.Surface), border = BorderStroke(1.dp, if (selected) ForsaUi.Primary.copy(alpha = .35f) else ForsaUi.Border), elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 2.dp else 1.dp)) {
+                Row(Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Surface(Modifier.size(46.dp), shape = ForsaUi.FieldShape, color = if (selected) ForsaUi.Primary else ForsaUi.Background, contentColor = if (selected) Color.White else ForsaUi.Primary) { androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Icon(if (plan.first == "top_7") Icons.Default.LocationOn else if (plan.first == "urgent_48") Icons.Default.Schedule else Icons.Default.RocketLaunch, null, Modifier.size(21.dp)) } }
+                    Spacer(Modifier.width(11.dp))
+                    Column(Modifier.weight(1f)) { Text(plan.second, style = MaterialTheme.typography.titleMedium); Text(description, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted); Text(plan.third.toString() + " د.ع", style = MaterialTheme.typography.labelLarge, color = ForsaUi.Primary, modifier = Modifier.padding(top = 5.dp)) }
+                    if (selected) Icon(Icons.Default.CheckCircle, null, tint = ForsaUi.Primary, modifier = Modifier.size(23.dp))
                 }
             }
         }
 
         DisposableEffect(activeOrderId) {
-            if (activeOrderId.isBlank()) {
-                onDispose { }
-            } else {
-                val registration = db.collection("promotionOrders").document(activeOrderId)
-                    .addSnapshotListener { snapshot, error ->
-                        if (error != null || snapshot == null || !snapshot.exists()) return@addSnapshotListener
-                        paymentStatus = snapshot.getString("status").orEmpty()
-                        if (paymentStatus == "paid") {
-                            submitting = false
-                            onMessage("تم الدفع وتفعيل ترقية الإعلان")
-                            onDone()
-                        }
-                    }
-
+            if (activeOrderId.isBlank()) onDispose { } else {
+                val registration = db.collection("promotionOrders").document(activeOrderId).addSnapshotListener { snapshot, error ->
+                    if (error != null || snapshot == null || !snapshot.exists()) return@addSnapshotListener
+                    paymentStatus = snapshot.getString("status").orEmpty()
+                    if (paymentStatus == "paid") { submitting = false; onMessage("تم الدفع وتفعيل ترقية الإعلان"); onDone() }
+                }
                 onDispose { registration.remove() }
             }
         }
 
-        Surface(
-            Modifier.fillMaxWidth(),
-            shape = ForsaUi.FieldShape,
-            color = MaterialTheme.colorScheme.primaryContainer
-        ) {
-            Text(
-                if (paymentStatus.isNotBlank() && paymentStatus != "paid") {
-                    "حالة الدفع: " + paymentStatus
-                } else if (paymentApiBaseUrl.isBlank()) {
-                    "الدفع مهيأ داخل التطبيق، وباقي فقط ربط عنوان خادم الدفع وإضافة مفاتيح ZainCash بعد الموافقة."
-                } else {
-                    "سيتم تحويلك إلى بوابة ZainCash لإكمال الدفع بشكل آمن."
-                },
-                Modifier.padding(14.dp)
-            )
-        }
-
-        Button(
-            onClick = {
-                if (submitting) return@Button
-                if (userUid.isBlank()) {
-                    onMessage("سجّل الدخول أولاً")
-                    return@Button
-                }
-                if (paymentApiBaseUrl.isBlank()) {
-                    onMessage("خادم الدفع غير مربوط بعد")
-                    return@Button
-                }
-
-                val user = FirebaseAuth.getInstance().currentUser
-                if (user == null) {
-                    onMessage("سجّل الدخول أولاً")
-                    return@Button
-                }
-
-                submitting = true
-                paymentStatus = "payment_initializing"
-                user.getIdToken(false)
-                    .addOnSuccessListener { tokenResult ->
-                        val idToken = tokenResult.token
-                        if (idToken.isNullOrBlank()) {
-                            submitting = false
-                            paymentStatus = "payment_init_failed"
-                            onMessage("تعذر التحقق من جلسة الحساب")
-                            return@addOnSuccessListener
-                        }
-
-                        scope.launch {
-                            try {
-                                val result = startForsaPayment(
-                                    baseUrl = paymentApiBaseUrl,
-                                    idToken = idToken,
-                                    jobId = job.id,
-                                    planId = selectedPlan.first
-                                )
-                                activeOrderId = result.orderId
-                                paymentStatus = "pending_payment"
-                                context.startActivity(
-                                    Intent(Intent.ACTION_VIEW, Uri.parse(result.redirectUrl))
-                                )
-                            } catch (exception: Exception) {
-                                submitting = false
-                                paymentStatus = "payment_init_failed"
-                                val message = exception.message.orEmpty()
-                                onMessage(
-                                    if (message == "PAYMENT_API_NOT_CONFIGURED") {
-                                        "خادم الدفع غير مربوط بعد"
-                                    } else {
-                                        "تعذر بدء عملية الدفع"
-                                    }
-                                )
-                            }
-                        }
-                    }
-                    .addOnFailureListener {
-                        submitting = false
-                        paymentStatus = "payment_init_failed"
-                        onMessage("تعذر التحقق من جلسة الحساب")
-                    }
-            },
-            enabled = !submitting,
-            modifier = Modifier.fillMaxWidth().height(54.dp),
-            shape = ForsaUi.FieldShape
-        ) {
-            if (submitting) {
-                CircularProgressIndicator(
-                    Modifier.size(22.dp),
-                    strokeWidth = 2.dp,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-            } else {
-                Text("الدفع عبر ZainCash", fontSize = 16.sp)
+        Surface(Modifier.fillMaxWidth(), shape = ForsaUi.FieldShape, color = if (paymentStatus.isNotBlank() && paymentStatus != "paid") ForsaUi.WarningSoft else ForsaUi.SecondarySoft, contentColor = if (paymentStatus.isNotBlank() && paymentStatus != "paid") ForsaUi.Warning else ForsaUi.Success) {
+            Row(Modifier.padding(13.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(if (paymentStatus.isNotBlank() && paymentStatus != "paid") Icons.Default.Schedule else Icons.Default.Payments, null, Modifier.size(19.dp)); Spacer(Modifier.width(8.dp))
+                Text(when { paymentStatus.isNotBlank() && paymentStatus != "paid" -> "حالة الدفع: " + paymentStatus; paymentApiBaseUrl.isBlank() -> "الدفع جاهز من جهة التطبيق، لكن خادم الدفع غير مربوط حالياً."; else -> "سيتم تحويلك إلى ZainCash لإكمال الدفع." }, style = MaterialTheme.typography.bodyMedium)
             }
         }
+
+        Button(onClick = {
+            if (submitting) return@Button
+            if (userUid.isBlank()) { onMessage("سجّل الدخول أولاً"); return@Button }
+            if (paymentApiBaseUrl.isBlank()) { onMessage("خادم الدفع غير مربوط بعد"); return@Button }
+            val user = FirebaseAuth.getInstance().currentUser
+            if (user == null) { onMessage("سجّل الدخول أولاً"); return@Button }
+            submitting = true; paymentStatus = "payment_initializing"
+            user.getIdToken(false).addOnSuccessListener { tokenResult ->
+                val idToken = tokenResult.token
+                if (idToken.isNullOrBlank()) { submitting = false; paymentStatus = "payment_init_failed"; onMessage("تعذر التحقق من جلسة الحساب"); return@addOnSuccessListener }
+                scope.launch {
+                    try {
+                        val result = startForsaPayment(paymentApiBaseUrl, idToken, job.id, selectedPlan.first)
+                        activeOrderId = result.orderId; paymentStatus = "pending_payment"
+                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(result.redirectUrl)))
+                    } catch (exception: Exception) {
+                        submitting = false; paymentStatus = "payment_init_failed"
+                        onMessage(if (exception.message == "PAYMENT_API_NOT_CONFIGURED") "خادم الدفع غير مربوط بعد" else "تعذر بدء عملية الدفع")
+                    }
+                }
+            }.addOnFailureListener { submitting = false; paymentStatus = "payment_init_failed"; onMessage("تعذر التحقق من جلسة الحساب") }
+        }, enabled = !submitting, modifier = Modifier.fillMaxWidth().height(52.dp), shape = ForsaUi.FieldShape) {
+            if (submitting) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp, color = Color.White) else { Icon(Icons.Default.Payments, null, Modifier.size(19.dp)); Spacer(Modifier.width(7.dp)); Text("المتابعة إلى ZainCash") }
+        }
+        Spacer(Modifier.height(10.dp))
     }
 }
 
