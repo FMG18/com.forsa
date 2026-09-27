@@ -363,13 +363,13 @@ private fun ForsaTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = colors, content = content)
 }
 
-@Composable
 private fun queryDisplayName(context: Context, uri: Uri): String? {
     return context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)?.use { cursor ->
         if (cursor.moveToFirst()) cursor.getString(0) else null
     }
 }
 
+@Composable
 private fun ForsaApp(paymentIntent: Intent? = null) {
     val context = LocalContext.current
     val activity = context.findActivity()
