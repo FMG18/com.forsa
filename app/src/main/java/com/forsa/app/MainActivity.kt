@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -1628,10 +1629,14 @@ private fun MainScaffold(
                 MainTab.Home -> HomeTab(
                     userName = userName,
                     role = role,
-                    jobsCount = jobs.count { it.isActive },
+                    jobsCount = jobs.count { it.isActive && !it.isExpired },
                     canPublish = canPublish,
+                    jobs = jobs,
+                    cvProfile = cvProfile,
+                    profileCity = city,
                     onJobs = { onTab(MainTab.Jobs) },
-                    onPublish = { onTab(MainTab.Publish) }
+                    onPublish = { onTab(MainTab.Publish) },
+                    onSelectJob = onSelectJob
                 )
 
                 MainTab.Jobs -> JobsTab(
@@ -1714,13 +1719,61 @@ private fun MainScaffold(
 }
 
 @Composable
+private fun recommendedJobs(
+    jobs: List<Job>,
+    cvProfile: CvProfile,
+    profileCity: String
+): List<Job> {
+    val terms = (
+        cvProfile.skills.split(',', '،', ';', '؛', '\n') +
+            cvProfile.headline.split(',', '،', ';', '؛', '\n')
+    )
+        .map { it.trim().lowercase() }
+        .filter { it.length >= 2 }
+        .distinct()
+
+    val city = profileCity.trim().lowercase()
+    if (terms.isEmpty() && city.isBlank()) return emptyList()
+
+    return jobs.asSequence()
+        .filter { it.isActive && !it.isExpired }
+        .map { job ->
+            val title = job.title.lowercase()
+            val description = job.description.lowercase()
+            val company = job.company.lowercase()
+            val jobCity = job.city.lowercase()
+            var score = 0
+            terms.forEach { term ->
+                if (title.contains(term)) score += 4
+                if (description.contains(term)) score += 2
+                if (company.contains(term)) score += 1
+            }
+            if (city.isNotBlank() && jobCity.contains(city)) score += 5
+            job to score
+        }
+        .filter { it.second > 0 }
+        .sortedWith(
+            compareByDescending<Pair<Job, Int>> { it.second }
+                .thenByDescending { it.first.isFeatured }
+                .thenByDescending { it.first.id }
+        )
+        .take(5)
+        .map { it.first }
+        .toList()
+}
+
+@Composable
 private fun HomeTab(
     userName: String,
     role: String,
     jobsCount: Int,
     canPublish: Boolean,
+    jobs: List<Job>,
+    cvProfile: CvProfile,
+    profileCity: String,
     onJobs: () -> Unit,
-    onPublish: () -> Unit
+    onPublish: () -> Unit,
+    onSelectJob: (Job) -> Unit
 ) {
     val name = userName.trim().ifEmpty { "مستخدم فرصة" }
 
@@ -1785,6 +1838,39 @@ private fun HomeTab(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             SmallStat("إجمالي الوظائف", jobsCount.toString(), Modifier.weight(1f))
             SmallStat("المدن", "العراق", Modifier.weight(1f))
+        }
+
+        if (role == "باحث عن عمل") {
+            val suggestions = recommendedJobs(jobs, cvProfile, profileCity)
+            if (suggestions.isNotEmpty()) {
+                Text("وظائف مناسبة لك", fontSize = 19.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    "الاقتراحات تعتمد على بيانات سيرتك ومدينتك الحالية.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    fontSize = 12.sp
+                )
+                suggestions.take(3).forEach { job ->
+                    Card(
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelectJob(job) },
+                        shape = RoundedCornerShape(18.dp)
+                    ) {
+                        Column(
+                            Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text(job.title, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+                            Text(job.company, color = MaterialTheme.colorScheme.primary)
+                            Text(
+                                job.city + " • " + job.type,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontSize = 13.sp
+                            )
+                        }
+                    }
+                }
+            }
         }
 
         Text(
