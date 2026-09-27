@@ -1890,21 +1890,48 @@ private fun MainScaffold(
     }
 
     Scaffold(
+        containerColor = ForsaUi.Background,
         topBar = {
-            if (currentTab != MainTab.Publish) {
-                TopAppBar(title = { Text(mainTitle(currentTab)) })
-            }
+            TopAppBar(
+                title = {
+                    Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
+                        Text(mainTitle(currentTab), style = MaterialTheme.typography.titleLarge)
+                        Text(
+                            if (userName.isNotBlank()) "فرصة • $userName" else "فرصة",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = ForsaUi.Muted
+                        )
+                    }
+                },
+                navigationIcon = {
+                    BrandMark()
+                },
+                colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+                    containerColor = ForsaUi.Background,
+                    scrolledContainerColor = ForsaUi.Background
+                )
+            )
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = ForsaUi.Surface,
+                tonalElevation = 1.dp,
+                shadowElevation = 5.dp,
+                modifier = Modifier.background(ForsaUi.Surface, ForsaUi.NavShape)
+            ) {
                 visibleTabs.forEach { item ->
                     NavigationBarItem(
                         selected = currentTab == item,
                         onClick = { onTab(item) },
-                        icon = {
-                            Icon(tabIcon(item), contentDescription = null)
-                        },
-                        label = { Text(tabLabel(item)) }
+                        icon = { Icon(tabIcon(item), contentDescription = null) },
+                        label = { Text(tabLabel(item), style = MaterialTheme.typography.labelMedium) },
+                        colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                            selectedIconColor = ForsaUi.Primary,
+                            selectedTextColor = ForsaUi.Primary,
+                            indicatorColor = ForsaUi.PrimarySoft,
+                            unselectedIconColor = ForsaUi.Muted,
+                            unselectedTextColor = ForsaUi.Muted
+                        )
                     )
                 }
             }
@@ -1913,7 +1940,8 @@ private fun MainScaffold(
         Surface(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(padding),
+            color = ForsaUi.Background
         ) {
             when (currentTab) {
                 MainTab.Home -> HomeTab(
@@ -1928,7 +1956,6 @@ private fun MainScaffold(
                     onPublish = { onTab(MainTab.Publish) },
                     onSelectJob = onSelectJob
                 )
-
                 MainTab.Jobs -> JobsTab(
                     jobs = jobs,
                     currentUserJobUid = userUid,
@@ -1942,7 +1969,6 @@ private fun MainScaffold(
                     onApply = onApplyToJob,
                     onDelete = onDeleteJob
                 )
-
                 MainTab.Publish -> {
                     if (canPublish) {
                         PublishTab(
@@ -1971,7 +1997,6 @@ private fun MainScaffold(
                         )
                     }
                 }
-
                 MainTab.Profile -> ProfileTab(
                     userName = userName,
                     phone = phone,
