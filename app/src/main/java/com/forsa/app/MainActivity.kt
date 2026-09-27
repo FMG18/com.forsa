@@ -5396,17 +5396,21 @@ private fun AuthHeader(
     subtitle: String,
     onBack: (() -> Unit)?
 ) {
-    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        if (onBack != null) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, "رجوع")
+    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (onBack != null) {
+                IconButton(onClick = onBack, modifier = Modifier.size(42.dp)) {
+                    Surface(Modifier.fillMaxSize(), shape = ForsaUi.SmallShape, color = ForsaUi.Surface, border = BorderStroke(1.dp, ForsaUi.Border)) {
+                        androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.ArrowForward, "رجوع", tint = ForsaUi.Ink)
+                        }
+                    }
+                }
+                Spacer(Modifier.width(8.dp))
             }
+            Text(title, style = MaterialTheme.typography.headlineLarge)
         }
-        Column(Modifier.weight(1f)) {
-            Text(title, fontSize = 28.sp, fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(4.dp))
-            Text(subtitle, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
-        }
+        Text(subtitle, style = MaterialTheme.typography.bodyLarge, color = ForsaUi.Muted)
     }
 }
 
