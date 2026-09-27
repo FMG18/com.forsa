@@ -1,201 +1,92 @@
-status=PASS
-commit=878ec1d0a8f4f91cb12004c3e4ac4148540c66b0
-run=36358882183
+status=FAIL
+commit=ccf042d8fe13242d1fd3ba85030327d9a47f1d65
+run=36359771286
 attempt=1
-build_exit_code=0
-smoke_exit_code=0
-smoke_outcome=success
-summary=APK built successfully and launched on Android Emulator without a detected crash.
+build_exit_code=1
+smoke_exit_code=1
+smoke_outcome=failure
+summary=APK build failed with exit code 1.
 
 --- build log tail ---
-To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
-Daemon will be stopped at the end of the build 
-> Task :app:preBuild UP-TO-DATE
-> Task :app:preDebugBuild UP-TO-DATE
-> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
-> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :app:generateDebugBuildConfig
-> Task :app:generateDebugResValues
-> Task :app:processDebugGoogleServices
-> Task :app:checkDebugAarMetadata
-> Task :app:mapDebugSourceSetPaths
-> Task :app:generateDebugResources
-> Task :app:packageDebugResources
-> Task :app:createDebugCompatibleScreenManifests
-> Task :app:extractDeepLinksDebug
-> Task :app:parseDebugLocalResources
-> Task :app:mergeDebugResources
-> Task :app:processDebugMainManifest
-> Task :app:processDebugManifest
-> Task :app:processDebugManifestForPackage
-> Task :app:javaPreCompileDebug
-> Task :app:mergeDebugShaders
-> Task :app:compileDebugShaders NO-SOURCE
-> Task :app:generateDebugAssets UP-TO-DATE
-> Task :app:mergeDebugAssets
-> Task :app:compressDebugAssets
-> Task :app:desugarDebugFileDependencies
-> Task :app:mergeDebugJniLibFolders
-> Task :app:checkDebugDuplicateClasses
-> Task :app:mergeDebugNativeLibs
-> Task :app:processDebugResources
-> Task :app:mergeLibDexDebug
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3459:51 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3554:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3562:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3678:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3698:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3705:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3716:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3729:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3757:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3837:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3846:37 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3883:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3892:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3905:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3913:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3926:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4061:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4192:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4227:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4249:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4287:45 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4316:45 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4347:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4477:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4486:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4535:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4663:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4685:41 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4759:13 Functions which invoke @Composable functions must be marked with the @Composable annotation
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4767:21 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4768:18 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4769:22 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4770:23 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4771:19 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4772:22 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4773:19 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4774:21 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4775:28 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4776:28 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4777:31 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4778:32 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4779:19 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4790:18 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4887:5 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4890:29 @Composable invocations can only happen from the context of a @Composable function
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4912:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5136:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5151:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5243:29 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5274:37 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5287:43 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5305:61 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5365:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5482:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5595:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5610:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5636:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5655:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5676:25 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5770:21 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5796:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5813:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5845:17 Type checking has run into a recursive problem. Easiest workaround: specify the types of your declarations explicitly.
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790552785952.json
 
-> Task :app:stripDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
+FAILURE: Build failed with an exception.
 
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
-> Task :app:mergeExtDexDebug
-> Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2310:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2343:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2525:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2722:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3341:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3475:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3663:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3829:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3987:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4309:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4458:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:4731:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5043:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5135:36 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
 
-> Task :app:compileDebugJavaWithJavac
-> Task :app:dexBuilderDebug
-> Task :app:mergeDebugGlobalSynthetics
-> Task :app:processDebugJavaRes
-> Task :app:mergeProjectDexDebug
-> Task :app:mergeDebugJavaResource
-> Task :app:packageDebug
-> Task :app:createDebugApkListingFileRedirect
-> Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790551810269.json
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
 
-BUILD SUCCESSFUL in 57s
-38 actionable tasks: 38 executed
+BUILD FAILED in 38s
+30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-non-messaging-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/all-non-url-email-cut-translate, session=smartselect/prod/train/en/all-non-url-email-cut-translate]
-09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/all-non-url-email-cut-translate, session=smartselect/prod/train/en/all-non-url-email-cut-translate]
-09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/all/all, session=smartselect/prod/train/all/all]
-09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/all/all, session=smartselect/prod/train/all/all]
-09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps, session=smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps, session=smartselect/prod/train/en/address-or-pasted-to-map-or-shopping-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps, session=smartselect/prod/train/en/address-phone-or-pasted-to-search-or-browser-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/pasted-to-translate-apps, session=smartselect/prod/train/en/pasted-to-translate-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : java.lang.IllegalArgumentException: Unsupported response code3
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at qgb.run(PG:48)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:307)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.276  1414  2112 W AiAiFed : [AiAi SmartSelect FL] Cancelling training failed [mode=FEDERATION, population=aiai/playstore/smartselect/prod/train/en/pasted-to-translate-apps, session=smartselect/prod/train/en/pasted-to-translate-apps]
-09-27 23:32:36.276  1414  2112 W AiAiFed : zkd: UNKNOWN
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zkb.i(PG:3)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at aaac.cB(PG:15)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zom.a(PG:32)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zpd.run(PG:7)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at zvw.run(PG:17)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-27 23:32:36.276  1414  2112 W AiAiFed : 	at java.lang.Thread.run(Thread.java:1012)
-09-27 23:32:36.290  1585  1958 I Backup  : [TargetEnabler] Setting target components to enabled = false
