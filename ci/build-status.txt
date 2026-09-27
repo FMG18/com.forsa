@@ -1,6 +1,6 @@
 status=PASS
-commit=3710aac8c16c16945f3f3cb7f13f11e4e6f940ec
-run=36321858330
+commit=3d4b1b00ec9faa0fbdc33c95327affb648c36466
+run=36322221109
 attempt=1
 build_exit_code=0
 smoke_exit_code=0
@@ -20,13 +20,14 @@ Daemon will be stopped at the end of the build
 > Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
-> Task :app:mergeDebugResources
 > Task :app:packageDebugResources
+> Task :app:mergeDebugResources
 > Task :app:createDebugCompatibleScreenManifests
 > Task :app:extractDeepLinksDebug
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
 > Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
@@ -34,12 +35,11 @@ Daemon will be stopped at the end of the build
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
-> Task :app:processDebugManifestForPackage
-> Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugJniLibFolders
-> Task :app:mergeLibDexDebug
-> Task :app:processDebugResources
+> Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs
+> Task :app:processDebugResources
+> Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
@@ -74,129 +74,129 @@ w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790515052949.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790515429846.json
 
-BUILD SUCCESSFUL in 46s
+BUILD SUCCESSFUL in 44s
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at com.google.android.libraries.internal.growth.growthkit.inject.GrowthKitBootCompletedBroadcastReceiver.onReceive(PG:54)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:4772)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2436)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.os.Handler.dispatchMessage(Handler.java:107)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.os.Looper.loopOnce(Looper.java:232)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.os.Looper.loop(Looper.java:317)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at android.app.ActivityThread.main(ActivityThread.java:8705)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at java.lang.reflect.Method.invoke(Native Method)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
-09-27 13:20:03.384  3205  3205 W GnpSdk  : 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
-09-27 13:20:03.385  1211  1837 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.libraries.search.device#com.google.android.tts [CONTEXT service_id=51 ]
-09-27 13:20:03.385  1211  1837 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.transcription.device#com.google.android.tts [CONTEXT service_id=51 ]
-09-27 13:20:03.388  1211  2580 I NetworkScheduler.Stats: Task com.google.android.gms/com.google.android.gms.checkin.CheckinService started execution. cause:5 exec_start_elapsed_seconds: 49 [CONTEXT service_id=218 ]
-09-27 13:20:03.391   554  2348 D FileUtils: Rounded bytes from 4110737408 to 8000000000
-09-27 13:20:03.395  1211  1837 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.apps.search.transcription.uidevice#com.google.android.tts [CONTEXT service_id=51 ]
-09-27 13:20:03.397  1211  1837 W GetConfigSnapshotOp: Succeeded but not registered: com.google.android.libraries.performance.primes#com.google.android.tts [CONTEXT service_id=51 ]
-09-27 13:20:03.399  3225  3337 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.auth_api_phone, using defaults.
-09-27 13:20:03.399  3225  3337 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.auth_managed, using defaults.
-09-27 13:20:03.399  3225  3337 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.auth.proximity, using defaults.
-09-27 13:20:03.406  3225  3333 D Backup  : [BackupGoogleSettingsIO] Back up or restore entry point is not enabled
-09-27 13:20:03.411  3101  3196 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.415  3101  3196 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.416  3225  3337 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.common.download, using defaults.
-09-27 13:20:03.416  3101  3196 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.apps.messaging.settings.search/settings/dynamic_indexables_raw
-09-27 13:20:03.417  3101  3196 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.417  3205  3223 I Bugle   : MessagesSearchIndexablesProvider: Querying NonIndexableKeys.
-09-27 13:20:03.425  3205  3205 I Bugle   : DarkModeManager: setDarkMode: -1
-09-27 13:20:03.428  3225  3337 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.cast, using defaults.
-09-27 13:20:03.432  3225  3337 I ebvk$a  : Unable to retrieve flag snapshot for com.google.android.gms.googlesettings#com.google.android.gms, using defaults.
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: Error getting setting item searchables
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: java.util.concurrent.ExecutionException: java.lang.IllegalStateException: No account, cannot provide search indexables
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.r(PG:4)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.get(PG:11)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at ifl.a(PG:18)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.a(PG:9)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.queryRawData(PG:2)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.provider.SearchIndexablesProvider.query(SearchIndexablesProvider.java:125)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1620)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1716)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider$Transport.query(ContentProvider.java:295)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:107)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1500)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransact(Binder.java:1444)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: Caused by: java.lang.IllegalStateException: No account, cannot provide search indexables
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at gnu.a(PG:53)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqn.a(PG:3)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.d(PG:2)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:9)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.m(PG:2)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npz.e(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.o(PG:5)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.e(PG:2)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsp.run(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsq.run(PG:4)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at ief.run(PG:1)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nmv.run(PG:24)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at idl.run(PG:66)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 13:20:03.433  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at iem.run(PG:6)
-09-27 13:20:03.434  3101  3198 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.434  3101  3198 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.apps.safetyhub.platformsettings.searchindexablesprovider/settings/dynamic_indexables_raw
-09-27 13:20:03.434  3101  3198 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: Error getting setting item searchables
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: java.util.concurrent.ExecutionException: java.lang.IllegalStateException: No account, cannot provide search indexables
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.r(PG:4)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.get(PG:11)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at ifl.a(PG:18)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.a(PG:9)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.queryNonIndexableKeys(PG:6)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.provider.SearchIndexablesProvider.query(SearchIndexablesProvider.java:127)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1620)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1716)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider$Transport.query(ContentProvider.java:295)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:107)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1500)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransact(Binder.java:1444)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: Caused by: java.lang.IllegalStateException: No account, cannot provide search indexables
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at gnu.a(PG:53)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqn.a(PG:3)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.d(PG:2)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:9)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.m(PG:2)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npz.e(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.o(PG:5)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.e(PG:2)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsp.run(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsq.run(PG:4)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at ief.run(PG:1)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at nmv.run(PG:24)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at idl.run(PG:66)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at java.lang.Thread.run(Thread.java:1012)
-09-27 13:20:03.435  3238  3260 W Safetyhub.EmergencySearchIndexablesProvider: 	at iem.run(PG:6)
-09-27 13:20:03.435  3101  3198 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.436  3205  3288 I GnpSdk  : GrowthKit disabled by flag. Aborting GrowthKitBootCompletedBroadcastReceiver
-09-27 13:20:03.436  3205  3350 I Phlogger: Unable to retrieve flag snapshot for com.google.android.libraries.notifications.platform#com.google.android.apps.messaging, using defaults.
-09-27 13:20:03.437  3101  3198 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-27 13:20:03.437  3205  3205 I GnpSdk  : Intent received for action [android.intent.action.BOOT_COMPLETED] package [com.google.android.apps.messaging].
-09-27 13:20:03.437  3205  3205 I GnpSdk  : Phenotype initialized.
-09-27 13:20:03.442  3225  3342 I CAR.DRIVINGMODE: DrivingMode Settings Indexed from the location module
+09-27 13:26:18.427   551   870 E system_server: No package ID 7f found for resource ID 0x7f140422.
+09-27 13:26:18.427   551   870 D ShortcutService: Package com.google.android.youtube has 4 manifest shortcut(s), and 0 share target(s)
+09-27 13:26:18.427   551   870 D ShortcutService: Package com.google.android.youtube updated, version 1545868784 -> 1545868784
+09-27 13:26:18.428  1170  2587 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
+09-27 13:26:18.429  1170  2587 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
+09-27 13:26:18.430  3040  3096 W AllowlistedPackageIdentifiers: Is debuggable: false
+09-27 13:26:18.431  1078  1283 D ImsResolver: maybeAddedImsService, packageName: com.google.android.youtube
+09-27 13:26:18.432  1078  1078 D CarrierSvcBindHelper: onPackageModified: com.google.android.googlequicksearchbox
+09-27 13:26:18.434  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+09-27 13:26:18.435   909  2674 I PermissionControllerServiceImpl: Updating user sensitive for uid 10156
+09-27 13:26:18.435   356   414 I netd    : tetherGetStats() -> {[]} <2.04ms>
+09-27 13:26:18.437  1078  2289 V MmsProvider: accessRestricted=false
+09-27 13:26:18.591     0     0 I init    : starting service 'idmap2d'...
+09-27 13:26:18.443  1078  1078 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-27 13:26:18.443   551   975 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.443   909  2674 I PermissionControllerServiceImpl: Updating user sensitive for uid 10204
+09-27 13:26:18.443   909  2674 I PermissionControllerServiceImpl: Updating user sensitive for uid 10143
+09-27 13:26:18.444  3040  3051 W gs.intelligence: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/talkback/talkback.apk' with 1 weak references
+09-27 13:26:18.444  3040  3051 W gs.intelligence: ApkAssets: Deleting an ApkAssets object '/vendor/overlay/EmulatorTalkBackOverlay/EmulatorTalkBackOverlay.apk' with 1 weak references
+09-27 13:26:18.446  1078  1078 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-27 13:26:18.446   551   975 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.448   551  1033 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.449   551  1033 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.449   551  1033 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.449   551  1033 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.449  1078  1078 D CarrierSvcBindHelper: onPackageModified: com.google.android.apps.messaging
+09-27 13:26:18.449  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+09-27 13:26:18.449  1078  1283 D ImsResolver: maybeAddedImsService, packageName: com.google.android.googlequicksearchbox
+09-27 13:26:18.451   909   972 I PermissionControllerServiceImpl: Updating user sensitive for uid 10111
+09-27 13:26:18.454   909   972 I PermissionControllerServiceImpl: Updating user sensitive for uid 1000
+09-27 13:26:18.458   909   972 I PermissionControllerServiceImpl: Updating user sensitive for uid 10205
+09-27 13:26:18.458   908   908 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 0
+09-27 13:26:18.464   908   908 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 0
+09-27 13:26:18.465  1078  1078 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-27 13:26:18.465   551   633 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.466  1078  1078 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-27 13:26:18.466   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.466   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.466   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.466   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.466   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.467  1170  2587 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
+09-27 13:26:18.467  1170  2623 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+09-27 13:26:18.467  1170  2179 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+09-27 13:26:18.468   908   908 D ControlsListingControllerImpl: ServiceConfig reloaded, count: 0
+09-27 13:26:18.470  1078  1078 D CarrierSvcBindHelper: onPackageModified: com.google.android.apps.safetyhub
+09-27 13:26:18.471  1170  2623 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+09-27 13:26:18.473  1078  1283 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.messaging
+09-27 13:26:18.474  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+09-27 13:26:18.480  1078  1078 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-27 13:26:18.481   551   956 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.629     0     0 I init    : ... started service 'idmap2d' has pid 3488
+09-27 13:26:18.633     0     0 I init    : Control message: Processed ctl.start for 'idmap2d' from pid: 551 (system_server)
+09-27 13:26:18.484   551   576 W system_server: Long monitor contention with owner android.bg (582) at void android.app.ResourcesManager.registerAllResourcesReference(android.content.res.Resources)(ResourcesManager.java:1965) waiters=0 in android.content.res.Resources android.app.ResourcesManager.createResources(android.content.res.ResourcesKey, java.lang.ClassLoader, android.app.ResourcesManager$ApkAssetsSupplier) for 184ms
+09-27 13:26:18.487  1078  1078 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-27 13:26:18.487   551  1598 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.488   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.488   551   633 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.488   551   633 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.488   551   633 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.490  3488  3488 I idmap2d : Starting
+09-27 13:26:18.495  1078  1283 D ImsResolver: maybeAddedImsService, packageName: com.google.android.apps.safetyhub
+09-27 13:26:18.495  1078  1078 D CarrierSvcBindHelper: onPackageModified: com.android.vending
+09-27 13:26:18.495  1315  1315 D Backup  : [D2dTransport] Moved from state 0 to 0
+09-27 13:26:18.497  1170  2179 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+09-27 13:26:18.497  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+09-27 13:26:18.502  1170  2559 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+09-27 13:26:18.503   551   551 I TransportConnection: D2dTransportService#3: Notifying [TransportManager.registerTransport()] transport = BackupTransportClient
+09-27 13:26:18.505   551   870 D ShortcutService: Package com.google.android.youtube: publishing manifest shortcuts
+09-27 13:26:18.507  1170  2179 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+09-27 13:26:18.509  1315  2644 I Checkin : [CheckinOperation] Starting Checkin: Default Task Reason : 8 Force : false UserId : 0 Start time : 51066
+09-27 13:26:18.513  1078  1078 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-27 13:26:18.513   551  1905 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.518   551  1024 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms, role: android.app.role.WALLET
+09-27 13:26:18.519  1078  1078 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-27 13:26:18.523  1170  2179 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
+09-27 13:26:18.523   551  1264 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.524  1315  2644 I CheckinUtil: Classify the device as Phone. [CONTEXT service_id=130 ]
+09-27 13:26:18.525   551  1605 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.525   551  1598 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.526   551  1605 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.527   551   956 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.543  1078  1083 I m.android.phone: Background concurrent mark compact GC freed 4463KB AllocSpace bytes, 2(104KB) LOS objects, 49% free, 3569KB/7138KB, paused 199us,524us total 243.314ms
+09-27 13:26:18.544  3040  3096 D CompatChangeReporter: Compat change id reported: 279646685; UID 10140; state: ENABLED
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.548  1078  1085 W System  : A resource failed to call AbstractCursor.close. 
+09-27 13:26:18.557  1078  1283 D ImsResolver: maybeAddedImsService, packageName: com.android.vending
+09-27 13:26:18.557  1078  1078 D CarrierSvcBindHelper: onPackageModified: com.android.camera2
+09-27 13:26:18.557  1078  1078 D CarrierSvcBindHelper: No carrier app for: 0
+09-27 13:26:18.561   909   926 W ssioncontroller: ApkAssets: Deleting an ApkAssets object '<empty> and /system/framework/framework-res.apk' with 1 weak references
+09-27 13:26:18.561   551  1509 D BackupTransportManager: [UserID:0] Transport com.google.android.gms/.backup.component.D2dTransportService registered
+09-27 13:26:18.561   551  1509 D BackupManagerService: [UserID:0] Transport com.google.android.gms/.backup.migrate.service.D2dTransport registered 21416ms after first request (delay = 3000ms)
+09-27 13:26:18.562   909   926 W ssioncontroller: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.permission/priv-app/GoogleSafetyCenterResources@350820360/GoogleSafetyCenterResources.apk' with 1 weak references
+09-27 13:26:18.563  1078  1078 E SmsApplication: com.google.android.apps.messaging lost android:read_cell_broadcasts:  (fixing)
+09-27 13:26:18.563   551   644 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 10131, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.564   909   926 W ssioncontroller: ApkAssets: Deleting an ApkAssets object '<empty> and /apex/com.android.healthfitness/priv-app/HealthConnectControllerGoogle@350820300/HealthConnectControllerGoogle.apk' with 1 weak references
+09-27 13:26:18.568  1078  1078 E CellBroadcastUtils: getDefaultCellBroadcastReceiverPackageName: no package found
+09-27 13:26:18.568   551  1904 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.568   551   854 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-27 13:26:18.568   551   854 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-27 13:26:18.568   551   854 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-27 13:26:18.568   551   854 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-27 13:26:18.568   551   854 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-27 13:26:18.568   551   854 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-27 13:26:18.568   551   854 D AppWidgetServiceImpl: Trying to notify widget providers changed
+09-27 13:26:18.568   551   854 D AppWidgetServiceImpl: Trying to notify widget providers changed
+09-27 13:26:18.569   551  1904 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.571   551  1024 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.devicelockcontroller, role: android.app.role.SYSTEM_FINANCED_DEVICE_CONTROLLER
+09-27 13:26:18.574   551   956 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = RECEIVE_WAP_PUSH, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.574   551  1904 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = SEND_SMS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.575   551   956 W ParceledListSlice: Element #25 is 19828 bytes.
+09-27 13:26:18.575   551   956 W ParceledListSlice: Element #26 is 19864 bytes.
+09-27 13:26:18.575   551  1904 W AppOpService: Ignored setUidMode call for runtime permission app op: uid = 1001, code = READ_CELL_BROADCASTS, mode = allow, callingUid = 1001, oldMode = allow
+09-27 13:26:18.575  1170  2559 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
