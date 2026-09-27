@@ -384,6 +384,10 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
     val db = remember { FirebaseFirestore.getInstance() }
     val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
 
+    fun message(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
     androidx.compose.runtime.LaunchedEffect(paymentIntent) {
         val uri = paymentIntent?.data
         if (
@@ -442,10 +446,6 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                     }
             }
         }
-    }
-
-    fun message(text: String) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
     val currentUid = auth.currentUser?.uid
