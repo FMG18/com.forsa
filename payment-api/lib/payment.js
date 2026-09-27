@@ -30,6 +30,20 @@ async function createPayment({ uid, jobId, planId }) {
     throw Object.assign(new Error("Invalid promotion plan"), { statusCode: 400 });
   }
 
+  const userSnap = await db.collection("users").doc(uid).get();
+  if (!userSnap.exists) {
+    throw Object.assign(new Error("User profile not found"), { statusCode: 403 });
+  }
+
+  const user = userSnap.data();
+  if (
+    user.role !== "صاحب عمل" ||
+    user.roleConfirmed !== true ||
+    user.verificationStatus !== "verified"
+  ) {
+    throw Object.assign(new Error("Employer verification required"), { statusCode: 403 });
+  }
+
   const jobRef = db.collection("jobs").doc(jobId);
   const jobSnap = await jobRef.get();
 
@@ -40,6 +54,16 @@ async function createPayment({ uid, jobId, planId }) {
   const job = jobSnap.data();
   if (job.ownerUid !== uid) {
     throw Object.assign(new Error("Job ownership check failed"), { statusCode: 403 });
+  }
+
+  const now = Date.now();
+  const expiresAt = Number(job.expiresAt || 0);
+  const legacyExpiresAt = Number(job.createdAt || 0) + 30 * 24 * 60 * 60 * 1000;
+  if (
+    job.isActive !== true ||
+    (expiresAt > 0 ? expiresAt <= now : !job.createdAt || legacyExpiresAt <= now)
+  ) {
+    throw Object.assign(new Error("Job is not open for promotion"), { statusCode: 400 });
   }
 
   const orderRef = db.collection("promotionOrders").doc();
