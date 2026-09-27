@@ -236,6 +236,25 @@ async function reconcileOrder({ orderId, callbackPayload, callbackStatus }) {
         { merge: true }
       );
 
+      const paymentNotificationRef = db
+        .collection("notifications")
+        .doc(orderId + "-payment-paid");
+      const paymentNotificationSnap = await tx.get(paymentNotificationRef);
+      if (!paymentNotificationSnap.exists && order.ownerUid) {
+        tx.set(paymentNotificationRef, {
+          targetUid: String(order.ownerUid),
+          actorUid: "system",
+          type: "payment_success",
+          title: "تم تأكيد الدفع",
+          body: "تم الدفع وتفعيل ترقية إعلان " + String(job.title || "الوظيفة") + ".",
+          jobId: String(order.jobId || ""),
+          applicationId: "",
+          status: "paid",
+          read: false,
+          createdAt: now,
+        });
+      }
+
       result.status = "paid";
       result.expiresAt = expiresAt;
       result.deepLink =
