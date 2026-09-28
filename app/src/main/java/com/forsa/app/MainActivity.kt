@@ -125,6 +125,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import java.util.concurrent.TimeUnit
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.google.firebase.storage.FirebaseStorage
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -626,7 +627,38 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
     var cvProfile by remember { mutableStateOf(CvProfile()) }
     var unreadNotificationsCount by remember { mutableStateOf(0) }
     val db = remember { FirebaseFirestore.getInstance() }
+    val authPrefs = remember(context) {
+        context.getSharedPreferences("forsa_auth_bootstrap", Context.MODE_PRIVATE)
+    }
     val paymentApiBaseUrl = BuildConfig.FORSA_PAYMENT_API_BASE_URL
+
+    fun isValidRole(role: String?): Boolean =
+        role == "باحث عن عمل" || role == "صاحب عمل"
+
+    fun cacheRole(uid: String, role: String?) {
+        if (uid.isBlank() || !isValidRole(role)) return
+        authPrefs.edit().putString("role_$uid", role).apply()
+    }
+
+    fun cachedRole(uid: String): String? =
+        authPrefs.getString("role_$uid", null)?.takeIf(::isValidRole)
+
+    fun readUserDocument(
+        uid: String,
+        onSuccess: (com.google.firebase.firestore.DocumentSnapshot) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        val userRef = db.collection("users").document(uid)
+        userRef.get(Source.SERVER)
+            .addOnSuccessListener(onSuccess)
+            .addOnFailureListener { serverError ->
+                userRef.get(Source.CACHE)
+                    .addOnSuccessListener(onSuccess)
+                    .addOnFailureListener {
+                        onFailure(serverError)
+                    }
+            }
+    }
 
     fun message(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
@@ -771,16 +803,19 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             companyCity = ""
             userName = authenticatedUser?.displayName.orEmpty()
 
-            db.collection("users").document(uid).get()
-                .addOnSuccessListener { document ->
+            readUserDocument(
+                uid = uid,
+                onSuccess = { document ->
                     val storedRole = document.getString("role")
                     val roleConfirmed = document.getBoolean("roleConfirmed") == true
 
                     if (
-                        (storedRole == "باحث عن عمل" || storedRole == "صاحب عمل") &&
+                        isValidRole(storedRole) &&
                         roleConfirmed
                     ) {
+                        cacheRole(uid, storedRole)
                         profileRole = storedRole
+                        cacheRole(uid, storedRole)
                         verificationStatus = document.getString("verificationStatus")
                             .orEmpty()
                             .ifBlank { "unverified" }
@@ -940,12 +975,18 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                         authScreen = AuthScreen.RoleSelection
                     }
                 }
-                .addOnFailureListener {
-                    auth.signOut()
-                    profileLoaded = true
-                    authScreen = AuthScreen.Welcome
-                    message("تعذر التحقق من نوع الحساب. سجّل الدخول مرة أخرى")
+                onFailure = {
+                    val fallbackRole = cachedRole(uid)
+                    if (isValidRole(fallbackRole)) {
+                        profileRole = fallbackRole.orEmpty()
+                        profileLoaded = true
+                    } else {
+                        profileLoaded = true
+                        authScreen = AuthScreen.RoleSelection
+                        message("تعذر قراءة بيانات الحساب حالياً. اختر نوع الحساب أو حاول مرة أخرى")
+                    }
                 }
+            )
         }
 
         onDispose {
@@ -1019,7 +1060,10 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
         db.collection("users").document(user.uid)
             .set(baseData, com.google.firebase.firestore.SetOptions.merge())
             .addOnSuccessListener {
-                if (role != null) profileRole = role
+                if (role != null) {
+                    profileRole = role
+                    cacheRole(user.uid, role)
+                }
                 onDone()
             }
             .addOnFailureListener {
@@ -1042,25 +1086,36 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             return
         }
 
-        db.collection("users").document(user.uid).get()
-            .addOnSuccessListener { document ->
+        readUserDocument(
+            uid = user.uid,
+            onSuccess = { document ->
                 val storedRole = document.getString("role")
                 val roleConfirmed = document.getBoolean("roleConfirmed") == true
                 if (
-                    (storedRole == "باحث عن عمل" || storedRole == "صاحب عمل") &&
+                    isValidRole(storedRole) &&
                     roleConfirmed
                 ) {
-                    profileRole = storedRole
+                    profileRole = storedRole.orEmpty()
+                    cacheRole(user.uid, storedRole)
                     persistUserBasics(onDone = ::signedIn)
                 } else {
                     loading = false
                     authScreen = AuthScreen.RoleSelection
                 }
+            },
+            onFailure = {
+                val fallbackRole = cachedRole(user.uid)
+                if (isValidRole(fallbackRole)) {
+                    profileRole = fallbackRole.orEmpty()
+                    signedIn()
+                    message("تم تسجيل الدخول باستخدام بيانات الحساب المحفوظة")
+                } else {
+                    loading = false
+                    authScreen = AuthScreen.RoleSelection
+                    message("تعذر قراءة بيانات الحساب حالياً. اختر نوع الحساب أو حاول مرة أخرى")
+                }
             }
-            .addOnFailureListener {
-                loading = false
-                message("تعذر التحقق من نوع الحساب. حاول مرة أخرى")
-            }
+        )
     }
 
     fun saveSelectedRole(role: String) {
