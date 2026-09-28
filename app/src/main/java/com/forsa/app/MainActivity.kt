@@ -446,6 +446,43 @@ private fun ForsaTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
+private fun ForsaPageHeader(
+    title: String,
+    subtitle: String? = null,
+    onBack: (() -> Unit)? = null,
+    actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {}
+) {
+    Row(
+        Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (onBack != null) {
+            IconButton(onClick = onBack, modifier = Modifier.size(42.dp)) {
+                Surface(
+                    Modifier.fillMaxSize(),
+                    shape = ForsaUi.SmallShape,
+                    color = ForsaUi.Surface,
+                    border = BorderStroke(1.dp, ForsaUi.Border)
+                ) {
+                    androidx.compose.foundation.layout.Box(
+                        Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.ArrowForward, "رجوع", tint = ForsaUi.Ink, modifier = Modifier.size(19.dp))
+                    }
+                }
+            }
+            Spacer(Modifier.width(9.dp))
+        }
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(title, style = MaterialTheme.typography.headlineLarge)
+            subtitle?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted) }
+        }
+        actions()
+    }
+}
+
+@Composable
 private fun ForsaCard(
     modifier: Modifier = Modifier,
     emphasis: Boolean = false,
@@ -2593,27 +2630,29 @@ private fun JobDetailsScreen(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
+        ForsaPageHeader(
+            title = "تفاصيل الوظيفة",
+            subtitle = job.company,
+            onBack = onBack,
+            actions = {
+                IconButton(onClick = onToggleSaved, modifier = Modifier.size(42.dp)) {
+                    Surface(
+                        Modifier.fillMaxSize(),
+                        shape = ForsaUi.SmallShape,
+                        color = ForsaUi.Surface,
+                        border = BorderStroke(1.dp, ForsaUi.Border)
+                    ) {
+                        androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Icon(
+                                if (isSaved) Icons.Default.Bookmark else Icons.Default.BookmarkBorder,
+                                contentDescription = if (isSaved) "إزالة من المحفوظة" else "حفظ الوظيفة",
+                                tint = if (isSaved) ForsaUi.Primary else ForsaUi.Muted
+                            )
+                        }
+                    }
+                }
             }
-
-            Text(
-                "تفاصيل الوظيفة",
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            IconButton(onClick = onToggleSaved) {
-                Icon(
-                    if (isSaved) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                    contentDescription = if (isSaved) "إزالة من المحفوظة" else "حفظ الوظيفة"
-                )
-            }
-        }
+        )
 
         Card(
             Modifier.fillMaxWidth(),
@@ -2775,15 +2814,7 @@ private fun PublishTab(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onCancel) {
-                Icon(Icons.Default.ArrowForward, "رجوع")
-            }
-            Text("نشر فرصة عمل", fontSize = 26.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("نشر فرصة عمل", "أنشئ إعلاناً واضحاً وسهل البحث", onCancel)
 
         Text(
             "أدخل المعلومات الأساسية للوظيفة.",
@@ -3502,20 +3533,7 @@ private fun CompanyProfileScreen(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
-            }
-            Text(
-                "ملف الشركة",
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        ForsaPageHeader("ملف الشركة", "حدّث بيانات شركتك وخلّيها جاهزة للباحثين عن عمل", onBack)
 
         Text(
             "احفظ معلومات شركتك مرة واحدة حتى تكون جاهزة عند نشر الوظائف.",
@@ -3636,20 +3654,7 @@ private fun EmployerDashboardScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
-            }
-            Text(
-                "لوحة صاحب العمل",
-                fontSize = 25.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        ForsaPageHeader("لوحة صاحب العمل", "نظرة سريعة على إعلاناتك وطلبات التقديم", onBack)
 
         Text(
             "ملخص حسابك في مكان واحد.",
@@ -3824,15 +3829,7 @@ private fun EmployerJobsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, "رجوع")
-            }
-            Text("إعلاناتي", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("إعلاناتي", "إدارة الإعلانات والترويج والحالة", onBack)
 
         if (myJobs.isEmpty()) {
             Text(
@@ -3990,15 +3987,7 @@ private fun EditJobScreen(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, "رجوع")
-            }
-            Text("تعديل الوظيفة", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("تعديل الوظيفة", "حدّث معلومات الإعلان بدون فقدان بياناته", onBack)
 
         OutlinedTextField(
             value = title,
@@ -4148,15 +4137,7 @@ private fun EmployerApplicationsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, "رجوع")
-            }
-            Text("طلبات التقديم", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("طلبات التقديم", "راجع المتقدمين وتابع مراحل الطلبات", onBack)
 
         if (applications.isNotEmpty()) {
             Text(
@@ -4619,15 +4600,7 @@ private fun MyApplicationsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, "رجوع")
-            }
-            Text("طلباتي", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("طلباتي", "تابع كل طلبات التقديم وحالاتها", onBack)
 
         if (applications.isNotEmpty()) {
             Text(
