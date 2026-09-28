@@ -1,6 +1,6 @@
 status=FAIL
-commit=fcda5c9a7af7e91b18f586ff37537ef907c032ba
-run=36424000506
+commit=60c104c640637515b0094d8f6a63847a02f5a78d
+run=36424343143
 attempt=1
 build_exit_code=1
 smoke_exit_code=1
@@ -16,8 +16,8 @@ Daemon will be stopped at the end of the build
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
 > Task :app:generateDebugResValues
-> Task :app:processDebugGoogleServices
 > Task :app:checkDebugAarMetadata
+> Task :app:processDebugGoogleServices
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
@@ -49,28 +49,9 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
-> Task :app:compileDebugKotlin
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:808:17 No value passed for parameter 'onFailure'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:808:31 An explicit type is required on a value parameter.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:809:47 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:810:50 Unresolved reference 'getBoolean'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:819:55 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:822:53 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:823:61 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:824:61 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:825:49 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:827:48 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:828:48 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:829:49 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:830:48 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:832:41 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:959:53 Unresolved reference 'getString'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:978:17 Unresolved reference 'onFailure'.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:978:27 Syntax error: Expecting an element.
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:978:27 Syntax error: Call has no callee.
-
 > Task :app:compileDebugKotlin FAILED
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790599620024.json
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:816:39 Assignment type mismatch: actual type is 'String?', but 'String' was expected.
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790599807337.json
 
 FAILURE: Build failed with an exception.
 
@@ -85,7 +66,7 @@ Execution failed for task ':app:compileDebugKotlin'.
 > Run with --scan to get full insights.
 > Get more help at https://help.gradle.org.
 
-BUILD FAILED in 39s
+BUILD FAILED in 25s
 30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
