@@ -827,8 +827,8 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                         companyName = document.getString("companyName").orEmpty()
                         companyAbout = document.getString("companyAbout").orEmpty()
                         companyCity = document.getString("companyCity").orEmpty()
-                        userName = auth.currentUser?.displayName
-                            ?: document.getString("displayName").orEmpty()
+                        userName = document.getString("displayName").orEmpty()
+                            .ifBlank { auth.currentUser?.displayName.orEmpty() }
 
                         jobsRegistration = db.collection("jobs")
                             .addSnapshotListener { snapshot, error ->
@@ -1041,11 +1041,16 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
             return
         }
 
-        val baseData = mutableMapOf<String, Any>(
-            "displayName" to user.displayName.orEmpty(),
-            "email" to user.email.orEmpty(),
-            "phone" to user.phoneNumber.orEmpty()
-        )
+        val baseData = mutableMapOf<String, Any>()
+        user.displayName?.trim()?.takeIf { it.isNotBlank() }?.let {
+            baseData["displayName"] = it
+        }
+        user.email?.trim()?.takeIf { it.isNotBlank() }?.let {
+            baseData["email"] = it
+        }
+        user.phoneNumber?.trim()?.takeIf { it.isNotBlank() }?.let {
+            baseData["phone"] = it
+        }
         if (role != null) {
             baseData["role"] = role
             baseData["roleConfirmed"] = true
@@ -1522,38 +1527,35 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                             .setDisplayName(cleanName)
                             .build()
 
-                        user.updateProfile(profile).addOnCompleteListener { task ->
-                            if (!task.isSuccessful) {
-                                loading = false
-                                message("تعذر تحديث بيانات الحساب")
-                            } else {
-                                db.collection("users").document(user.uid)
-                                    .set(
-                                        mapOf(
-                                            "displayName" to cleanName,
-                                            "email" to user.email.orEmpty(),
-                                            "phone" to cleanPhone,
-                                            "city" to cleanCity,
-                                            "role" to profileRole,
-                                            "companyName" to companyName,
-                                            "companyAbout" to companyAbout,
-                                            "companyCity" to companyCity
-                                        ),
-                                        com.google.firebase.firestore.SetOptions.merge()
-                                    )
-                                    .addOnSuccessListener {
-                                        userName = cleanName
-                                        profilePhone = cleanPhone
-                                        profileCity = cleanCity
-                                        loading = false
-                                        message("تم حفظ بيانات الملف الشخصي")
-                                    }
-                                    .addOnFailureListener {
-                                        loading = false
-                                        message("تعذر حفظ بيانات الملف الشخصي")
-                                    }
+                        // Firestore هو المصدر الدائم لبيانات الملف.
+                        // لا نجعل فشل تحديث Auth يمنع حفظ البيانات.
+                        db.collection("users").document(user.uid)
+                            .set(
+                                mapOf(
+                                    "displayName" to cleanName,
+                                    "email" to user.email.orEmpty(),
+                                    "phone" to cleanPhone,
+                                    "city" to cleanCity,
+                                    "role" to profileRole,
+                                    "companyName" to companyName,
+                                    "companyAbout" to companyAbout,
+                                    "companyCity" to companyCity
+                                ),
+                                com.google.firebase.firestore.SetOptions.merge()
+                            )
+                            .addOnSuccessListener {
+                                user.updateProfile(profile).addOnCompleteListener {
+                                    userName = cleanName
+                                    profilePhone = cleanPhone
+                                    profileCity = cleanCity
+                                    loading = false
+                                    message("تم حفظ بيانات الملف الشخصي")
+                                }
                             }
-                        }
+                            .addOnFailureListener {
+                                loading = false
+                                message("تعذر حفظ بيانات الملف الشخصي")
+                            }
                     }
                 }
             }
@@ -5401,42 +5403,39 @@ private fun RegisterScreen(
                                 onMessage(firebaseError(task.exception))
                             } else {
                                 auth.currentUser?.let { user ->
-                                    val profile = UserProfileChangeRequest.Builder()
-                                        .setDisplayName(cleanName)
-                                        .build()
-                                    user.updateProfile(profile).addOnCompleteListener { profileTask ->
-                                        if (!profileTask.isSuccessful) {
-                                            onLoading(false)
-                                            onMessage("تعذر حفظ اسم الحساب")
-                                        } else {
-                                            FirebaseFirestore.getInstance()
-                                                .collection("users")
-                                                .document(user.uid)
-                                                .set(
-                                                    mapOf(
-                                                        "displayName" to cleanName,
-                                                        "email" to user.email.orEmpty(),
-                                                        "phone" to "",
-                                                        "city" to "",
-                                                        "role" to role.orEmpty(),
-                                                        "roleConfirmed" to true,
-                                                        "verificationStatus" to "unverified",
-                                                        "companyName" to "",
-                                                        "companyAbout" to "",
-                                                        "companyCity" to ""
-                                                    ),
-                                                    com.google.firebase.firestore.SetOptions.merge()
-                                                )
-                                                .addOnCompleteListener { saveTask ->
-                                                    if (saveTask.isSuccessful) {
-                                                        onSuccess()
-                                                    } else {
-                                                        onLoading(false)
-                                                        onMessage("تم إنشاء الحساب لكن تعذر حفظ الملف الشخصي")
-                                                    }
+                                    // احفظ بيانات الحساب الأساسية في Firestore أولاً.
+                                    // تحديث اسم Firebase Auth تجميلي فقط ولا يجب أن يمنع الحفظ.
+                                    FirebaseFirestore.getInstance()
+                                        .collection("users")
+                                        .document(user.uid)
+                                        .set(
+                                            mapOf(
+                                                "displayName" to cleanName,
+                                                "email" to user.email.orEmpty(),
+                                                "phone" to "",
+                                                "city" to "",
+                                                "role" to role.orEmpty(),
+                                                "roleConfirmed" to true,
+                                                "verificationStatus" to "unverified",
+                                                "companyName" to "",
+                                                "companyAbout" to "",
+                                                "companyCity" to ""
+                                            ),
+                                            com.google.firebase.firestore.SetOptions.merge()
+                                        )
+                                        .addOnCompleteListener { saveTask ->
+                                            if (saveTask.isSuccessful) {
+                                                val profile = UserProfileChangeRequest.Builder()
+                                                    .setDisplayName(cleanName)
+                                                    .build()
+                                                user.updateProfile(profile).addOnCompleteListener {
+                                                    onSuccess()
                                                 }
+                                            } else {
+                                                onLoading(false)
+                                                onMessage("تم إنشاء الحساب لكن تعذر حفظ الملف الشخصي")
+                                            }
                                         }
-                                    }
                                 } ?: run {
                                     onLoading(false)
                                     onMessage("تعذر إنشاء جلسة المستخدم")
