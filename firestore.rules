@@ -261,8 +261,23 @@ service cloud.firestore {
           "verificationStatus", "verificationRequestedAt", "verificationUpdatedAt", "verificationNote",
           "verificationDocumentName", "verificationDocumentPath", "verificationDocumentUpdatedAt"
         ])
-        && request.resource.data.role == resource.data.role
-        && request.resource.data.roleConfirmed == resource.data.roleConfirmed
+        && (
+          (
+            resource.data.roleConfirmed == true
+            && request.resource.data.role == resource.data.role
+            && request.resource.data.roleConfirmed == true
+          )
+          || (
+            resource.data.roleConfirmed != true
+            && request.resource.data.role in ["باحث عن عمل", "صاحب عمل"]
+            && request.resource.data.roleConfirmed == true
+            && (
+              !(("role" in resource.data))
+              || resource.data.role in ["باحث عن عمل", "صاحب عمل"]
+                 && request.resource.data.role == resource.data.role
+            )
+          )
+        )
         && (
           (
             (!("verificationStatus" in request.resource.data) && !("verificationStatus" in resource.data))
