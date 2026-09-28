@@ -2928,47 +2928,15 @@ private fun RoleRequiredScreen(
     description: String,
     onBack: () -> Unit
 ) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Surface(
-            Modifier.size(86.dp),
-            CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer
-        ) {
-            androidx.compose.foundation.layout.Box(
-                Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    Icons.Default.Lock,
-                    contentDescription = null,
-                    modifier = Modifier.size(38.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
+    Column(Modifier.fillMaxSize().padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+        Surface(Modifier.size(88.dp), shape = ForsaUi.SheetShape, color = ForsaUi.PrimarySoft, contentColor = ForsaUi.Primary) {
+            androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Icon(Icons.Default.Lock, null, Modifier.size(36.dp)) }
         }
         Spacer(Modifier.height(18.dp))
-        Text(
-            title,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            description,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(18.dp))
-        OutlinedButton(onClick = onBack, shape = ForsaUi.FieldShape) {
-            Text("رجوع")
+        ForsaCard(modifier = Modifier.fillMaxWidth()) {
+            Text(title, style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+            Text(description, style = MaterialTheme.typography.bodyLarge, color = ForsaUi.Muted, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth().padding(top = 8.dp))
+            OutlinedButton(onClick = onBack, modifier = Modifier.fillMaxWidth().padding(top = 16.dp), shape = ForsaUi.FieldShape) { Text("العودة للحساب") }
         }
     }
 }
@@ -3766,22 +3734,10 @@ private fun DashboardStatCard(
     value: String,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier,
-        shape = ForsaUi.CardShape
-    ) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(5.dp)
-        ) {
-            Text(value, fontSize = 25.sp, fontWeight = FontWeight.Bold)
-            Text(
-                title,
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+    Card(modifier = modifier, shape = ForsaUi.CardShape, colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface), elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)) {
+        Column(Modifier.fillMaxWidth().padding(15.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(value, style = MaterialTheme.typography.headlineMedium, color = ForsaUi.Primary)
+            Text(title, style = MaterialTheme.typography.labelMedium, color = ForsaUi.Muted)
         }
     }
 }
@@ -4451,15 +4407,7 @@ private fun NotificationsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
-            }
-            Text("الإشعارات", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("الإشعارات", "آخر تحديثات حسابك وطلباتك", onBack)
 
         if (notifications.isEmpty()) {
             Surface(
@@ -4875,15 +4823,7 @@ private fun CvProfileScreen(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
-            }
-            Text("السيرة الذاتية", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("السيرة الذاتية", "ملفك المهني جاهز للعرض عند التقديم", onBack)
 
         Text(
             "اكتب معلوماتك الأساسية حتى تكون جاهزة عند التقديم.",
@@ -5187,15 +5127,7 @@ private fun SavedJobsScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowForward, contentDescription = "رجوع")
-            }
-            Text("المحفوظة", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-        }
+        ForsaPageHeader("المحفوظة", "الوظائف التي حفظتها للرجوع إليها", onBack)
 
         if (saved.isEmpty()) {
             Column(
@@ -5267,10 +5199,10 @@ private fun SavedJobsScreen(
 
 @Composable
 private fun ProfileInfo(label: String, value: String) {
-    Card(Modifier.fillMaxWidth(), shape = ForsaUi.FieldShape) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(value, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+    Card(Modifier.fillMaxWidth(), shape = ForsaUi.CardShape, colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface)) {
+        Column(Modifier.padding(15.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(label, style = MaterialTheme.typography.labelMedium, color = ForsaUi.Muted)
+            Text(value, style = MaterialTheme.typography.titleMedium)
         }
     }
 }
