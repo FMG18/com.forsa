@@ -1,11 +1,11 @@
-status=PASS
-commit=cfcca7ac6fb3e4bb7759d2360bac6e7a1735193c
-run=36404808130
+status=FAIL
+commit=fcda5c9a7af7e91b18f586ff37537ef907c032ba
+run=36424000506
 attempt=1
-build_exit_code=0
-smoke_exit_code=0
-smoke_outcome=success
-summary=APK built successfully and launched on Android Emulator without a detected crash.
+build_exit_code=1
+smoke_exit_code=1
+smoke_outcome=failure
+summary=APK build failed with exit code 1.
 
 --- build log tail ---
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
@@ -27,6 +27,7 @@ Daemon will be stopped at the end of the build
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
+> Task :app:processDebugManifestForPackage
 > Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
@@ -34,162 +35,57 @@ Daemon will be stopped at the end of the build
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
-> Task :app:processDebugManifestForPackage
-> Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugJniLibFolders
-> Task :app:mergeLibDexDebug
+> Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
+> Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
 Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
 
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+> Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
+
 > Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:471:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:565:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2281:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2603:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2965:270 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3458:31 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3478:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5222:48 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:808:17 No value passed for parameter 'onFailure'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:808:31 An explicit type is required on a value parameter.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:809:47 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:810:50 Unresolved reference 'getBoolean'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:819:55 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:822:53 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:823:61 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:824:61 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:825:49 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:827:48 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:828:48 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:829:49 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:830:48 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:832:41 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:959:53 Unresolved reference 'getString'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:978:17 Unresolved reference 'onFailure'.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:978:27 Syntax error: Expecting an element.
+e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:978:27 Syntax error: Call has no callee.
 
-> Task :app:compileDebugJavaWithJavac
-> Task :app:dexBuilderDebug
-> Task :app:mergeDebugGlobalSynthetics
-> Task :app:processDebugJavaRes
-> Task :app:mergeProjectDexDebug
-> Task :app:mergeDebugJavaResource
-> Task :app:packageDebug
-> Task :app:createDebugApkListingFileRedirect
-> Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790588357928.json
+> Task :app:compileDebugKotlin FAILED
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790599620024.json
 
-BUILD SUCCESSFUL in 1m 10s
-38 actionable tasks: 38 executed
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 39s
+30 actionable tasks: 30 executed
 
 --- smoke logcat tail ---
-09-28 09:42:07.810   556  1834 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.812   556  1834 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.812   556  1834 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.815   556   579 D ColorDisplayService: GlobalSaturationTintController Animation cancelled: false to matrix: 
-09-28 09:42:07.815   556   579 D ColorDisplayService:        1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 min matrix coefficients: 
-09-28 09:42:07.815   556   579 D ColorDisplayService:        1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 max matrix coefficients: 
-09-28 09:42:07.815   556   579 D ColorDisplayService:        1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000
-09-28 09:42:07.821  2333  2696 D CompatChangeReporter: Compat change id reported: 279646685; UID 10176; state: ENABLED
-09-28 09:42:07.825  1646  1646 I BgTaskExecutorImpl: (REDACTED) Starting %s background task %s.
-09-28 09:42:07.825  1646  1864 I A       : Scheduling growth periodic tasks
-09-28 09:42:07.826  1646  1864 I PcpLocalCalendarStartup: #onDeviceInstallOrBoot(): Starting PCP calendar tasks.
-09-28 09:42:07.826  1646  1864 I PcpLocalCalendarStartup: PCP calendar migration is not enabled.
-09-28 09:42:07.827   556  1841 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.827   556  1841 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.827   556  1249 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.827   556  1249 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.829   556  1841 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.829   556  1841 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.834  1075  1075 D MultiSimSettingController: onCarrierConfigChanged phoneId 0 subId 1
-09-28 09:42:07.834   556  1841 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.834   556  1841 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.835   556  1249 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.835   556  1249 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.836  1075  1075 D MultiSimSettingController: isReadyToReevaluate: subInfoInitialized=true, carrierConfigsLoaded=true, satelliteEnabledOrBeingEnabled=false
-09-28 09:42:07.836  1075  1075 D MultiSimSettingController: updateDefaults
-09-28 09:42:07.839   556  1249 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.839   556  1249 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.840  1075  1075 D MultiSimSettingController: isReadyToReevaluate: subInfoInitialized=true, carrierConfigsLoaded=true, satelliteEnabledOrBeingEnabled=false
-09-28 09:42:07.841   556  1474 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.841   556  1474 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.850   556  1006 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.850   556  1006 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.851  1380  2180 W FenceManagerImpl: <DWB> Register all active fences - Successfully registered 4.
-09-28 09:42:07.853  1075  1075 D MultiSimSettingController: updateDefaultValues: change: 6
-09-28 09:42:07.853  1075  1075 D MultiSimSettingController: updateDefaultValues: to only primary sub 1
-09-28 09:42:07.857  1349  1648 I NearbyDiscovery: Trigger rescan contextual cards [CONTEXT service_id=265 ]
-09-28 09:42:07.857   556  1834 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.858   556  1834 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.860  1338  1860 I SuperDelight: SuperDelightUnpacker$UnpackCancellableTask.execute():105 UnpackCancellableTask#execute(): fst-decompress /data/user/0/com.google.android.inputmethod.latin/files/superpacks/delight/main_en_us_2024051500_1.staged
-09-28 09:42:07.871   556  1474 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.871   556  1474 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.889  1175  2137 I FontLog : Fetch {Google Sans, wdth 100.0, wght 700, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
-09-28 09:42:07.895   556  1834 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.895   556  1834 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.895  1497  1520 I AiAiEcho: Settings changed for uri: content://settings/secure/nearby_sharing_component
-09-28 09:42:07.896  1497  1761 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
-09-28 09:42:07.896  1497  1761 I AiAiEcho: EchoTargets: 
-09-28 09:42:07.896  1497  1761 I AiAiEcho: Filtered by AiAi flag check: 
-09-28 09:42:07.896  1497  1761 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
-09-28 09:42:07.900  1349  1353 W gle.android.gms: Missing inline cache for ajmy ajmz.b(android.content.Context, java.util.Map, ajni)
-09-28 09:42:07.900  1349  1353 W gle.android.gms: Missing inline cache for ajmy ajmz.b(android.content.Context, java.util.Map, ajni)
-09-28 09:42:07.900   556  1841 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.900  1497  1761 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
-09-28 09:42:07.901   556  1841 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.904  1349  1604 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
-09-28 09:42:07.904  1349  1604 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
-09-28 09:42:07.904  1349  1604 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
-09-28 09:42:07.907  1497  1761 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
-09-28 09:42:07.907  1497  1761 I AiAiEcho: Predicting[0]:  [CONTEXT sampling_count=5 ]
-09-28 09:42:07.907  1497  1761 I AiAiEcho: EchoTargets: 
-09-28 09:42:07.907  1497  1761 I AiAiEcho: Filtered by AiAi flag check: 
-09-28 09:42:07.907  1497  1761 I AiAiEcho: [CONTEXT ratelimit_period="10 SECONDS" ]
-09-28 09:42:07.907  1497  1761 I AiAiEcho: Ranked targets strategy: SORT, count: 0, ranking metadata:  [CONTEXT ratelimit_period="10 SECONDS" ]
-09-28 09:42:07.907  1497  1761 I AiAiEcho: #remoteViewsTwiddler: feature disabled.
-09-28 09:42:07.908  1497  1761 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface lockscreen with targets# 0 (types=[])
-09-28 09:42:07.908  1497  1761 I AiAiEcho: #postPredictionTargets: Sending updates to UISurface home with targets# 0 (types=[])
-09-28 09:42:07.909   556  1840 I Telecom : PhoneAccountRegistrar: setUserSelectedOutgoingPhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}: TSI.sUSOPA@AJM🔒
-09-28 09:42:07.911   556  1840 I Telecom : PhoneAccountRegistrar: setUserSelectedOutgoingPhoneAccount: no change to voice sub: TSI.sUSOPA@AJM🔒
-09-28 09:42:07.914  1349  2314 D ActivityThread: Loading provider com.google.android.gms.nearby.sharing: com.google.android.gms.nearby.sharing.SharingSliceProvider
-09-28 09:42:07.919  1349  2314 D CompatChangeReporter: Compat change id reported: 3400644; UID 10142; state: ENABLED
-09-28 09:42:07.922  1075  1075 D MultiSimSettingController: isReadyToReevaluate: subInfoInitialized=true, carrierConfigsLoaded=true, satelliteEnabledOrBeingEnabled=false
-09-28 09:42:07.924  1075  1075 D CarrierKeyDownloadManager [0]: CarrierConfig changed slotIndex = 0 subId = 1 CarrierId = 1 phoneId = 0
-09-28 09:42:07.925  1075  1075 D CarrierKeyDownloadManager [0]: updateSimOperator, Initialized mMccMncForDownload = 310260
-09-28 09:42:07.925  1075  1075 D CarrierKeyDownloadManager [0]: Carrier Config changed: slotIndex=0
-09-28 09:42:07.928   500   500 W libgoldfish-rild: Multi-element reporting criteria are not supported with HIDL HAL
-09-28 09:42:07.936   556  1840 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.936   556  1840 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.941   556  1840 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 09:42:07.941   556  1840 D PackageManager: Clear ephemeral installer activity
-09-28 09:42:07.942  1380  2180 W NotificationScheduler: <DWB> Cannot reschedule growth notification, not scheduled.
-09-28 09:42:07.952  1646  1652 I earchbox:search: Compiler allocated 4565KB to compile java.lang.Object com.google.android.apps.gsa.binaries.velvet.app.ahh.a()
-09-28 09:42:07.977  1534  1953 I TRG.RoutingOracle: (REDACTED) Connection state changed: %s.
-09-28 09:42:07.978  1534  1793 I TRG.HotwordFrontend: (REDACTED) Configuration=%s changed; frontend=%s is not running.
-09-28 09:42:07.985  1075  1075 W FeatureConnection: getRegistrationTech: ImsRegistration is null
-09-28 09:42:07.986  1534  1895 I TRG.RoutingOracle: (REDACTED) Invocations routing has changed
-09-28 09:42:07.986  1534  1895 I TRG.RoutingOracle: %s
-09-28 09:42:07.990  1075  1075 V SimultaneousCallingTracker: Received EVENT 101
-09-28 09:42:07.990  1075  1075 D SimultaneousCallingTracker: Ignoring updatePhoneMapAndSimultaneousCallSupportMap since device is not DSDA capable.
-09-28 09:42:07.990  1075  1075 I Telephony: Carrier-config changed, checking for phone account updates.
-09-28 09:42:07.990  1075  1075 D Telephony: TelecomAccountRegistry: handleCarrierConfigChange: subId=1, accountSubId=1
-09-28 09:42:07.996  1075  1075 D Telephony: isEmergencyPreferredAccount: subId=1, activeData=-1
-09-28 09:42:07.996  1075  1075 D Telephony: isEmergencyPreferredAccount: Device does not require preference.
-09-28 09:42:07.996  1075  1075 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
-09-28 09:42:07.999  1075  1075 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
-09-28 09:42:07.999  1075  1075 I Telephony:  isRttSupported: false
-09-28 09:42:07.999  1075  1075 I Telephony:  alwaysAllowWhileRoaming: false
-09-28 09:42:07.999  1075  1075 I Telephony:  isRoaming: false
-09-28 09:42:07.999  1075  1075 I Telephony:  isOnWfc: false
-09-28 09:42:08.006  2692  2692 I droid.dynsystem: Using CollectorTypeCMC GC.
-09-28 09:42:08.007  2692  2692 W droid.dynsystem: Unexpected CPU variant for x86: x86_64.
-09-28 09:42:08.007  2692  2692 W droid.dynsystem: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
-09-28 09:42:08.008  2692  2692 E droid.dynsystem: Not starting debugger since process cannot load the jdwp agent.
-09-28 09:42:08.012  2692  2692 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
-09-28 09:42:08.017  1349  1638 I Icing   : Query from package: com.google.android.gms, component: AppsCorpus, restrict package: com.google.android.gms, start: 0, num: 100
-09-28 09:42:08.045  2455  2625 I ComposerWrapperImpl: Done initializing en-us-x-iog-lstm-embedded
-09-28 09:42:08.046  1349  1604 W Conscrypt: Could not set socket write timeout: java.net.SocketException: Socket closed
-09-28 09:42:08.046  1349  1604 W Conscrypt: 	at com.google.android.gms.org.conscrypt.Platform.setSocketWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):204)
-09-28 09:42:08.046  1349  1604 W Conscrypt: 	at com.google.android.gms.org.conscrypt.ConscryptFileDescriptorSocket.setSoWriteTimeout(:com.google.android.gms@242335041@24.23.35 (190800-646585959):4)
-09-28 09:42:08.057  1075  1082 I m.android.phone: Background concurrent mark compact GC freed 3897KB AllocSpace bytes, 13(544KB) LOS objects, 49% free, 3869KB/7738KB, paused 241us,474us total 379.862ms
-09-28 09:42:08.078  2455  2625 I tflite  : Created TensorFlow Lite XNNPACK delegate for CPU.
-09-28 09:42:08.078  2455  2625 W tflite  : Attempting to use a delegate that only supports static-sized tensors with a graph that has dynamic-sized tensors (tensor#26 is a dynamic-sized tensor).
-09-28 09:42:08.093  1175  2179 I GCoreUlr: Unbound from all signal providers.
-09-28 09:42:08.099  1175  2356 I SQLiteCastDBHelper: Creating cast database
-09-28 09:42:08.099  1175  1467 I Nearby  : Beginning attempt #1 for RestoreDeviceName... [CONTEXT service_id=49 ]
-09-28 09:42:08.099  1175  1409 I CastSocket: Adding new CastClientAuthKeyManager. [CONTEXT service_id=161 ]
-09-28 09:42:08.113   556   834 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
-09-28 09:42:08.114   556   834 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
-09-28 09:42:08.114   556   834 D InetDiagMessage: Destroyed live tcp sockets for uids={10145} in 1ms
-09-28 09:42:08.114   556   834 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
-09-28 09:42:08.118  1175  1175 I NearbyDiscovery: DiscoveryService onStartCommand action: com.google.android.gms.nearby.discovery:ACTION_INIT_RUNTIME_STATE [CONTEXT service_id=265 ]
