@@ -1,6 +1,6 @@
 status=PASS
-commit=07d3874d5770fac24f0a592d3b4934790bcd2f0c
-run=36424685551
+commit=e6613d9ff2cfe6e980339054a44013a8d533a408
+run=36435893700
 attempt=1
 build_exit_code=0
 smoke_exit_code=0
@@ -36,9 +36,9 @@ Daemon will be stopped at the end of the build
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
-> Task :app:processDebugResources
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs
+> Task :app:processDebugResources
 > Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
@@ -48,7 +48,6 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:writeDebugAppMetadata
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
-
 > Task :app:compileDebugKotlin
 w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:472:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:566:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
@@ -68,129 +67,129 @@ w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790600003519.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790605569387.json
 
-BUILD SUCCESSFUL in 49s
+BUILD SUCCESSFUL in 1m 2s
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.a(PG:9)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.queryNonIndexableKeys(PG:6)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.provider.SearchIndexablesProvider.query(SearchIndexablesProvider.java:127)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1620)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1716)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider$Transport.query(ContentProvider.java:295)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:107)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1500)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransact(Binder.java:1444)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: Caused by: java.lang.IllegalStateException: No account, cannot provide search indexables
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at gnu.a(PG:53)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqn.a(PG:3)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.d(PG:2)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:9)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.m(PG:2)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npz.e(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.o(PG:5)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.e(PG:2)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsp.run(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsq.run(PG:4)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at ief.run(PG:1)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nmv.run(PG:24)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at idl.run(PG:66)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at java.lang.Thread.run(Thread.java:1012)
-09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at iem.run(PG:6)
-09-28 12:55:55.177  1316  2918 I ModuleSetResolution: Pending container module APKs: []
-09-28 12:55:55.177  1316  2918 I ModuleSetResolution: Pending non-container module APKs: []
-09-28 12:55:55.178  1316  1638 I SystemUpdate: [Execution,InstallationIntentOperation] Received intent: Intent { act=com.google.android.gms.update.INSTALL_UPDATE cat=[targeted_intent_op_prefix:.update.execution.InstallationIntentOperation] cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }.
-09-28 12:55:55.182  2949  3109 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.183  2949  3109 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.184  3118  3118 V NativeCrypto: Registering com/google/android/gms/org/conscrypt/NativeCrypto's 305 native methods...
-09-28 12:55:55.189  3117  3201 W DynamiteModule: Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
-09-28 12:55:55.192  1316  1316 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.ocr.service.internal.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsInternalApiService }
-09-28 12:55:55.192  1316  1316 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.ocr.service.internal.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsInternalApiService }
-09-28 12:55:55.199  1183  1895 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
-09-28 12:55:55.200  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.202  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.202  2949  3107 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.apps.messaging.settings.search/settings/dynamic_indexables_raw
-09-28 12:55:55.202  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.202  3115  3163 I Bugle   : MessagesSearchIndexablesProvider: Querying NonIndexableKeys.
-09-28 12:55:55.207   359   359 I netd    : tetherGetStats() -> {[]} <0.29ms>
-09-28 12:55:55.212  3117  3201 W ProviderInstaller: Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
-09-28 12:55:55.212  1225  1225 D StatsLog: LAUNCHER_ALLAPPS_COUNT
-09-28 12:55:55.214  1225  1259 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.settings.intelligence]
-09-28 12:55:55.221  3118  3118 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
-09-28 12:55:55.222   359   359 I netd    : tetherGetStats() -> {[]} <0.26ms>
-09-28 12:55:55.223  1225  1259 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.settings.intelligence
-09-28 12:55:55.227  1225  1259 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.cellbroadcastreceiver]
-09-28 12:55:55.229  1225  1259 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.cellbroadcastreceiver
-09-28 12:55:55.231   359   359 I netd    : bandwidthSetGlobalAlert(2097152) <0.16ms>
-09-28 12:55:55.234   359   359 I netd    : bandwidthRemoveInterfaceQuota(eth0) <0.63ms>
-09-28 12:55:55.236   359   359 I netd    : bandwidthSetInterfaceQuota(eth0, 9223372036854775807) <0.47ms>
-09-28 12:55:55.244  1542  1734 I A       : (REDACTED) Device Compliance Fetch time taken = %sms
-09-28 12:55:55.244  1542  1734 I A       : Device is compliant!
-09-28 12:55:55.244  1542  1734 I A       : Invoking "compliant" action...
-09-28 12:55:55.245  1316  1638 I SystemUpdate: [Control,InstallationControl] Installation progress updated to (0x000, -1.000).
-09-28 12:55:55.246  3117  3201 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/org.apache.http.legacy.jar
-09-28 12:55:55.253  1183  1183 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.auth.account.workaccount.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
-09-28 12:55:55.260  3117  3201 D nativeloader: Configuring clns-8 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
-09-28 12:55:55.261  3117  3201 D nativeloader: Configuring clns-9 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
-09-28 12:55:55.262  3117  3201 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
-09-28 12:55:55.262  3117  3201 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
-09-28 12:55:55.269   554   575 I SystemUpdateManagerService: No existing info file /data/system/system-update-info.xml
-09-28 12:55:55.276   554  1224 W JobInfo : Job 'com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService#1728' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
-09-28 12:55:55.288  3117  3201 D nativeloader: Configuring product-clns-10 for unbundled product apk /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk. target_sdk_version=34, uses_libraries=, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64:/product/lib64:/system/product/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms:/product/lib64:/system/product/lib64
-09-28 12:55:55.289  3117  3201 W ProviderInstaller: Failed to report request stats: com.google.android.gms.common.security.ProviderInstallerImpl.reportRequestStats [class android.content.Context, long, long]
-09-28 12:55:55.297  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.298  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
-09-28 12:55:55.320  1316  1518 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
-09-28 12:55:55.320  1316  1518 I Icing   : doRemovePackageData com.google.android.gms.supervision
-09-28 12:55:55.328  3117  3201 D nativeloader: Load /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64/libconscrypt_gmscore_jni.so using ns product-clns-10 from class loader (caller=/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!classes3.dex): ok
-09-28 12:55:55.332   554  1932 D FileUtils: Rounded bytes from 4110737408 to 8000000000
-09-28 12:55:55.333  3117  3201 V NativeCrypto: Registering com/google/android/gms/org/conscrypt/NativeCrypto's 305 native methods...
-09-28 12:55:55.339  1316  1638 I SystemUpdate: [Execution,ExecutionManager] Action pending executed for 0.13 seconds.
-09-28 12:55:55.347  3115  3115 W GnpSdk  : Failed to get GrowthKitJobScheduler in GrowthKitBootCompletedBroadcastReceiver So GrowthKit failed to schedule jobs after package replaced / boot completed.
-09-28 12:55:55.347  3115  3115 W GnpSdk  : java.lang.NullPointerException: Attempt to invoke interface method 'java.lang.Object eeaz.b()' on a null object reference
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at com.google.android.libraries.internal.growth.growthkit.inject.GrowthKitBootCompletedBroadcastReceiver.onReceive(PG:54)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:4772)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2436)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.os.Handler.dispatchMessage(Handler.java:107)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.os.Looper.loopOnce(Looper.java:232)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.os.Looper.loop(Looper.java:317)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread.main(ActivityThread.java:8705)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at java.lang.reflect.Method.invoke(Native Method)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
-09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
-09-28 12:55:55.359  3117  3201 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
-09-28 12:55:55.373  1316  1638 I SystemUpdate: [Execution,ExecutionManager] Action finished-execution executed for 0.00 seconds.
-09-28 12:55:55.380   554  1932 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 12:55:55.380   554  1932 D PackageManager: Clear ephemeral installer activity
-09-28 12:55:55.383  3115  3115 I Bugle   : DarkModeManager: setDarkMode: -1
-09-28 12:55:55.388  3117  3192 D CompatChangeReporter: Compat change id reported: 253665015; UID 10135; state: ENABLED
-09-28 12:55:55.389   554  1224 D CompatChangeReporter: Compat change id reported: 253665015; UID 10135; state: ENABLED
-09-28 12:55:55.410  3118  3118 I GmsApplication: [gms_startup_benchmark] Static start time (ms): 51365, Startup latency (ms): 558, Is system user: true
-09-28 12:55:55.412  3118  3118 W ebcf    : Primes not initialized, returning default (no-op) Primes instance which will ignore all calls. Please call Primes.initialize(...) before using any Primes API.
-09-28 12:55:55.417   554  1224 D CompatChangeReporter: Compat change id reported: 271850009; UID 10135; state: ENABLED
-09-28 12:55:55.417   554  1224 D ConnectivityService: requestNetwork for uid/pid:1000/554 asUid: 10135 activeRequest: null callbackRequest: 96 [NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false
-09-28 12:55:55.417  1316  1518 I Icing   : doRemovePackageData com.google.android.gms.supervision
-09-28 12:55:55.419   554   825 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
-09-28 12:55:55.420   554   825 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
-09-28 12:55:55.420   554   825 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
-09-28 12:55:55.420   554   825 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
-09-28 12:55:55.421   554   832 D ConnectivityService: NetReassign [97 : null → 100] [c 0] [a 0] [i 3]
-09-28 12:55:55.435  3117  3207 D CompatChangeReporter: Compat change id reported: 263076149; UID 10135; state: ENABLED
-09-28 12:55:55.436  1542  2460 V ClearcutMetricXmitter: Transmission is done.
-09-28 12:55:55.437  3115  3232 D CompatChangeReporter: Compat change id reported: 279646685; UID 10132; state: ENABLED
-09-28 12:55:55.438  3115  3232 I Bugle   : Initializing EmojiCompat
-09-28 12:55:55.448  3118  3246 I GMS_MM_Logger: Start time: 52011
-09-28 12:55:55.448  3118  3246 I GMS_MM_Logger: Started.
+09-28 14:28:47.758   355  2804 I resolv  : doQuery: rcode=0, ancount=8, return value=160
+09-28 14:28:47.758  2801  2801 I m.android.shell: Using CollectorTypeCMC GC.
+09-28 14:28:47.759  2801  2801 W m.android.shell: Unexpected CPU variant for x86: x86_64.
+09-28 14:28:47.759  2801  2801 W m.android.shell: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
+09-28 14:28:47.759  1015  2785 D TrafficStats: tagSocket(126) with statsTag=0xffffff81, statsUid=-1
+09-28 14:28:47.761  2801  2801 E m.android.shell: Not starting debugger since process cannot load the jdwp agent.
+09-28 14:28:47.762   554  1745 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.771  2801  2801 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+09-28 14:28:47.774   554  1745 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:47.775   554  1745 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.783   355  2815 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10143 0}
+09-28 14:28:47.788   355  2816 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
+09-28 14:28:47.788   554  1745 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:47.788   554  1745 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.788   355  2817 I resolv  : res_nmkquery: (QUERY, IN, A)
+09-28 14:28:47.796  1377  1523 W NotificationScheduler: <DWB> Cannot reschedule growth notification, not scheduled.
+09-28 14:28:47.804   355  2817 I resolv  : res_nsend: used send_dg 164 terrno: 0
+09-28 14:28:47.804   355  2817 I resolv  : doQuery: rcode=0, ancount=8, return value=164
+09-28 14:28:47.805   355  2816 I resolv  : res_nsend: used send_dg 260 terrno: 0
+09-28 14:28:47.805   355  2816 I resolv  : doQuery: rcode=0, ancount=8, return value=260
+09-28 14:28:47.817  1015  2787 D NetworkMonitor/100: PROBE_HTTP http://connectivitycheck.gstatic.com/generate_204 time=122ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Mon, 28 Sep 2026 14:28:48 GMT], X-Android-Received-Millis=[1790605727801], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1790605727705]}
+09-28 14:28:47.835  1438  1983 I constellation: [intent_handler] on init with intent Intent { act=com.google.android.chimera.IntentOperation.NEW_MODULE (has extras) }
+09-28 14:28:47.839  1438  1746 E PhenotypeRegOp: Attempting to overwrite config package for com.google.android.finder_shared#com.google.android.gms [CONTEXT service_id=231 ]
+09-28 14:28:47.840  1438  1746 E PhenotypeRegOp: Attempting to overwrite config package for com.google.android.gms.games [CONTEXT service_id=231 ]
+09-28 14:28:47.848  1438  1746 E PhenotypeRegOp: Attempting to overwrite config package for com.google.android.gms.maps#com.google.android.gms [CONTEXT service_id=231 ]
+09-28 14:28:47.849  1101  1101 I Telephony: TelecomAccountRegistry$AccountEntry: registerPstnPhoneAccount: Registering account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with Telecom. subId=1
+09-28 14:28:47.855  1438  1746 E PhenotypeRegOp: Attempting to overwrite config package for com.google.android.gms.mobile_data_plan [CONTEXT service_id=231 ]
+09-28 14:28:47.869  1015  2785 D NetworkMonitor/100: PROBE_HTTPS https://www.google.com/generate_204 time=119ms ret=204 request={Connection=[close], User-Agent=[Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.32 Safari/537.36]} headers={null=[HTTP/1.1 204 No Content], Alt-Svc=[h3=":443"; ma=2592000,h3-29=":443"; ma=2592000], Connection=[close], Content-Length=[0], Cross-Origin-Resource-Policy=[cross-origin], Date=[Mon, 28 Sep 2026 14:28:48 GMT], X-Android-Received-Millis=[1790605727869], X-Android-Response-Source=[NETWORK 204], X-Android-Selected-Protocol=[http/1.1], X-Android-Sent-Millis=[1790605727859]}
+09-28 14:28:47.870  1438  1746 E PhenotypeRegOp: Attempting to overwrite config package for com.google.android.libraries.spot#com.google.android.gms [CONTEXT service_id=231 ]
+09-28 14:28:47.871   554  1007 I AppWidgetServiceImpl: getInstalledProvidersForProfiles() 0
+09-28 14:28:47.872   554  1254 I AppWidgetServiceImpl: notifyProviderInheritance() 0
+09-28 14:28:47.880  1438  1746 E PhenotypeRegOp: Attempting to overwrite config package for com.google.android.gms.udc [CONTEXT service_id=231 ]
+09-28 14:28:47.903  2801  2801 D nativeloader: Configuring clns-shared-7 for other apk /system/priv-app/Shell/Shell.apk. target_sdk_version=35, uses_libraries=, library_path=/system/priv-app/Shell/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user_de/0/com.android.shell:/system/priv-app/Shell:/system/lib64:/system_ext/lib64
+09-28 14:28:47.904   554  2187 I Telecom : CallsManager: updateEmergencyCallNotificationAsync; show=false: CM.UEMCNA@AH0❗
+09-28 14:28:47.905  1015  2784 D NetworkMonitor/100: isCaptivePortal: isSuccessful()=true isPortal()=false RedirectUrl=null isPartialConnectivity()=false Time=349ms
+09-28 14:28:47.911  2801  2801 D CompatChangeReporter: Compat change id reported: 202956589; UID 2000; state: ENABLED
+09-28 14:28:47.911   554   848 D ConnectivityService: [100 WIFI] validation passed
+09-28 14:28:47.914  1242  1248 I .gms.persistent: Background concurrent mark compact GC freed 10MB AllocSpace bytes, 40(4148KB) LOS objects, 49% free, 18MB/37MB, paused 293.818ms,315.907ms total 1.792s
+09-28 14:28:47.916   554   601 D ShortcutService: Getting shortcuts for launcher= com.google.android.asuser=0 pkg=com.google.android.googlequicksearchbox
+09-28 14:28:47.916   554   601 D ShortcutService: Getting shortcuts for launcher= com.google.android.apps.nexuslauncheruser=0 pkg=com.google.android.googlequicksearchbox
+09-28 14:28:47.916   554   601 D ShortcutService: Getting shortcuts for launcher= com.android.systemuiuser=0 pkg=com.google.android.googlequicksearchbox
+09-28 14:28:47.917   554   601 D ShortcutService: Getting shortcuts for launcher= com.google.android.asuser=0 pkg=com.google.android.gms
+09-28 14:28:47.922   554   590 W Looper  : Slow dispatch took 249ms android.fg h=android.os.Handler c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@5b48cd5 m=0
+09-28 14:28:47.922   554   590 W Looper  : Slow delivery took 241ms android.fg h=android.os.Handler c=com.android.server.power.hint.HintManagerService$MyUidObserver$$ExternalSyntheticLambda0@2870cea m=0
+09-28 14:28:47.926   554   590 W Looper  : Drained
+09-28 14:28:47.927   554   876 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+09-28 14:28:47.929   554   554 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.gSCMFU(a)@AHs🔒
+09-28 14:28:47.929   554   554 W Looper  : Slow dispatch took 256ms main h=android.app.ActivityThread$H c=android.app.LoadedApk$ReceiverDispatcher$Args$$ExternalSyntheticLambda0@a9f91cb m=0
+09-28 14:28:47.929   554   554 W Looper  : Slow delivery took 249ms main h=com.android.server.power.Notifier$NotifierHandler c=null m=7
+09-28 14:28:47.931  1242  1250 W .gms.persistent: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/Velvet/Velvet.apk' with 1 weak references
+09-28 14:28:47.934   554   554 W Looper  : Drained
+09-28 14:28:47.935  2801  2801 V GraphicsEnvironment: Currently set values for:
+09-28 14:28:47.935  2801  2801 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-28 14:28:47.935  2801  2801 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-28 14:28:47.935  2801  2801 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+09-28 14:28:47.938  2801  2801 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+09-28 14:28:47.941  1438  1826 E constellation: [event_manager] Couldn't get GCM token
+09-28 14:28:47.941  1438  1826 E constellation: java.io.IOException: AUTHENTICATION_FAILED
+09-28 14:28:47.941  1438  1826 E constellation: 	at bhis.f(:com.google.android.gms@242335041@24.23.35 (190800-646585959):31)
+09-28 14:28:47.941  1438  1826 E constellation: 	at bhib.e(:com.google.android.gms@242335041@24.23.35 (190800-646585959):68)
+09-28 14:28:47.941  1438  1826 E constellation: 	at bhib.d(:com.google.android.gms@242335041@24.23.35 (190800-646585959):77)
+09-28 14:28:47.941  1438  1826 E constellation: 	at bhib.c(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+09-28 14:28:47.941  1438  1826 E constellation: 	at com.google.android.gms.constellation.EventManager.a(:com.google.android.gms@242335041@24.23.35 (190800-646585959):15)
+09-28 14:28:47.941  1438  1826 E constellation: 	at com.google.android.gms.constellation.EventManager.b(:com.google.android.gms@242335041@24.23.35 (190800-646585959):59)
+09-28 14:28:47.941  1438  1826 E constellation: 	at com.google.android.gms.constellation.EventManager.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):233)
+09-28 14:28:47.941  1438  1826 E constellation: 	at com.google.android.chimera.IntentOperation.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):2)
+09-28 14:28:47.941  1438  1826 E constellation: 	at ajom.onHandleIntent(:com.google.android.gms@242335041@24.23.35 (190800-646585959):8)
+09-28 14:28:47.941  1438  1826 E constellation: 	at pkf.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):70)
+09-28 14:28:47.941  1438  1826 E constellation: 	at pke.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):152)
+09-28 14:28:47.941  1438  1826 E constellation: 	at emsz.run(:com.google.android.gms@242335041@24.23.35 (190800-646585959):21)
+09-28 14:28:47.941  1438  1826 E constellation: 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+09-28 14:28:47.941  1438  1826 E constellation: 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+09-28 14:28:47.941  1438  1826 E constellation: 	at java.lang.Thread.run(Thread.java:1012)
+09-28 14:28:47.942   554  1881 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:47.942   554  1881 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.949   554  1877 I Telecom : TelecomServiceImpl$1: registerPhoneAccount: account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AHw🔒
+09-28 14:28:47.949  2374  2757 D TrafficStats: tagSocket(118) with statsTag=0x1803, statsUid=10143
+09-28 14:28:47.949  1438  1870 W Icing   : Failed to get Lockbox signed-in status: java.util.concurrent.TimeoutException: Timed out waiting for Task
+09-28 14:28:47.949  1438  1870 W Icing   : getSignedInAccountName: Falling back to default value
+09-28 14:28:47.950   554  1877 I Telecom : PhoneAccountRegistrar: Modify account: [ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}]: TSI.rPA(cap)@AHw🔒
+09-28 14:28:47.950   927  1226 I PermissionControllerServiceImpl: Updating user sensitive for uid 1027
+09-28 14:28:47.952  2374  2757 D TrafficStats: tagSocket(119) with statsTag=0x1803, statsUid=10143
+09-28 14:28:47.954  1438  1825 W gle.android.gms: Long monitor contention with owner [com.google.android.gms.chimera.container.intentoperation.GmsIntentOperationChimeraService-Executor] processing com.google.android.gms.icing.proxy.UpdateIcingCorporaIntentOperation for action com.google.android.gms.ENTIRE_PACKAGE_CHANGED (1749) at void pkf.run()(:com.google.android.gms@242335041@24.23.35 (190800-646585959):73) waiters=0 in void pkf.run() for 6.961s
+09-28 14:28:47.954  1242  1242 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.tapandpay.service.BIND dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+09-28 14:28:47.954  1242  1242 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.tapandpay.service.BIND dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+09-28 14:28:47.954  1242  1250 W .gms.persistent: ApkAssets: Deleting an ApkAssets object '<empty> and /product/app/LatinIMEGooglePrebuilt/LatinIMEGooglePrebuilt.apk' with 1 weak references
+09-28 14:28:47.957   554  1877 I Telecom : CallsManager: handlePhoneAccountChanged: phoneAccount=[[X] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AHw🔒
+09-28 14:28:47.958  1438  1825 D ActivityThread: Loading provider com.google.android.gms.icing.proxy: com.google.android.gms.icing.proxy.InternalIcingCorporaProvider
+09-28 14:28:47.961   554  1254 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:47.961   554  1254 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.962  1242  1242 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.auth.aang.events.services.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+09-28 14:28:47.962  1242  1242 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.auth.aang.events.services.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+09-28 14:28:47.964   554  1150 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:47.964   554  1150 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.966  1438  1826 W constellation: [event_manager] Event manager is not initialized
+09-28 14:28:47.967   554   841 D WifiService: Remove settings for package:com.android.nfc
+09-28 14:28:47.967   554   841 D WifiConfigManager: Remove all networks for app ApplicationInfo{be8f1ec com.android.nfc}
+09-28 14:28:47.967   554   841 I PasspointManager: No app ops listener found for com.android.nfc
+09-28 14:28:47.972  1174  1178 I s.nexuslauncher: NativeAlloc concurrent mark compact GC freed 1277KB AllocSpace bytes, 16(1208KB) LOS objects, 49% free, 5148KB/10MB, paused 131us,25.187ms total 637.101ms
+09-28 14:28:47.975   554  1265 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:47.975   554  1265 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:47.979   554  1877 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.rPA(cap)@AHw🔒
+09-28 14:28:47.979   554  1877 I Telecom : PhoneAccountRegistrar: Notifying telephony of voice service override change for 1 SIMs, hasService = false: TSI.rPA(cap)@AHw🔒
+09-28 14:28:47.979  1438  2290 W gle.android.gms: Long monitor contention with owner highpool[3] (1870) at bfgz bfhb.f(java.lang.String)(:com.google.android.gms@242335041@24.23.35 (190800-646585959):12) waiters=0 in hug bfxx.g(java.lang.String) for 817ms
+09-28 14:28:47.983   554   681 I RoleService: Granting default roles...
+09-28 14:28:47.983  1438  2290 I Icing   : Query from package: com.google.android.gms, component: AppsCorpus, restrict package: com.google.android.gms, start: 0, num: 100
+09-28 14:28:47.988  1242  2718 I GmsCoreVoilaTileGrpc: grpc compression enabled: gzip
+09-28 14:28:47.998  1377  1510 I WM-WorkerWrapper: Worker result SUCCESS for Work [ id=982338e5-a80e-4e52-8e61-2a5bd6c0954b, tags={ com.google.apps.tiktok.contrib.work.TikTokListenableWorker,TikTokWorker#com.google.android.apps.wellbeing.fences.FenceRecovery } ]
+09-28 14:28:48.002  1101  1101 I PhoneInterfaceManager: setVoiceServiceStateOverride: subId=1, phone=Handler (com.android.internal.telephony.GsmCdmaPhone) {6fc16ca}, hasService=false, callingPackage=com.android.server.telecom
+09-28 14:28:48.008  1242  1242 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.nearby.sharing.START_SERVICE dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiServiceNoInstantApps }
+09-28 14:28:48.009  1242  1242 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.nearby.sharing.START_SERVICE dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiServiceNoInstantApps }
+09-28 14:28:48.010  2374  2757 D TrafficStats: tagSocket(119) with statsTag=0x1803, statsUid=10143
+09-28 14:28:48.016  1101  1101 I Telephony: TelecomAccountRegistry$AccountEntry: Registered phoneAccount: [[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with handle: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}
+09-28 14:28:48.016  1101  1101 I Telephony: PstnIncomingCallNotifier: Registering: [0]
+09-28 14:28:48.016  1101  1101 D Telephony: Registering: Handler (com.android.internal.telephony.GsmCdmaPhone) {6fc16ca}
+09-28 14:28:48.023   554  1811 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 14:28:48.023   554  1811 D PackageManager: Clear ephemeral installer activity
+09-28 14:28:48.024   554  1045 W Role    : Default holder doesn't have required signing certificate: com.google.android.retaildemo:6547c73dee150c103980bfdffe55cc9a011d785dd694a5f99afd8205bcaf1f80
+09-28 14:28:48.024   554  1045 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTEM_SUPERVISION
+09-28 14:28:48.025   554  1045 W Role    : Default holder doesn't have required signing certificate: com.google.android.apps.work.clouddpc:23962F4B43B9857638EA66F4D419518EAE282491ACDA4B94707BD59003C45E58
