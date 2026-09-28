@@ -813,7 +813,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                         isValidRole(storedRole) &&
                         roleConfirmed
                     ) {
-                        profileRole = storedRole
+                        profileRole = storedRole.orEmpty()
                         cacheRole(uid, storedRole)
                         verificationStatus = document.getString("verificationStatus")
                             .orEmpty()
