@@ -813,7 +813,6 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                         isValidRole(storedRole) &&
                         roleConfirmed
                     ) {
-                        cacheRole(uid, storedRole)
                         profileRole = storedRole
                         cacheRole(uid, storedRole)
                         verificationStatus = document.getString("verificationStatus")
@@ -974,7 +973,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                         profileLoaded = true
                         authScreen = AuthScreen.RoleSelection
                     }
-                }
+                },
                 onFailure = {
                     val fallbackRole = cachedRole(uid)
                     if (isValidRole(fallbackRole)) {
