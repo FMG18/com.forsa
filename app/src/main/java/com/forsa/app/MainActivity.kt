@@ -2391,7 +2391,7 @@ private fun JobsTab(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text("ابحث عن فرصة", fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        ForsaSectionTitle("اكتشف فرصة", "ابحث بالمسمى أو الشركة أو المدينة، ثم استخدم الفلاتر للوصول للنتيجة المناسبة.")
 
         OutlinedTextField(
             value = query,
@@ -2662,7 +2662,7 @@ private fun JobDetailsScreen(
                 Modifier.padding(20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text(job.title, fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                Text(job.title, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.ExtraBold)
                 Text(job.company, color = MaterialTheme.colorScheme.primary, fontSize = 17.sp)
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -3802,7 +3802,7 @@ private fun EmployerJobsScreen(
                         Modifier.padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(job.title, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                        Text(job.title, style = MaterialTheme.typography.titleLarge)
                         Text(job.company, color = MaterialTheme.colorScheme.primary)
                         Surface(
                             shape = ForsaUi.SmallShape,
@@ -5143,7 +5143,7 @@ private fun SavedJobsScreen(
                     tint = MaterialTheme.colorScheme.primary
                 )
                 Spacer(Modifier.height(16.dp))
-                Text("ما عندك وظائف محفوظة", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text("ما عندك وظائف محفوظة", style = MaterialTheme.typography.titleLarge)
                 Spacer(Modifier.height(6.dp))
                 Text(
                     "اضغط القلب على أي وظيفة حتى تحفظها.",
