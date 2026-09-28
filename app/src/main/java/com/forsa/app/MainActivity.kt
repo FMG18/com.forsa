@@ -5763,7 +5763,7 @@ private fun PasswordField(
 
 @Composable
 private fun AuthScaffold(content: @Composable ColumnScope.() -> Unit) {
-    Surface(Modifier.fillMaxSize()) {
+    Surface(Modifier.fillMaxSize(), color = ForsaUi.Background) {
         Column(
             Modifier
                 .fillMaxSize()
