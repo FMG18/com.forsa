@@ -1,11 +1,11 @@
-status=FAIL
-commit=60c104c640637515b0094d8f6a63847a02f5a78d
-run=36424343143
+status=PASS
+commit=07d3874d5770fac24f0a592d3b4934790bcd2f0c
+run=36424685551
 attempt=1
-build_exit_code=1
-smoke_exit_code=1
-smoke_outcome=failure
-summary=APK build failed with exit code 1.
+build_exit_code=0
+smoke_exit_code=0
+smoke_outcome=success
+summary=APK built successfully and launched on Android Emulator without a detected crash.
 
 --- build log tail ---
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
@@ -16,8 +16,8 @@ Daemon will be stopped at the end of the build
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :app:generateDebugBuildConfig
 > Task :app:generateDebugResValues
-> Task :app:checkDebugAarMetadata
 > Task :app:processDebugGoogleServices
+> Task :app:checkDebugAarMetadata
 > Task :app:mapDebugSourceSetPaths
 > Task :app:generateDebugResources
 > Task :app:packageDebugResources
@@ -36,9 +36,9 @@ Daemon will be stopped at the end of the build
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
 > Task :app:mergeDebugJniLibFolders
+> Task :app:processDebugResources
 > Task :app:checkDebugDuplicateClasses
 > Task :app:mergeDebugNativeLibs
-> Task :app:processDebugResources
 > Task :app:mergeLibDexDebug
 
 > Task :app:stripDebugDebugSymbols
@@ -49,24 +49,148 @@ Unable to strip the following libraries, packaging them as they are: libandroidx
 > Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeExtDexDebug
 
-> Task :app:compileDebugKotlin FAILED
-e: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:816:39 Assignment type mismatch: actual type is 'String?', but 'String' was expected.
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790599807337.json
+> Task :app:compileDebugKotlin
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:472:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:566:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2335:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2657:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3019:270 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3512:31 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3532:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5276:48 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
-FAILURE: Build failed with an exception.
+> Task :app:compileDebugJavaWithJavac
+> Task :app:dexBuilderDebug
+> Task :app:mergeDebugGlobalSynthetics
+> Task :app:processDebugJavaRes
+> Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect
+> Task :app:assembleDebug
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790600003519.json
 
-* What went wrong:
-Execution failed for task ':app:compileDebugKotlin'.
-> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
-   > Compilation error. See log for more details
-
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --info or --debug option to get more log output.
-> Run with --scan to get full insights.
-> Get more help at https://help.gradle.org.
-
-BUILD FAILED in 25s
-30 actionable tasks: 30 executed
+BUILD SUCCESSFUL in 49s
+38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.a(PG:9)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at com.google.android.apps.safetyhub.platformsettings.search.EmergencySearchIndexablesProvider.queryNonIndexableKeys(PG:6)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.provider.SearchIndexablesProvider.query(SearchIndexablesProvider.java:127)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1620)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider.query(ContentProvider.java:1716)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProvider$Transport.query(ContentProvider.java:295)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.content.ContentProviderNative.onTransact(ContentProviderNative.java:107)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransactInternal(Binder.java:1500)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at android.os.Binder.execTransact(Binder.java:1444)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: Caused by: java.lang.IllegalStateException: No account, cannot provide search indexables
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at gnu.a(PG:53)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqn.a(PG:3)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.d(PG:2)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:9)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.m(PG:2)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npz.e(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at a.d(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nrb.execute(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.g(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.j(PG:12)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npw.o(PG:5)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at npy.e(PG:2)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nqa.run(PG:13)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsp.run(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nsq.run(PG:4)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at ief.run(PG:1)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at nmv.run(PG:24)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at idl.run(PG:66)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at java.lang.Thread.run(Thread.java:1012)
+09-28 12:55:55.170  3117  3173 W Safetyhub.EmergencySearchIndexablesProvider: 	at iem.run(PG:6)
+09-28 12:55:55.177  1316  2918 I ModuleSetResolution: Pending container module APKs: []
+09-28 12:55:55.177  1316  2918 I ModuleSetResolution: Pending non-container module APKs: []
+09-28 12:55:55.178  1316  1638 I SystemUpdate: [Execution,InstallationIntentOperation] Received intent: Intent { act=com.google.android.gms.update.INSTALL_UPDATE cat=[targeted_intent_op_prefix:.update.execution.InstallationIntentOperation] cmp=com.google.android.gms/.chimera.GmsIntentOperationService (has extras) }.
+09-28 12:55:55.182  2949  3109 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.183  2949  3109 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.184  3118  3118 V NativeCrypto: Registering com/google/android/gms/org/conscrypt/NativeCrypto's 305 native methods...
+09-28 12:55:55.189  3117  3201 W DynamiteModule: Local module descriptor class for com.google.android.gms.providerinstaller.dynamite not found.
+09-28 12:55:55.192  1316  1316 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.ocr.service.internal.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsInternalApiService }
+09-28 12:55:55.192  1316  1316 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.ocr.service.internal.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.GmsInternalApiService }
+09-28 12:55:55.199  1183  1895 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+09-28 12:55:55.200  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.202  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.202  2949  3107 W RemoteCallableBase: Null cursor. Cannot add index data for Uri: content://com.google.android.apps.messaging.settings.search/settings/dynamic_indexables_raw
+09-28 12:55:55.202  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.202  3115  3163 I Bugle   : MessagesSearchIndexablesProvider: Querying NonIndexableKeys.
+09-28 12:55:55.207   359   359 I netd    : tetherGetStats() -> {[]} <0.29ms>
+09-28 12:55:55.212  3117  3201 W ProviderInstaller: Failed to load providerinstaller module: No acceptable module com.google.android.gms.providerinstaller.dynamite found. Local version is 0 and remote version is 0.
+09-28 12:55:55.212  1225  1225 D StatsLog: LAUNCHER_ALLAPPS_COUNT
+09-28 12:55:55.214  1225  1259 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.settings.intelligence]
+09-28 12:55:55.221  3118  3118 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
+09-28 12:55:55.222   359   359 I netd    : tetherGetStats() -> {[]} <0.26ms>
+09-28 12:55:55.223  1225  1259 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.settings.intelligence
+09-28 12:55:55.227  1225  1259 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.cellbroadcastreceiver]
+09-28 12:55:55.229  1225  1259 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.cellbroadcastreceiver
+09-28 12:55:55.231   359   359 I netd    : bandwidthSetGlobalAlert(2097152) <0.16ms>
+09-28 12:55:55.234   359   359 I netd    : bandwidthRemoveInterfaceQuota(eth0) <0.63ms>
+09-28 12:55:55.236   359   359 I netd    : bandwidthSetInterfaceQuota(eth0, 9223372036854775807) <0.47ms>
+09-28 12:55:55.244  1542  1734 I A       : (REDACTED) Device Compliance Fetch time taken = %sms
+09-28 12:55:55.244  1542  1734 I A       : Device is compliant!
+09-28 12:55:55.244  1542  1734 I A       : Invoking "compliant" action...
+09-28 12:55:55.245  1316  1638 I SystemUpdate: [Control,InstallationControl] Installation progress updated to (0x000, -1.000).
+09-28 12:55:55.246  3117  3201 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/org.apache.http.legacy.jar
+09-28 12:55:55.253  1183  1183 D BoundBrokerSvc: onUnbind: Intent { act=com.google.android.gms.auth.account.workaccount.START dat=chimera-action:/... cmp=com.google.android.gms/.chimera.PersistentApiService }
+09-28 12:55:55.260  3117  3201 D nativeloader: Configuring clns-8 for other apk /system/framework/com.android.media.remotedisplay.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+09-28 12:55:55.261  3117  3201 D nativeloader: Configuring clns-9 for other apk /system/framework/com.android.location.provider.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+09-28 12:55:55.262  3117  3201 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+09-28 12:55:55.262  3117  3201 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+09-28 12:55:55.269   554   575 I SystemUpdateManagerService: No existing info file /data/system/system-update-info.xml
+09-28 12:55:55.276   554  1224 W JobInfo : Job 'com.google.android.settings.intelligence/.modules.routines.impl.RoutinesJobIntentService#1728' has a deadline with no functional constraints. The deadline won't improve job execution latency. Consider removing the deadline.
+09-28 12:55:55.288  3117  3201 D nativeloader: Configuring product-clns-10 for unbundled product apk /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk. target_sdk_version=34, uses_libraries=, library_path=/product/priv-app/PrebuiltGmsCore/lib/x86_64:/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64:/product/lib64:/system/product/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms:/product/lib64:/system/product/lib64
+09-28 12:55:55.289  3117  3201 W ProviderInstaller: Failed to report request stats: com.google.android.gms.common.security.ProviderInstallerImpl.reportRequestStats [class android.content.Context, long, long]
+09-28 12:55:55.297  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.298  2949  3107 W MetricsFeatureProvider: Disabled westworld logs writing!!!
+09-28 12:55:55.320  1316  1518 I Icing   : Usage reports ok 0, Failed Usage reports 0, indexed 0, rejected 0
+09-28 12:55:55.320  1316  1518 I Icing   : doRemovePackageData com.google.android.gms.supervision
+09-28 12:55:55.328  3117  3201 D nativeloader: Load /product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!/lib/x86_64/libconscrypt_gmscore_jni.so using ns product-clns-10 from class loader (caller=/product/priv-app/PrebuiltGmsCore/PrebuiltGmsCore.apk!classes3.dex): ok
+09-28 12:55:55.332   554  1932 D FileUtils: Rounded bytes from 4110737408 to 8000000000
+09-28 12:55:55.333  3117  3201 V NativeCrypto: Registering com/google/android/gms/org/conscrypt/NativeCrypto's 305 native methods...
+09-28 12:55:55.339  1316  1638 I SystemUpdate: [Execution,ExecutionManager] Action pending executed for 0.13 seconds.
+09-28 12:55:55.347  3115  3115 W GnpSdk  : Failed to get GrowthKitJobScheduler in GrowthKitBootCompletedBroadcastReceiver So GrowthKit failed to schedule jobs after package replaced / boot completed.
+09-28 12:55:55.347  3115  3115 W GnpSdk  : java.lang.NullPointerException: Attempt to invoke interface method 'java.lang.Object eeaz.b()' on a null object reference
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at com.google.android.libraries.internal.growth.growthkit.inject.GrowthKitBootCompletedBroadcastReceiver.onReceive(PG:54)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread.handleReceiver(ActivityThread.java:4772)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread.-$$Nest$mhandleReceiver(Unknown Source:0)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2436)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.os.Handler.dispatchMessage(Handler.java:107)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.os.Looper.loopOnce(Looper.java:232)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.os.Looper.loop(Looper.java:317)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at android.app.ActivityThread.main(ActivityThread.java:8705)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at java.lang.reflect.Method.invoke(Native Method)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:580)
+09-28 12:55:55.347  3115  3115 W GnpSdk  : 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:886)
+09-28 12:55:55.359  3117  3201 I ProviderInstaller: Installed default security provider GmsCore_OpenSSL
+09-28 12:55:55.373  1316  1638 I SystemUpdate: [Execution,ExecutionManager] Action finished-execution executed for 0.00 seconds.
+09-28 12:55:55.380   554  1932 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+09-28 12:55:55.380   554  1932 D PackageManager: Clear ephemeral installer activity
+09-28 12:55:55.383  3115  3115 I Bugle   : DarkModeManager: setDarkMode: -1
+09-28 12:55:55.388  3117  3192 D CompatChangeReporter: Compat change id reported: 253665015; UID 10135; state: ENABLED
+09-28 12:55:55.389   554  1224 D CompatChangeReporter: Compat change id reported: 253665015; UID 10135; state: ENABLED
+09-28 12:55:55.410  3118  3118 I GmsApplication: [gms_startup_benchmark] Static start time (ms): 51365, Startup latency (ms): 558, Is system user: true
+09-28 12:55:55.412  3118  3118 W ebcf    : Primes not initialized, returning default (no-op) Primes instance which will ignore all calls. Please call Primes.initialize(...) before using any Primes API.
+09-28 12:55:55.417   554  1224 D CompatChangeReporter: Compat change id reported: 271850009; UID 10135; state: ENABLED
+09-28 12:55:55.417   554  1224 D ConnectivityService: requestNetwork for uid/pid:1000/554 asUid: 10135 activeRequest: null callbackRequest: 96 [NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]] callback flags: 0 order: 2147483647 isUidTracked: false
+09-28 12:55:55.417  1316  1518 I Icing   : doRemovePackageData com.google.android.gms.supervision
+09-28 12:55:55.419   554   825 D OemPaidWifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-28 12:55:55.420   554   825 D MultiInternetWifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-28 12:55:55.420   554   825 D WifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-28 12:55:55.420   554   825 D UntrustedWifiNetworkFactory: got request NetworkRequest [ REQUEST id=97, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10135 RequestorUid: 1000 RequestorPkg: android UnderlyingNetworks: Null] ]
+09-28 12:55:55.421   554   832 D ConnectivityService: NetReassign [97 : null → 100] [c 0] [a 0] [i 3]
+09-28 12:55:55.435  3117  3207 D CompatChangeReporter: Compat change id reported: 263076149; UID 10135; state: ENABLED
+09-28 12:55:55.436  1542  2460 V ClearcutMetricXmitter: Transmission is done.
+09-28 12:55:55.437  3115  3232 D CompatChangeReporter: Compat change id reported: 279646685; UID 10132; state: ENABLED
+09-28 12:55:55.438  3115  3232 I Bugle   : Initializing EmojiCompat
+09-28 12:55:55.448  3118  3246 I GMS_MM_Logger: Start time: 52011
+09-28 12:55:55.448  3118  3246 I GMS_MM_Logger: Started.
