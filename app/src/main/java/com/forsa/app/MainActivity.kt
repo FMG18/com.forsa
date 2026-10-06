@@ -1866,48 +1866,92 @@ private fun WelcomeScreen(
                 .verticalScroll(rememberScrollState())
                 .navigationBarsPadding()
                 .imePadding()
-                .padding(horizontal = 20.dp, vertical = 28.dp),
+                .padding(horizontal = 18.dp, vertical = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(Modifier.height(18.dp))
-            BrandMark()
-            Spacer(Modifier.height(18.dp))
-            Text("فرصة", style = MaterialTheme.typography.displayMedium)
-            Text(
-                "مساحتك لاكتشاف فرص العمل وبناء مسارك المهني",
-                style = MaterialTheme.typography.bodyLarge,
-                color = ForsaUi.Muted,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 8.dp)
-            )
-            Spacer(Modifier.height(28.dp))
+            Surface(
+                Modifier
+                    .fillMaxWidth()
+                    .height(265.dp),
+                shape = ForsaUi.SheetShape,
+                color = Color.Transparent
+            ) {
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .background(ForsaUi.HeroGradient, ForsaUi.SheetShape)
+                        .padding(24.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Surface(
+                        Modifier.size(78.dp),
+                        shape = CircleShape,
+                        color = Color.White.copy(alpha = .14f)
+                    ) {
+                        androidx.compose.foundation.layout.Box(
+                            Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                Icons.Default.Work,
+                                null,
+                                tint = Color.White,
+                                modifier = Modifier.size(36.dp)
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(15.dp))
+                    Text(
+                        "فرصة",
+                        style = MaterialTheme.typography.displayMedium,
+                        color = Color.White
+                    )
+                    Text(
+                        "مكان واحد للباحث عن عمل وصاحب العمل",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.White.copy(alpha = .88f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(top = 7.dp)
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(16.dp))
 
             Surface(
-                modifier = Modifier.fillMaxWidth(),
-                shape = ForsaUi.SheetShape,
+                Modifier.fillMaxWidth(),
+                shape = ForsaUi.CardShape,
                 color = ForsaUi.Surface,
                 border = BorderStroke(1.dp, ForsaUi.Border)
             ) {
                 Column(
                     Modifier.padding(18.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(11.dp)
                 ) {
                     ForsaMetaChip(
-                        "حساب آمن",
+                        "تجربة عراقية أولاً",
                         icon = { Icon(Icons.Default.Verified, null, Modifier.size(15.dp)) },
                         selected = true
                     )
-                    Text("ابدأ بالطريقة اللي تناسبك", style = MaterialTheme.typography.titleLarge)
                     Text(
-                        "سجل دخولك أو أنشئ حساب جديد خلال خطوات بسيطة.",
+                        "ابدأ بالطريقة اللي تناسبك",
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        "سجّل دخولك أو أنشئ حسابك، وبعدها نكمل معك خطوة بخطوة.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = ForsaUi.Muted
                     )
+
                     Button(
                         onClick = onGoogle,
                         enabled = !loading,
                         modifier = Modifier.fillMaxWidth().height(52.dp),
-                        shape = ForsaUi.FieldShape
+                        shape = ForsaUi.FieldShape,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = ForsaUi.PrimaryDark
+                        )
                     ) {
                         if (loading) {
                             CircularProgressIndicator(
@@ -1919,6 +1963,7 @@ private fun WelcomeScreen(
                             Text("المتابعة باستخدام Google")
                         }
                     }
+
                     OutlinedButton(
                         onClick = onEmailLogin,
                         modifier = Modifier.fillMaxWidth().height(50.dp),
@@ -1928,23 +1973,34 @@ private fun WelcomeScreen(
                         Spacer(Modifier.width(8.dp))
                         Text("الدخول بالبريد الإلكتروني")
                     }
-                    OutlinedButton(
-                        onClick = onPhone,
-                        enabled = !loading,
-                        modifier = Modifier.fillMaxWidth().height(50.dp),
-                        shape = ForsaUi.FieldShape
-                    ) {
-                        Text("المتابعة برقم الهاتف")
-                    }
-                    AuthDivider()
-                    TextButton(onClick = onRegister, modifier = Modifier.fillMaxWidth()) {
-                        Text("ليس لديك حساب؟ إنشاء حساب")
+
+                    Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
+                        OutlinedButton(
+                            onClick = onPhone,
+                            enabled = !loading,
+                            modifier = Modifier.weight(1f).height(50.dp),
+                            shape = ForsaUi.FieldShape
+                        ) {
+                            Text("الهاتف")
+                        }
+                        Button(
+                            onClick = onRegister,
+                            enabled = !loading,
+                            modifier = Modifier.weight(1f).height(50.dp),
+                            shape = ForsaUi.FieldShape,
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ForsaUi.Secondary
+                            )
+                        ) {
+                            Text("إنشاء حساب")
+                        }
                     }
                 }
             }
-            Spacer(Modifier.height(14.dp))
+
+            Spacer(Modifier.height(12.dp))
             Text(
-                "ابدأ حسابك، أكمل ملفك، وخلي فرصتك أقرب.",
+                "سجل حسابك، أكمل ملفك، واكتشف فرص أقرب لك.",
                 style = MaterialTheme.typography.labelMedium,
                 color = ForsaUi.Muted,
                 textAlign = TextAlign.Center,
@@ -1953,7 +2009,6 @@ private fun WelcomeScreen(
         }
     }
 }
-
 
 @Composable
 private fun BrandMark() {
@@ -2039,46 +2094,93 @@ private fun MainScaffold(
     Scaffold(
         containerColor = ForsaUi.Background,
         topBar = {
-            TopAppBar(
-                title = {
-                    Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                        Text(mainTitle(currentTab), style = MaterialTheme.typography.titleLarge)
+            Surface(
+                color = ForsaUi.Background
+            ) {
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        Modifier.size(44.dp),
+                        shape = ForsaUi.SmallShape,
+                        color = ForsaUi.PrimaryDark
+                    ) {
+                        androidx.compose.foundation.layout.Box(
+                            Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Work, null, tint = Color.White, modifier = Modifier.size(21.dp))
+                        }
+                    }
+                    Spacer(Modifier.width(11.dp))
+                    Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(1.dp)) {
                         Text(
-                            if (userName.isNotBlank()) "فرصة • $userName" else "فرصة",
+                            mainTitle(currentTab),
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(
+                            if (userName.isNotBlank()) "فرصة • $userName" else "منصة فرص العمل العراقية",
                             style = MaterialTheme.typography.labelMedium,
                             color = ForsaUi.Muted
                         )
                     }
-                },
-                navigationIcon = {
-                    BrandMark()
-                },
-                colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
-                    containerColor = ForsaUi.Background,
-                    scrolledContainerColor = ForsaUi.Background
-                )
-            )
+                    Surface(
+                        shape = ForsaUi.PillShape,
+                        color = ForsaUi.PrimarySoft
+                    ) {
+                        Text(
+                            if (role == "صاحب عمل") "صاحب عمل" else "باحث عن عمل",
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = ForsaUi.Primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
+            }
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = ForsaUi.Surface,
-                tonalElevation = 1.dp,
-                modifier = Modifier.background(ForsaUi.Surface, ForsaUi.NavShape)
+            Surface(
+                color = ForsaUi.Surface,
+                shape = ForsaUi.NavShape,
+                border = BorderStroke(1.dp, ForsaUi.Border)
             ) {
-                visibleTabs.forEach { item ->
-                    NavigationBarItem(
-                        selected = currentTab == item,
-                        onClick = { onTab(item) },
-                        icon = { Icon(tabIcon(item), contentDescription = null) },
-                        label = { Text(tabLabel(item), style = MaterialTheme.typography.labelMedium) },
-                        colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
-                            selectedIconColor = ForsaUi.Primary,
-                            selectedTextColor = ForsaUi.Primary,
-                            indicatorColor = ForsaUi.PrimarySoft,
-                            unselectedIconColor = ForsaUi.Muted,
-                            unselectedTextColor = ForsaUi.Muted
+                NavigationBar(
+                    containerColor = Color.Transparent,
+                    tonalElevation = 0.dp
+                ) {
+                    visibleTabs.forEach { item ->
+                        NavigationBarItem(
+                            selected = currentTab == item,
+                            onClick = { onTab(item) },
+                            icon = {
+                                Surface(
+                                    Modifier.size(if (currentTab == item) 38.dp else 34.dp),
+                                    shape = ForsaUi.PillShape,
+                                    color = if (currentTab == item) ForsaUi.PrimarySoft else Color.Transparent,
+                                    contentColor = if (currentTab == item) ForsaUi.Primary else ForsaUi.Muted
+                                ) {
+                                    androidx.compose.foundation.layout.Box(
+                                        Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Icon(tabIcon(item), contentDescription = null, modifier = Modifier.size(20.dp))
+                                    }
+                                }
+                            },
+                            label = { Text(tabLabel(item), style = MaterialTheme.typography.labelMedium) },
+                            colors = androidx.compose.material3.NavigationBarItemDefaults.colors(
+                                selectedIconColor = ForsaUi.Primary,
+                                selectedTextColor = ForsaUi.Primary,
+                                indicatorColor = Color.Transparent,
+                                unselectedIconColor = ForsaUi.Muted,
+                                unselectedTextColor = ForsaUi.Muted
+                            )
                         )
-                    )
+                    }
                 }
             }
         }
