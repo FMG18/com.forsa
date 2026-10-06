@@ -365,33 +365,38 @@ class MainActivity : ComponentActivity() {
 }
 
 private object ForsaUi {
-    val Primary = Color(0xFF5B4BDB)
-    val PrimaryDark = Color(0xFF4536B8)
-    val PrimarySoft = Color(0xFFEAE7FF)
-    val Secondary = Color(0xFF0D9F86)
-    val SecondarySoft = Color(0xFFDDF7F0)
-    val Ink = Color(0xFF171721)
-    val Muted = Color(0xFF6C6C7A)
-    val Background = Color(0xFFF5F6FA)
+    // New visual identity: deep graphite + emerald + warm orange accent.
+    val Primary = Color(0xFF0F766E)
+    val PrimaryDark = Color(0xFF0B3D3A)
+    val PrimarySoft = Color(0xFFDDF6F1)
+    val Secondary = Color(0xFFF97316)
+    val SecondarySoft = Color(0xFFFFEFE3)
+    val Ink = Color(0xFF101828)
+    val Muted = Color(0xFF667085)
+    val Background = Color(0xFFF7F8FA)
     val Surface = Color(0xFFFFFFFF)
-    val Border = Color(0xFFE4E5ED)
-    val Success = Color(0xFF14866B)
-    val SuccessSoft = Color(0xFFE2F6EF)
+    val Border = Color(0xFFE4E7EC)
+    val Success = Color(0xFF15803D)
+    val SuccessSoft = Color(0xFFE6F7EC)
     val Warning = Color(0xFFB7791F)
-    val WarningSoft = Color(0xFFFFF3D9)
-    val Danger = Color(0xFFC53D4A)
-    val DangerSoft = Color(0xFFFDE5E7)
+    val WarningSoft = Color(0xFFFFF5D7)
+    val Danger = Color(0xFFDC2626)
+    val DangerSoft = Color(0xFFFEECEC)
 
     val Gradient = Brush.linearGradient(
-        listOf(PrimaryDark, Primary, Color(0xFF7665EC))
+        listOf(PrimaryDark, Primary, Color(0xFF14B8A6))
     )
 
-    val CardShape = RoundedCornerShape(22.dp)
-    val SheetShape = RoundedCornerShape(28.dp)
-    val FieldShape = RoundedCornerShape(16.dp)
-    val SmallShape = RoundedCornerShape(12.dp)
+    val HeroGradient = Brush.linearGradient(
+        listOf(Color(0xFF0B3D3A), Color(0xFF0F766E), Color(0xFFF97316))
+    )
+
+    val CardShape = RoundedCornerShape(20.dp)
+    val SheetShape = RoundedCornerShape(30.dp)
+    val FieldShape = RoundedCornerShape(14.dp)
+    val SmallShape = RoundedCornerShape(11.dp)
     val PillShape = RoundedCornerShape(999.dp)
-    val NavShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
+    val NavShape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
 }
 
 private val ForsaShapes = androidx.compose.material3.Shapes(
@@ -402,16 +407,16 @@ private val ForsaShapes = androidx.compose.material3.Shapes(
 )
 
 private val ForsaTypography = androidx.compose.material3.Typography(
-    displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 34.sp, lineHeight = 40.sp, letterSpacing = (-0.6).sp),
-    displayMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 30.sp, lineHeight = 36.sp, letterSpacing = (-0.4).sp),
-    headlineLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 27.sp, lineHeight = 33.sp, letterSpacing = (-0.25).sp),
-    headlineMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 23.sp, lineHeight = 29.sp),
-    titleLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 26.sp),
-    titleMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 22.sp),
+    displayLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 34.sp, lineHeight = 40.sp, letterSpacing = (-0.8).sp),
+    displayMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 31.sp, lineHeight = 37.sp, letterSpacing = (-0.55).sp),
+    headlineLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.ExtraBold, fontSize = 26.sp, lineHeight = 32.sp, letterSpacing = (-0.3).sp),
+    headlineMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 22.sp, lineHeight = 28.sp),
+    titleLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Bold, fontSize = 18.sp, lineHeight = 24.sp),
+    titleMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 15.sp, lineHeight = 21.sp),
     bodyLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontSize = 15.sp, lineHeight = 23.sp),
     bodyMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontSize = 13.sp, lineHeight = 20.sp),
-    labelLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, lineHeight = 18.sp),
-    labelMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 12.sp, lineHeight = 16.sp)
+    labelLarge = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.SemiBold, fontSize = 13.sp, lineHeight = 18.sp),
+    labelMedium = TextStyle(fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 15.sp)
 )
 
 @Composable
@@ -420,23 +425,23 @@ private fun ForsaTheme(content: @Composable () -> Unit) {
         primary = ForsaUi.Primary,
         onPrimary = Color.White,
         primaryContainer = ForsaUi.PrimarySoft,
-        onPrimaryContainer = Color(0xFF2B246E),
+        onPrimaryContainer = Color(0xFF083B36),
         secondary = ForsaUi.Secondary,
         onSecondary = Color.White,
         secondaryContainer = ForsaUi.SecondarySoft,
-        onSecondaryContainer = Color(0xFF084A3E),
-        tertiary = Color(0xFFE59D32),
+        onSecondaryContainer = Color(0xFF7A2E00),
+        tertiary = Color(0xFF64748B),
         background = ForsaUi.Background,
         surface = ForsaUi.Surface,
-        surfaceVariant = Color(0xFFF0F1F6),
-        surfaceContainer = Color(0xFFF1F2F7),
+        surfaceVariant = Color(0xFFF0F2F5),
+        surfaceContainer = Color(0xFFF1F4F3),
         outline = ForsaUi.Border,
         onBackground = ForsaUi.Ink,
         onSurface = ForsaUi.Ink,
         onSurfaceVariant = ForsaUi.Muted,
         error = ForsaUi.Danger,
         errorContainer = ForsaUi.DangerSoft,
-        onErrorContainer = Color(0xFF5C141C)
+        onErrorContainer = Color(0xFF7F1D1D)
     )
     MaterialTheme(
         colorScheme = colors,
@@ -453,33 +458,47 @@ private fun ForsaPageHeader(
     onBack: (() -> Unit)? = null,
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {}
 ) {
-    Row(
-        Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (onBack != null) {
-            IconButton(onClick = onBack, modifier = Modifier.size(42.dp)) {
-                Surface(
-                    Modifier.fillMaxSize(),
-                    shape = ForsaUi.SmallShape,
-                    color = ForsaUi.Surface,
-                    border = BorderStroke(1.dp, ForsaUi.Border)
-                ) {
-                    androidx.compose.foundation.layout.Box(
+    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (onBack != null) {
+                IconButton(onClick = onBack, modifier = Modifier.size(44.dp)) {
+                    Surface(
                         Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        shape = ForsaUi.SmallShape,
+                        color = ForsaUi.Surface,
+                        border = BorderStroke(1.dp, ForsaUi.Border)
                     ) {
-                        Icon(Icons.Default.ArrowForward, "رجوع", tint = ForsaUi.Ink, modifier = Modifier.size(19.dp))
+                        androidx.compose.foundation.layout.Box(
+                            Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.ArrowForward, "رجوع", tint = ForsaUi.Ink, modifier = Modifier.size(19.dp))
+                        }
                     }
                 }
+                Spacer(Modifier.width(9.dp))
             }
-            Spacer(Modifier.width(9.dp))
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(title, style = MaterialTheme.typography.headlineLarge)
+                subtitle?.let {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = ForsaUi.Muted,
+                        maxLines = 2
+                    )
+                }
+            }
+            actions()
         }
-        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(title, style = MaterialTheme.typography.headlineLarge)
-            subtitle?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted) }
-        }
-        actions()
+        Surface(
+            Modifier.width(44.dp).height(4.dp),
+            shape = ForsaUi.PillShape,
+            color = ForsaUi.Secondary
+        ) {}
     }
 }
 
@@ -495,7 +514,13 @@ private fun ForsaCard(
         colors = CardDefaults.cardColors(
             containerColor = if (emphasis) ForsaUi.PrimarySoft else ForsaUi.Surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(
+            1.dp,
+            if (emphasis) ForsaUi.Primary.copy(alpha = .14f) else ForsaUi.Border
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (emphasis) 3.dp else 0.dp
+        ),
         content = content
     )
 }
@@ -504,7 +529,9 @@ private fun ForsaCard(
 private fun ForsaSectionTitle(title: String, subtitle: String? = null) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(title, style = MaterialTheme.typography.headlineMedium)
-        subtitle?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted) }
+        subtitle?.let {
+            Text(it, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted)
+        }
     }
 }
 
@@ -518,7 +545,10 @@ private fun ForsaMetaChip(
         shape = ForsaUi.PillShape,
         color = if (selected) ForsaUi.PrimarySoft else ForsaUi.Background,
         contentColor = if (selected) ForsaUi.Primary else ForsaUi.Muted,
-        border = BorderStroke(1.dp, if (selected) ForsaUi.Primary.copy(alpha = .18f) else ForsaUi.Border)
+        border = BorderStroke(
+            1.dp,
+            if (selected) ForsaUi.Primary.copy(alpha = .22f) else ForsaUi.Border
+        )
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 11.dp, vertical = 7.dp),
@@ -542,14 +572,15 @@ private fun ForsaActionTile(
         modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
         shape = ForsaUi.CardShape,
         colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        border = BorderStroke(1.dp, ForsaUi.Border),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(
             Modifier.padding(15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                Modifier.size(46.dp),
+                Modifier.size(48.dp),
                 shape = ForsaUi.SmallShape,
                 color = ForsaUi.PrimarySoft,
                 contentColor = ForsaUi.Primary
@@ -559,11 +590,24 @@ private fun ForsaActionTile(
                 }
             }
             Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(title, style = MaterialTheme.typography.titleMedium)
-                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted)
+                Text(
+                    subtitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = ForsaUi.Muted,
+                    maxLines = 2
+                )
             }
-            Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Muted)
+            Surface(
+                Modifier.size(32.dp),
+                shape = CircleShape,
+                color = ForsaUi.Background
+            ) {
+                androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Primary, modifier = Modifier.size(16.dp))
+                }
+            }
         }
     }
 }
@@ -2600,27 +2644,51 @@ private fun JobCard(
         Modifier.fillMaxWidth().clickable(onClick = onOpen),
         shape = ForsaUi.CardShape,
         colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = if (job.isFeatured) 3.dp else 1.dp)
+        border = BorderStroke(
+            1.dp,
+            if (job.isFeatured) ForsaUi.Secondary.copy(alpha = .38f) else ForsaUi.Border
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = if (job.isFeatured) 3.dp else 0.dp)
     ) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(11.dp)) {
+            if (job.isFeatured) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    ForsaStatusPill("featured")
+                }
+            }
+
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
                 Surface(
-                    Modifier.size(48.dp),
+                    Modifier.size(52.dp),
                     shape = ForsaUi.FieldShape,
-                    color = if (job.isFeatured) ForsaUi.WarningSoft else ForsaUi.PrimarySoft,
-                    contentColor = if (job.isFeatured) ForsaUi.Warning else ForsaUi.Primary
+                    color = if (job.isFeatured) ForsaUi.SecondarySoft else ForsaUi.PrimarySoft,
+                    contentColor = if (job.isFeatured) ForsaUi.Secondary else ForsaUi.Primary
                 ) {
                     androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Icon(if (job.isFeatured) Icons.Default.RocketLaunch else Icons.Default.BusinessCenter, null, Modifier.size(22.dp))
+                        Icon(
+                            if (job.isFeatured) Icons.Default.RocketLaunch else Icons.Default.BusinessCenter,
+                            null,
+                            Modifier.size(23.dp)
+                        )
                     }
                 }
                 Spacer(Modifier.width(11.dp))
                 Column(Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(job.title, style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
-                        if (job.isFeatured) ForsaStatusPill("featured")
-                    }
-                    Text(job.company, color = ForsaUi.Primary, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 2.dp))
+                    Text(
+                        job.title,
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 2
+                    )
+                    Text(
+                        job.company,
+                        color = ForsaUi.Primary,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(top = 3.dp)
+                    )
                 }
                 IconButton(onClick = onToggleSaved) {
                     Icon(
@@ -2635,28 +2703,57 @@ private fun JobCard(
                     }
                 }
             }
-            Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+
+            Row(
+                Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(7.dp)
+            ) {
                 ForsaMetaChip(job.city, icon = { Icon(Icons.Default.LocationOn, null, Modifier.size(14.dp)) })
                 ForsaMetaChip(job.type, icon = { Icon(Icons.Default.Schedule, null, Modifier.size(14.dp)) })
                 if (job.isExpired) ForsaMetaChip("منتهي") else if (!job.isActive) ForsaMetaChip("موقوف")
             }
-            Text(job.description, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted, maxLines = 3)
+
+            Text(
+                job.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = ForsaUi.Muted,
+                maxLines = 3
+            )
+
+            HorizontalDivider(color = ForsaUi.Border.copy(alpha = .75f))
+
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 if (job.expiresAt > 0L) {
                     Text(
-                        if (job.isExpired) "انتهى " + formatForsaDate(job.expiresAt) else "ينتهي " + formatForsaDate(job.expiresAt),
+                        if (job.isExpired) "انتهى " + formatForsaDate(job.expiresAt)
+                        else "ينتهي " + formatForsaDate(job.expiresAt),
                         style = MaterialTheme.typography.labelMedium,
                         color = if (job.isExpired) ForsaUi.Danger else ForsaUi.Muted,
                         modifier = Modifier.weight(1f)
                     )
-                } else Spacer(Modifier.weight(1f))
+                } else {
+                    Spacer(Modifier.weight(1f))
+                }
                 if (alreadyApplied) {
-                    ForsaMetaChip("تم التقديم", icon = { Icon(Icons.Default.CheckCircle, null, Modifier.size(14.dp)) }, selected = true)
+                    ForsaMetaChip(
+                        "تم التقديم",
+                        icon = { Icon(Icons.Default.CheckCircle, null, Modifier.size(14.dp)) },
+                        selected = true
+                    )
                 } else {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text("عرض التفاصيل", style = MaterialTheme.typography.labelLarge, color = ForsaUi.Primary)
+                        Text(
+                            "عرض التفاصيل",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = ForsaUi.Primary
+                        )
                         Spacer(Modifier.width(4.dp))
-                        Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Primary, modifier = Modifier.size(18.dp))
+                        Icon(
+                            Icons.Default.ArrowForward,
+                            null,
+                            tint = ForsaUi.Primary,
+                            modifier = Modifier.size(18.dp)
+                        )
                     }
                 }
             }
@@ -3517,10 +3614,16 @@ private fun ProfileActionCard(
         Modifier.fillMaxWidth().clickable(onClick = onClick),
         shape = ForsaUi.CardShape,
         colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        border = BorderStroke(1.dp, ForsaUi.Border),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Row(Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
-            Surface(Modifier.size(44.dp), shape = ForsaUi.SmallShape, color = ForsaUi.PrimarySoft, contentColor = ForsaUi.Primary) {
+            Surface(
+                Modifier.size(46.dp),
+                shape = ForsaUi.SmallShape,
+                color = ForsaUi.PrimarySoft,
+                contentColor = ForsaUi.Primary
+            ) {
                 androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Icon(icon, null, Modifier.size(21.dp))
                 }
@@ -3528,8 +3631,18 @@ private fun ProfileActionCard(
             Spacer(Modifier.width(11.dp))
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(title, style = MaterialTheme.typography.titleMedium)
-                Text(description, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted, maxLines = 2)
-                Text(actionLabel, style = MaterialTheme.typography.labelLarge, color = ForsaUi.Primary, modifier = Modifier.padding(top = 3.dp))
+                Text(
+                    description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = ForsaUi.Muted,
+                    maxLines = 2
+                )
+                Text(
+                    actionLabel,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = ForsaUi.Secondary,
+                    modifier = Modifier.padding(top = 3.dp)
+                )
             }
             Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Muted)
         }
@@ -5269,21 +5382,51 @@ private fun AuthHeader(
     subtitle: String,
     onBack: (() -> Unit)?
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (onBack != null) {
-                IconButton(onClick = onBack, modifier = Modifier.size(42.dp)) {
-                    Surface(Modifier.fillMaxSize(), shape = ForsaUi.SmallShape, color = ForsaUi.Surface, border = BorderStroke(1.dp, ForsaUi.Border)) {
-                        androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                IconButton(onClick = onBack, modifier = Modifier.size(44.dp)) {
+                    Surface(
+                        Modifier.fillMaxSize(),
+                        shape = ForsaUi.SmallShape,
+                        color = ForsaUi.Surface,
+                        border = BorderStroke(1.dp, ForsaUi.Border)
+                    ) {
+                        androidx.compose.foundation.layout.Box(
+                            Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
                             Icon(Icons.Default.ArrowForward, "رجوع", tint = ForsaUi.Ink)
                         }
                     }
                 }
                 Spacer(Modifier.width(8.dp))
             }
-            Text(title, style = MaterialTheme.typography.headlineLarge)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(title, style = MaterialTheme.typography.headlineLarge)
+                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = ForsaUi.Muted)
+            }
+            Surface(
+                Modifier.size(42.dp),
+                shape = CircleShape,
+                color = ForsaUi.PrimaryDark
+            ) {
+                androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Icon(Icons.Default.Work, null, tint = Color.White, modifier = Modifier.size(20.dp))
+                }
+            }
         }
-        Text(subtitle, style = MaterialTheme.typography.bodyLarge, color = ForsaUi.Muted)
+        Surface(
+            Modifier.fillMaxWidth().height(6.dp),
+            shape = ForsaUi.PillShape,
+            color = ForsaUi.PrimarySoft
+        ) {
+            Surface(
+                Modifier.fillMaxWidth(.32f).height(6.dp),
+                shape = ForsaUi.PillShape,
+                color = ForsaUi.Secondary
+            ) {}
+        }
     }
 }
 
