@@ -1,6 +1,6 @@
 status=PASS
-commit=6a370c0bfe59f529cf21f36cef8e47493837ff4c
-run=36496804104
+commit=f8f826c290e9f8ddd03ad162ef09117524e363f7
+run=37526298012
 attempt=1
 build_exit_code=0
 smoke_exit_code=0
@@ -8,6 +8,16 @@ smoke_outcome=success
 summary=APK built successfully and launched on Android Emulator without a detected crash.
 
 --- build log tail ---
+
+Welcome to Gradle 8.10.2!
+
+Here are the highlights of this release:
+ - Support for Java 23
+ - Faster configuration cache
+ - Better configuration cache reports
+
+For more details see https://docs.gradle.org/8.10.2/release-notes.html
+
 To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.10.2/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
 Daemon will be stopped at the end of the build 
 > Task :app:preBuild UP-TO-DATE
@@ -27,170 +37,171 @@ Daemon will be stopped at the end of the build
 > Task :app:parseDebugLocalResources
 > Task :app:processDebugMainManifest
 > Task :app:processDebugManifest
-> Task :app:javaPreCompileDebug
 > Task :app:processDebugManifestForPackage
+> Task :app:javaPreCompileDebug
 > Task :app:mergeDebugShaders
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
 > Task :app:mergeDebugAssets
 > Task :app:compressDebugAssets
 > Task :app:desugarDebugFileDependencies
-> Task :app:mergeDebugJniLibFolders
-> Task :app:checkDebugDuplicateClasses
-> Task :app:mergeDebugNativeLibs
 > Task :app:processDebugResources
-> Task :app:mergeLibDexDebug
-
-> Task :app:stripDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
-
-> Task :app:validateSigningDebug
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
+> Task :app:checkDebugDuplicateClasses
+> Task :app:compileDebugKotlin
 > Task :app:mergeExtDexDebug
 
 > Task :app:compileDebugKotlin
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:472:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:566:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2337:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2659:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3021:270 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3514:31 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3534:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
-w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5278:48 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:478:48 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:608:40 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2483:44 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:2854:43 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3220:270 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3713:31 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:3749:32 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
+w: file:///home/runner/work/com.forsa/com.forsa/app/src/main/java/com/forsa/app/MainActivity.kt:5501:48 'val Icons.Filled.ArrowForward: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.ArrowForward.
 
 > Task :app:compileDebugJavaWithJavac
 > Task :app:dexBuilderDebug
 > Task :app:mergeDebugGlobalSynthetics
 > Task :app:processDebugJavaRes
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJniLibFolders
 > Task :app:mergeProjectDexDebug
+> Task :app:mergeDebugNativeLibs
+> Task :app:validateSigningDebug
+> Task :app:writeDebugAppMetadata
+
+> Task :app:stripDebugDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so.
+
+> Task :app:writeDebugSigningConfigVersions
 > Task :app:mergeDebugJavaResource
 > Task :app:packageDebug
 > Task :app:createDebugApkListingFileRedirect
 > Task :app:assembleDebug
-gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1790637211796.json
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/build-1791318393086.json
 
-BUILD SUCCESSFUL in 50s
+BUILD SUCCESSFUL in 3m 30s
 38 actionable tasks: 38 executed
 
 --- smoke logcat tail ---
-09-28 23:15:56.329  1073  1073 D Telephony: isEmergencyPreferredAccount: subId=1, activeData=-1
-09-28 23:15:56.329  1073  1073 D Telephony: isEmergencyPreferredAccount: Device does not require preference.
-09-28 23:15:56.330  1073  1073 I Telephony: isRttCurrentlySupported -- regular acct, hasVoiceAvailability: false
-09-28 23:15:56.330  1073  1073 I Telephony:  isRttSupported: false
-09-28 23:15:56.330  1073  1073 I Telephony:  alwaysAllowWhileRoaming: false
-09-28 23:15:56.330  1073  1073 I Telephony:  isRoaming: false
-09-28 23:15:56.330  1073  1073 I Telephony:  isOnWfc: false
-09-28 23:15:56.330  1329  2679 D TrafficStats: tagSocket(147) with statsTag=0xffffffff, statsUid=-1
-09-28 23:15:56.334  1579  1733 D MDDTikTokTaskScheduler: Successfully updated periodic tasks for MDD lib MDD.CHARGING.PERIODIC.TASK 21600
-09-28 23:15:56.335  1186  1186 I GlobalMediaRouter: Found default route: MediaRouter.RouteInfo{ uniqueId=DEFAULT_ROUTE, name=Phone, description=null, iconUri=null, enabled=true, isSystemRoute=true, connectionState=0, canDisconnect=false, playbackType=0, playbackStream=3, deviceType=0, volumeHandling=1, volume=5, volumeMax=15, presentationDisplayId=-1, extras=null, settingsIntent=null, providerPackageName=android }
-09-28 23:15:56.338  1186  1186 I GlobalMediaRouter: Unselecting the current route because it is no longer selectable: null
-09-28 23:15:56.344  1478  1781 I Ma-Robin: (REDACTED) isRobinEligible:%s, isRobinOptIn:%s, isLauncherIconEnabled:%s, isImageComponentEnabled:%s
-09-28 23:15:56.344   553   553 I AS.AudioService: onSubscriptionsChanged()
-09-28 23:15:56.348  1478  1785 I Ma-fcf-RobinAvailabilityChecker: User not OptedIn. Skipping Eligibility Checks.
-09-28 23:15:56.348  1478  1785 I Ma-fcf-headphone-integration: Headphone voice queries disabled: HEADPHONE_VOICE_QUERIES flag not enabled
-09-28 23:15:56.348  1478  1785 I Ma-fcf-headphone-integration: Headphone notification anouncement disabled: ENABLE_NOTIFICATION_ANNOUNCEMENT flag not enabled
-09-28 23:15:56.350  1478  1785 I Ma-fcf-RobinStatus: (REDACTED) Robin eligibility : optedIn %s
-09-28 23:15:56.352  1493  2328 I Icing   : IndexChimeraService.getServiceInterface callingPackage=com.google.android.gms componentName=null serviceId=30
-09-28 23:15:56.353   553  1577 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 23:15:56.354  1478  1785 I Ma-fcf-RobinStatus: (REDACTED) Robin eligibility : forceEnableRobinForSuwOptin %s
-09-28 23:15:56.354   553  1577 D PackageManager: Clear ephemeral installer activity
-09-28 23:15:56.354   553   553 I AS.AudioService: onSubscriptionsChanged()
-09-28 23:15:56.361  1579  1716 I earchbox:search: WaitForGcToComplete blocked ClassLinker on Background for 2.497s
-09-28 23:15:56.362  1579  1716 W earchbox:search: Verification of m.bv com.google.android.gms.common.GoogleCertificatesImpl.c(java.lang.String, m.cj) took 2.498s (224.10 bytecodes/s) (17344B approximate peak alloc)
-09-28 23:15:56.372   553   553 I DeviceLockControllerConnectorImpl: Connected to com.google.android.devicelockcontroller/com.android.devicelockcontroller.DeviceLockControllerService
-09-28 23:15:56.372   553   553 I NotificationService: Cannot find enqueued record for key: 0|android|13|PreBootBroadcaster|1000
-09-28 23:15:56.374   553  1578 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 23:15:56.375   553  1578 D PackageManager: Clear ephemeral installer activity
-09-28 23:15:56.376  1478  1785 I Ma-fcf-BardAppUsersUtil: (REDACTED) %s was not found: %s
-09-28 23:15:56.378  1478  1785 I Ma-fcf-RobinStatus: Robin eligibility: Robin experiment flag is disabled.
-09-28 23:15:56.381   553  1578 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
-09-28 23:15:56.381   553  1578 D PackageManager: Clear ephemeral installer activity
-09-28 23:15:56.387  1186  1192 I .gms.persistent: Background concurrent mark compact GC freed 9074KB AllocSpace bytes, 29(3108KB) LOS objects, 49% free, 19MB/38MB, paused 195.024ms,51.125ms total 1.768s
-09-28 23:15:56.387  1478  1785 I Ma-fcf-RobinStatus: (REDACTED) Robin eligibility #evaluate: isEnabled = %s failure reasons: %s
-09-28 23:15:56.388   553  1894 I DevicePolicyEngine: Couldn't find any receivers that handle ACTION_DEVICE_POLICY_SET_RESULT in package com.google.android.devicelockcontroller
-09-28 23:15:56.389   553  1894 D DevicePolicyEngine: Writing device policies to file.
-09-28 23:15:56.389   553  1894 D DevicePolicyEngine: Writing to /data/system/device_policy_state.xml
-09-28 23:15:56.390  1478  1781 I Ma-Robin: (REDACTED) %s was not found: %s
-09-28 23:15:56.390   553   569 I system_server: Background concurrent mark compact GC freed 37MB AllocSpace bytes, 138(2864KB) LOS objects, 43% free, 30MB/54MB, paused 107.792ms,26.469ms total 3.392s
-09-28 23:15:56.390   553   575 I system_server: WaitForGcToComplete blocked ClassLinker on Background for 270.827ms
-09-28 23:15:56.391   553   575 V GrammaticalInflectionUtils: AttributionSource: AttributionSource { uid = 10201, packageName = null, attributionTag = null, token = android.os.Binder@44974cb, deviceId = 0, next = null } does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
-09-28 23:15:56.392  1478  1781 I TRG.InvocationSink: Pre-warming invocation sink grpc service.
-09-28 23:15:56.396  1186  1186 V MediaRouter: Selecting route: RouteInfo{ name=Phone, description=null, status=null, category=RouteCategory{ name=System types=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO  groupable=false }, supportedTypes=ROUTE_TYPE_LIVE_AUDIO ROUTE_TYPE_LIVE_VIDEO , presentationDisplay=null }
-09-28 23:15:56.404  1493  2339 W AppLinksIntentOperation: SC+ verification of app links not yet enabled [CONTEXT service_id=244 ]
-09-28 23:15:56.402   358   358 D Zygote  : Forked child process 2680
-09-28 23:15:56.405  1186  1994 I Fitness : FitCleanupIntentOperation received Intent android.intent.action.PACKAGE_CHANGED [CONTEXT service_id=17 ]
-09-28 23:15:56.408  2680  2680 I android.rkpdapp: Using CollectorTypeCMC GC.
-09-28 23:15:56.408  2680  2680 W android.rkpdapp: Unexpected CPU variant for x86: x86_64.
-09-28 23:15:56.408  2680  2680 W android.rkpdapp: Known variants: atom, sandybridge, silvermont, goldmont, goldmont-plus, goldmont-without-sha-xsaves, tremont, kabylake, default
-09-28 23:15:56.410   553   591 I ActivityManager: Start proc 2680:com.google.android.rkpdapp/u0a201 for service {com.google.android.rkpdapp/com.android.rkpdapp.service.RemoteProvisioningService}
-09-28 23:15:56.412  2680  2680 E android.rkpdapp: Not starting debugger since process cannot load the jdwp agent.
-09-28 23:15:56.412  2662  2662 D nativeloader: Configuring clns-shared-7 for other apk /system/app/CarrierDefaultApp/CarrierDefaultApp.apk. target_sdk_version=35, uses_libraries=, library_path=/system/app/CarrierDefaultApp/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.carrierdefaultapp:/system/app/CarrierDefaultApp:/system/lib64:/system_ext/lib64
-09-28 23:15:56.416   553   570 I BpBinder: onLastStrongRef automatically unlinking death recipients: 
-09-28 23:15:56.416  1186  2029 W ctxmgr  : [PendingIntentCompat] Timed out delivering to pendingIntent=PendingIntent{cc52ac6: android.os.BinderProxy@da1f9d0}, package=com.google.android.apps.wellbeing, permission=null [CONTEXT service_id=47 ]
-09-28 23:15:56.416  1493  2339 I LocationHistory: [IntentOperation] Handling action com.google.android.gms.location.reporting.SETTINGS_CHANGED [CONTEXT service_id=314 ]
-09-28 23:15:56.417  1329  1694 I SP      : Sync for bundled_delight succeeded in 1050 ms: {added: [main_en_us_2024022600_2], metadata: false
-09-28 23:15:56.418  2680  2680 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
-09-28 23:15:56.418  1073  1073 I Telephony: TelecomAccountRegistry$AccountEntry: registerPstnPhoneAccount: Registering account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with Telecom. subId=1
-09-28 23:15:56.419   553   874 D ShortcutService: Saving package item com.google.android.googlequicksearchbox to /data/system_ce/0/shortcut_service/packages/com.google.android.googlequicksearchbox.xml
-09-28 23:15:56.422  2662  2662 D CompatChangeReporter: Compat change id reported: 202956589; UID 10112; state: ENABLED
-09-28 23:15:56.423  1329  1694 I SP      : GC for 'bundled_delight' (10) with ttl of 0 ms took 0 ms (0/0/0)
-09-28 23:15:56.423  1329  1694 I LmManager: LmManager$1.onSuccess():82 Bundled delight sync success
-09-28 23:15:56.423   553  1577 I Telecom : TelecomServiceImpl$1: registerPhoneAccount: account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AI0🔒
-09-28 23:15:56.424  1186  2029 W ctxmgr  : [WorkManager] Long workInfo: pkg=com.google.android.gms, lbl=DispatcherDeliver, start=2026-09-28 23:15:51.366+0000, stop=2026-09-28 23:15:56.424+0000, durtn=5058ms [CONTEXT service_id=47 ]
-09-28 23:15:56.425  2242  2694 I DlcClient: Binding com.google.android.devicelockcontroller/com.android.devicelockcontroller.storage.GlobalParametersService
-09-28 23:15:56.425  1329  1709 I SuperDelight: SuperDelightManager$2.onSuccess():631 bundled_delight sync success, adding to data file manager
-09-28 23:15:56.425  1579  1734 W earchbox:search: Long monitor contention with owner BG Thread #1 (1733) at java.io.File android.app.ContextImpl.getFilesDir()(ContextImpl.java:855) waiters=0 in java.io.File android.app.ContextImpl.getFilesDir() for 480ms
-09-28 23:15:56.426   553  1577 I Telecom : PhoneAccountRegistrar: Modify account: [ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}]: TSI.rPA(cap)@AI0🔒
-09-28 23:15:56.427  1329  1709 I DataFileManager: DataFileManager.addDataWithoutNotify():185 adding data en-US bundled_delight
-09-28 23:15:56.430  1431  1820 I SP.AiAi : Registering captions_i18n_v0_background.20210623, url: https://storage.googleapis.com/captions/captions_i18n_v0_20210623_manifest.json, constraints: W:b:u:l, flags: bg, requested: 20210623, current: -1
-09-28 23:15:56.431  1579  1733 D MDDTikTokTaskScheduler: Successfully updated periodic tasks for MDD lib MDD.MAINTENANCE.PERIODIC.GCM.TASK 86400
-09-28 23:15:56.440  1478  2032 I A       : (REDACTED) Unable to retrieve flag snapshot for %s, using defaults.
-09-28 23:15:56.442   357  2700 I resolv  : GetAddrInfoHandler::run: {100 786532 100 983140 10143 0}
-09-28 23:15:56.442   357  2701 I resolv  : res_nmkquery: (QUERY, IN, AAAA)
-09-28 23:15:56.448   357  2702 I resolv  : res_nmkquery: (QUERY, IN, A)
-09-28 23:15:56.452  2242  2242 D GlobalParametersService: onCreate
-09-28 23:15:56.452  1186  1917 I NearbySharing: Not qualified for default opt-in. Multiple accounts are found. [CONTEXT service_id=194 ]
-09-28 23:15:56.455  1579  2658 I NetworkRecognitionRnr: Using pair HTTP connection
-09-28 23:15:56.456   553  1577 I Telecom : CallsManager: handlePhoneAccountChanged: phoneAccount=[[X] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AI0🔒
-09-28 23:15:56.460   553  1577 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.rPA(cap)@AI0🔒
-09-28 23:15:56.460   553  1577 I Telecom : PhoneAccountRegistrar: Notifying telephony of voice service override change for 1 SIMs, hasService = false: TSI.rPA(cap)@AI0🔒
-09-28 23:15:56.461  1579  2272 I A       : [Upload] Connected
-09-28 23:15:56.464  1579  1579 E A       : onError
-09-28 23:15:56.464  1579  1579 E A       : com.google.android.apps.gsa.shared.speech.b.l: errorCode: 65561, engine: 2
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.staticplugins.bp.a.f.a(PG:23)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.s3.o.hi(PG:13)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.ci.g.a.f.e(PG:9)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.d(PG:162)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.iO(PG:26)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.s3.p.c(PG:102)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.s3.q.run(PG:1)
-09-28 23:15:56.464  1579  1579 E A       : 	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:487)
-09-28 23:15:56.464  1579  1579 E A       : 	at java.util.concurrent.FutureTask.run(FutureTask.java:264)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.e.run(PG:12)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.bg.run(PG:3)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.bg.run(PG:3)
-09-28 23:15:56.464  1579  1579 E A       : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
-09-28 23:15:56.464  1579  1579 E A       : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
-09-28 23:15:56.464  1579  1579 E A       : 	at java.lang.Thread.run(Thread.java:1012)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.shared.util.c.a.l.run(PG:42)
-09-28 23:15:56.464  1579  1579 E A       : Caused by: com.google.android.apps.gsa.shared.speech.b.n: errorCode: 65586, engine: 2
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.s3.o.hi(PG:6)
-09-28 23:15:56.464  1579  1579 E A       : 	... 14 more
-09-28 23:15:56.464  1579  1579 E A       : Caused by: com.google.android.apps.gsa.shared.speech.b.j: errorCode: 401, engine: 2
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.assistant.shared.n.i.b(PG:30)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.s3.producers.j.hs(PG:11)
-09-28 23:15:56.464  1579  1579 E A       : 	at com.google.android.apps.gsa.speech.k.a.g.d(PG:135)
-09-28 23:15:56.464  1579  1579 E A       : 	... 12 more
-09-28 23:15:56.465  1579  1579 W A       : Failed to sync device settings.
-09-28 23:15:56.465  1579  1579 I A       : Retrying to sync device settings.
-09-28 23:15:56.467  1073  1073 I PhoneInterfaceManager: setVoiceServiceStateOverride: subId=1, phone=Handler (com.android.internal.telephony.GsmCdmaPhone) {8346059}, hasService=false, callingPackage=com.android.server.telecom
-09-28 23:15:56.467  1073  1073 I Telephony: TelecomAccountRegistry$AccountEntry: Registered phoneAccount: [[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with handle: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}
-09-28 23:15:56.467  1073  1073 I Telephony: PstnIncomingCallNotifier: Registering: [0]
-09-28 23:15:56.468  1073  1073 D Telephony: Registering: Handler (com.android.internal.telephony.GsmCdmaPhone) {8346059}
-09-28 23:15:56.468  1073  1073 W Telephony: registerMmTelCapabilityCallback: registration failed, no ImsService available. Exception: code: 1
-09-28 23:15:56.468  1579  1579 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-353' has a deadline with functional constraints and an extremely short time window of 0 ms (delay=15000, deadline=15000). The functional constraints are not likely to be satisfied when the job runs.
-09-28 23:15:56.469  1073  1073 W Telephony: registerImsRegistrationCallback: registration failed, no ImsService available. Exception: code: 1
-09-28 23:15:56.469  1073  1073 D Telephony: Finished registering mSimultaneousCallingTrackerListener for phoneId = 0; subId = 1
-09-28 23:15:56.471  1186  1888 I GCoreUlr: Unbound from all signal providers.
-09-28 23:15:56.472   553  1577 W JobInfo : Job 'com.google.android.googlequicksearchbox/com.google.android.apps.gsa.tasks.BackgroundTasksJobService#-353' has a deadline with functional constraints and an extremely short time window of 0 ms (delay=15000, deadline=15000). The functional constraints are not likely to be satisfied when the job runs.
+10-06 20:31:49.810   557   573 W system_server: ApkAssets: Deleting an ApkAssets object '/product/overlay/SystemUIGoogle__sdk_gphone64_x86_64__auto_generated_rro_product.apk' with 1 weak references
+10-06 20:31:49.810   557   573 W system_server: ApkAssets: Deleting an ApkAssets object '<empty> and /product/priv-app/WellbeingPrebuilt/WellbeingPrebuilt.apk' with 1 weak references
+10-06 20:31:49.792  1005  1005 W NetworkMonitor/: type=1400 audit(0.0:32): avc:  granted  { read open } for  path="/proc/1005/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+10-06 20:31:49.813  1556  1753 I A       : (REDACTED) Updating user context. Event: %s
+10-06 20:31:49.817   557  2718 D HealthConnectAlter: Alter table: ALTER TABLE planned_exercise_session_record_table ADD COLUMN completed_session_id BLOB NULL REFERENCES exercise_session_record_table(uuid) ON DELETE SET NULL
+10-06 20:31:49.818   557  2718 D HealthConnectAlter: Alter table: ALTER TABLE exercise_session_record_table ADD COLUMN planned_exercise_session_id BLOB NULL REFERENCES planned_exercise_session_record_table(uuid) ON DELETE SET NULL
+10-06 20:31:49.792  1005  1005 W NetworkMonitor/: type=1400 audit(0.0:33): avc:  granted  { getattr } for  path="/proc/1005/net/psched" dev="proc" ino=4026532021 scontext=u:r:network_stack:s0 tcontext=u:object_r:proc_net:s0 tclass=file
+10-06 20:31:49.823  1092  1092 I Telephony: TelecomAccountRegistry$AccountEntry: registerPstnPhoneAccount: Registering account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]] with Telecom. subId=1
+10-06 20:31:49.830   557  2149 I Telecom : TelecomServiceImpl$1: registerPhoneAccount: account=[[ ] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AJU🔒
+10-06 20:31:49.834  1526  2424 D TrafficStats: tagSocket(204) with statsTag=0x30002500, statsUid=-1
+10-06 20:31:49.844   167   958 W keystore2: system/security/keystore2/watchdog/src/lib.rs:114 - ### Keystore Watchdog report - BEGIN ###
+10-06 20:31:49.844   167   958 W keystore2: system/security/keystore2/watchdog/src/lib.rs:123 - When extracting from a bug report, please include this header
+10-06 20:31:49.844   167   958 W keystore2: system/security/keystore2/watchdog/src/lib.rs:124 - and all 1 records below.
+10-06 20:31:49.844   167   958 W keystore2: system/security/keystore2/watchdog/src/lib.rs:164 - ThreadId(7) Calling get_rkpd_attestation_key() Pending: 1.50038365s Overdue 1.000383937s
+10-06 20:31:49.844   167   958 W keystore2: system/security/keystore2/watchdog/src/lib.rs:175 - ### Keystore Watchdog report - END ###
+10-06 20:31:49.846   557  2149 I Telecom : PhoneAccountRegistrar: Modify account: [ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0}]: TSI.rPA(cap)@AJU🔒
+10-06 20:31:49.858   557  2149 I Telecom : CallsManager: handlePhoneAccountChanged: phoneAccount=[[X] PhoneAccount: ComponentInfo{com.android.phone/com.android.services.telephony.TelephonyConnectionService}, 1, UserHandle{0} Capabilities: CallProvider MultiUser PlaceEmerg SimSub  Audio Routes: BESW Schemes: tel voicemail  Extras: Bundle[{android.telecom.extra.SUPPORTS_VIDEO_CALLING_FALLBACK=true}] GroupId: *** SC Restrictions: [ ]]: TSI.rPA(cap)@AJU🔒
+10-06 20:31:49.866  2734  2734 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+10-06 20:31:49.869   557  2144 D PackageManager: Instant App installer not found with android.intent.action.INSTALL_INSTANT_APP_PACKAGE
+10-06 20:31:49.870   557  2144 D PackageManager: Clear ephemeral installer activity
+10-06 20:31:49.871  2734  2734 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+10-06 20:31:49.873  1526  2442 W DataCollectionRegistryC: missing CollectionDefinition for digitalassetlinks.googleapis.com/google.digitalassetlinks.v1.AssetLinks/Check
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{5b076de com.android.microdroid.empty_payload/10186} -> PackageSetting{33959a0 com.google.android.googlequicksearchbox/10144} BLOCKED
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{e101cfd com.forsa.app/10209} -> PackageSetting{33959a0 com.google.android.googlequicksearchbox/10144} BLOCKED
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{5b076de com.android.microdroid.empty_payload/10186} -> PackageSetting{a7a1959 com.google.android.rkpdapp/10197} BLOCKED
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{e101cfd com.forsa.app/10209} -> PackageSetting{a7a1959 com.google.android.rkpdapp/10197} BLOCKED
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{5b076de com.android.microdroid.empty_payload/10186} -> PackageSetting{d8c191e com.google.android.partnersetup/10132} BLOCKED
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{e101cfd com.forsa.app/10209} -> PackageSetting{d8c191e com.google.android.partnersetup/10132} BLOCKED
+10-06 20:31:49.874   557   615 I AppsFilter: interaction: PackageSetting{5b076de com.android.microdroid.empty_payload/10186} -> PackageSetting{f8205ff com.google.android.settings.intelligence/10140} BLOCKED
+10-06 20:31:49.875   557   615 I AppsFilter: interaction: PackageSetting{e101cfd com.forsa.app/10209} -> PackageSetting{f8205ff com.google.android.settings.intelligence/10140} BLOCKED
+10-06 20:31:49.875   557   615 I AppsFilter: interaction: PackageSetting{5b076de com.android.microdroid.empty_payload/10186} -> PackageSetting{a6a6fcc com.google.android.cellbroadcastreceiver/10198} BLOCKED
+10-06 20:31:49.875   557   615 I AppsFilter: interaction: PackageSetting{e101cfd com.forsa.app/10209} -> PackageSetting{a6a6fcc com.google.android.cellbroadcastreceiver/10198} BLOCKED
+10-06 20:31:49.876   557  2149 I Telecom : PhoneAccountRegistrar: getSimCallManager: SimCallManager for subId 1 queried, returning: null: TSI.rPA(cap)@AJU🔒
+10-06 20:31:49.877  2707  2707 D WM-PackageManagerHelper: androidx.work.impl.background.systemjob.SystemJobService enabled
+10-06 20:31:49.877   557  2149 I Telecom : PhoneAccountRegistrar: Notifying telephony of voice service override change for 1 SIMs, hasService = false: TSI.rPA(cap)@AJU🔒
+10-06 20:31:49.877   557  2718 I HealthConnectBackupRestore: Attempt to schedule download timeout job with state: 0
+10-06 20:31:49.877   557  2718 I HealthConnectBackupRestore: Attempt to schedule staging timeout job with state: 0
+10-06 20:31:49.877   557  2718 I HealthConnectBackupRestore: Attempt to schedule merging timeout job with state: 0
+10-06 20:31:49.879  2707  2707 D WM-Schedulers: Created SystemJobScheduler and enabled SystemJobService
+10-06 20:31:49.880  1234  1234 D BoundBrokerSvc: onBind: Intent { act=com.google.android.gms.semanticlocation.service.START_ODLH pkg=com.google.android.gms }
+10-06 20:31:49.881  1234  1234 D BoundBrokerSvc: Loading bound service for intent: Intent { act=com.google.android.gms.semanticlocation.service.START_ODLH pkg=com.google.android.gms }
+10-06 20:31:49.882  1234  2293 I FontLog : Using directory in FlatBuffer format [CONTEXT service_id=132 ]
+10-06 20:31:49.883  1234  1811 I FontLog : Font PFD returned from cache for {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} [CONTEXT service_id=132 ]
+10-06 20:31:49.883  1234  1811 I FontLog : Fetch {Google Sans, wdth 100.0, wght 500, ital 0.0, bestEffort false} end status Status{statusCode=SUCCESS, resolution=null} [CONTEXT service_id=132 ]
+10-06 20:31:49.884  1234  2288 W NearbySharing: No supported accounts found. [CONTEXT service_id=194 ]
+10-06 20:31:49.887  1092  1092 I PhoneInterfaceManager: setVoiceServiceStateOverride: subId=1, phone=Handler (com.android.internal.telephony.GsmCdmaPhone) {9b35110}, hasService=false, callingPackage=com.android.server.telecom
+10-06 20:31:49.887  1234  2288 I NearbySharing: Removed active account [CONTEXT service_id=194 ]
+10-06 20:31:49.892  2707  2752 D WM-ForceStopRunnable: The default process name was not specified.
+10-06 20:31:49.892  2734  2734 D nativeloader: Configuring clns-shared-7 for other apk /system/app/Traceur/Traceur.apk. target_sdk_version=33, uses_libraries=, library_path=/system/app/Traceur/lib/x86_64:/system/lib64:/system_ext/lib64, permitted_path=/data:/mnt/expand:/data/user/0/com.android.traceur:/system/app/Traceur:/system/lib64:/system_ext/lib64
+10-06 20:31:49.902  2707  2752 D WM-ForceStopRunnable: Performing cleanup operations.
+10-06 20:31:49.942  2734  2734 V GraphicsEnvironment: Currently set values for:
+10-06 20:31:49.945  1556  2397 W TimedProcessReaper: Scheduling killing of process to refresh configuration
+10-06 20:31:50.098     0     0 I init    : starting service 'idmap2d'...
+10-06 20:31:49.951  1526  1937 I ModuleSetResolution: Pending container module APKs: []
+10-06 20:31:49.951  1526  1937 I ModuleSetResolution: Pending non-container module APKs: []
+10-06 20:31:49.952   557   590 W MagnificationConnectionManager: requestConnection duplicated request: connect=false, mConnectionState=DISCONNECTED
+10-06 20:31:49.952   557   557 W Looper  : Slow dispatch took 120ms main h=com.android.server.accessibility.AccessibilityManagerService$MainHandler c=<recycled PooledLambda@5fa6fdf> m=0
+10-06 20:31:49.953   557   557 W IPCThreadState: Sending oneway calls to frozen process.
+10-06 20:31:49.957  2734  2734 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+10-06 20:31:50.102     0     0 I init    : ... started service 'idmap2d' has pid 2755
+10-06 20:31:50.105     0     0 I init    : Control message: Processed ctl.start for 'idmap2d' from pid: 557 (system_server)
+10-06 20:31:49.957  2734  2734 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+10-06 20:31:49.957  2734  2734 V GraphicsEnvironment: Global.Settings values are invalid: number of packages: 0, number of values: 0
+10-06 20:31:49.957  2734  2734 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+10-06 20:31:49.967  1092  1092 W FeatureConnection: getRegistrationTech: ImsRegistration is null
+10-06 20:31:49.968  1092  1092 D CompatChangeReporter: Compat change id reported: 330902016; UID 1001; state: ENABLED
+10-06 20:31:49.970  2755  2755 I idmap2d : Starting
+10-06 20:31:49.979  1556  1564 W earchbox:search: Missing inline cache for java.util.Set com.google.bq.d.a.a.f.d.g.a(java.lang.Object, n.h.a.l)
+10-06 20:31:49.979   557   557 I RegistrationProxy: onServiceConnected: com.android.rkpdapp.service.RemoteProvisioningService
+10-06 20:31:49.981  1234  2086 I Fitness : OnPackageChangedOperation got intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x5000010 pkg=com.google.android.gms cmp=com.google.android.gms/.chimera.PersistentIntentOperationService (has extras) } [CONTEXT service_id=17 ]
+10-06 20:31:49.998  1526  2270 W AppLinksIntentOperation: SC+ verification of app links not yet enabled [CONTEXT service_id=244 ]
+10-06 20:31:50.151     0     0 I servicemanager: Caller(pid=2707,uid=10197,sid=u:r:rkpdapp:s0:c197,c256,c512,c768) Found android.hardware.security.keymint.IRemotelyProvisionedComponent/default in device VINTF manifest.
+10-06 20:31:50.007   557   870 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-06 20:31:50.007   557   870 D AppWidgetServiceImpl: Trying to notify widget providers changed
+10-06 20:31:50.016   557  1848 I RegistrationProxy: IGetRegistrationCallback.onSuccess
+10-06 20:31:50.019   557   668 I RoleService: Granting default roles...
+10-06 20:31:50.022   557   870 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-06 20:31:50.022   557   870 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-06 20:31:50.022   557   870 D AppWidgetServiceImpl: Trying to notify widget providers changed
+10-06 20:31:50.023   557  2144 D ConnectivityService: registerNetworkAgent NetworkAgentInfo{network{101}  handle{437197393933}  ni{MOBILE[HSPA] CONNECTING extra: fast.t-mobile.com} created=2026-10-06T20:31:50.023Z Score(Policies :  ; KeepConnected : 0)   lp{{LinkAddresses: [ ] DnsAddresses: [ ] Domains: null MTU: 0 Routes: [ ]}}  nc{[ Transports: CELLULAR Capabilities: MMS&SUPL&IA&XCAP&INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VPN&NOT_ROAMING&NOT_CONGESTED&NOT_SUSPENDED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED LinkUpBandwidth>=14Kbps LinkDnBandwidth>=14Kbps Specifier: <TelephonyNetworkSpecifier [mSubId = 1]> SubscriptionIds: {1} UnderlyingNetworks: Null]}  factorySerialNumber=4}
+10-06 20:31:50.028   357   392 I netd    : getFwmarkForNetwork(101) -> {MarkMaskParcel{mark: 101, mask: 65535}} <0.00ms>
+10-06 20:31:50.028   922  2232 I PermissionControllerServiceImpl: Updating user sensitive for uid 10144
+10-06 20:31:50.036  1234  1814 I FontLog : Pulling font file for id = 3, cache size = 3 [CONTEXT service_id=132 ]
+10-06 20:31:50.037   557   885 D ShortcutService: received package broadcast intent: Intent { act=android.intent.action.PACKAGE_CHANGED dat=package: flg=0x45000010 (has extras) }
+10-06 20:31:50.037   557   885 D ShortcutService: changing package: com.google.android.googlequicksearchbox userId0
+10-06 20:31:50.037   557   885 D ShortcutService: handlePackageChanged: com.google.android.googlequicksearchbox user=0
+10-06 20:31:50.037   557   885 D ShortcutService: rescanPackageIfNeeded 0@com.google.android.googlequicksearchbox, forceRescan=true , isNewApp=false
+10-06 20:31:50.039   557   843 D ConnectivityService: [101 CELLULAR] EVENT_NETWORK_INFO_CHANGED, going from CONNECTING to CONNECTING
+10-06 20:31:50.039   557   870 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-06 20:31:50.042   922  2232 I PermissionControllerServiceImpl: Updating user sensitive for uid 10141
+10-06 20:31:50.042   922   949 I PermissionControllerServiceImpl: Updating user sensitive for uid 10197
+10-06 20:31:50.042   922   949 I PermissionControllerServiceImpl: Updating user sensitive for uid 10143
+10-06 20:31:50.043   557   885 E system_server: No package ID 7f found for resource ID 0x7f080bdc.
+10-06 20:31:50.045   557   885 E system_server: No package ID 7f found for resource ID 0x7f152158.
+10-06 20:31:50.049   557   885 E system_server: No package ID 7f found for resource ID 0x7f080bed.
+10-06 20:31:50.049   557   885 E system_server: No package ID 7f found for resource ID 0x7f152159.
+10-06 20:31:50.049   557   885 D ShortcutService: Package com.google.android.googlequicksearchbox has 2 manifest shortcut(s), and 0 share target(s)
+10-06 20:31:50.049   557   885 D ShortcutService: Package com.google.android.googlequicksearchbox updated, version 301351415 -> 301351415
+10-06 20:31:50.051   557   885 D ShortcutService: Package com.google.android.googlequicksearchbox: publishing manifest shortcuts
+10-06 20:31:50.052   557   870 I AppWidgetServiceImpl: Received broadcast: android.intent.action.PACKAGE_CHANGED on user 0
+10-06 20:31:50.053   557  1035 W Role    : Default holder doesn't have required signing certificate: com.google.android.retaildemo:6547c73dee150c103980bfdffe55cc9a011d785dd694a5f99afd8205bcaf1f80
+10-06 20:31:50.055  1187  1215 D PackageUpdatedTask: Package updated: mOp=UPDATE packages=[com.google.android.gms.supervision]
+10-06 20:31:50.064  1187  1215 W AllAppsList: updatePromiseInstallInfo: no Activities matched updated package, removing all apps from package=com.google.android.gms.supervision
+10-06 20:31:50.065   922  1020 I PermissionControllerServiceImpl: Updating user sensitive for uid 10167
+10-06 20:31:50.067  1187  1215 D PackageUpdatedTask: OP_UPDATE: package com.google.android.gms.supervision is disabled, removing package.
+10-06 20:31:50.067  1187  1215 D ModelWriter: removing items from db . Reason: [removed because the corresponding package or component is removed. mOp=2 removedPackages=[com.google.android.gms.supervision] removedComponents=[]]
+10-06 20:31:50.068  1234  1846 I NearbySharing: A new client has bound to the NearbySharingService ClientBridge for calling package com.google.android.gms and PID 1234 [CONTEXT service_id=194 ]
+10-06 20:31:50.077   557  1035 E RoleControllerServiceImpl: Default/fallback role holder package doesn't qualify for the role, package: com.google.android.gms.supervision, role: android.app.role.SYSTEM_SUPERVISION
+10-06 20:31:50.082  1556  1757 I DynamiteModule: Considering local module com.google.android.gms.cronet_dynamite:0 and remote module com.google.android.gms.cronet_dynamite:3111
+10-06 20:31:50.082  1556  1757 I DynamiteModule: Selected remote version of com.google.android.gms.cronet_dynamite, version >= 3111
+10-06 20:31:50.082  1556  1757 V DynamiteModule: Dynamite loader version >= 2, using loadModule2NoCrashUtils
+10-06 20:31:50.083  1556  1757 W ziparchive: Unable to open '/data/user_de/0/com.google.android.gms/app_chimera/m/00000001/CronetDynamite.uncompressed.dm': No such file or directory
+10-06 20:31:50.086   922  1020 I PermissionControllerServiceImpl: Updating user sensitive for uid 10132
+10-06 20:31:50.093  1526  2424 W ProviderHelper: Unknown dynamite feature providerinstaller.dynamite
+10-06 20:31:50.093  1526  2424 I DynamiteModule: Considering local module com.google.android.gms.providerinstaller.dynamite:1 and remote module com.google.android.gms.providerinstaller.dynamite:0
+10-06 20:31:50.093  1526  2424 I DynamiteModule: Selected local version of com.google.android.gms.providerinstaller.dynamite
+10-06 20:31:50.108   922  1020 I PermissionControllerServiceImpl: Updating user sensitive for uid 10112
+10-06 20:31:50.108   922  1020 I PermissionControllerServiceImpl: Updating user sensitive for uid 1000
+10-06 20:31:50.108   922  1020 I PermissionControllerServiceImpl: Updating user sensitive for uid 10140
+10-06 20:31:50.114   557   896 I SdkSandboxManager: Reconciling sdk data package directories for 0
