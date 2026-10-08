@@ -751,7 +751,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                 message("تم رفع مستند التوثيق")
             }.addOnFailureListener {
                 loading = false
-                message("تم رفع الملف لكن تعذر حفظ بياناته")
+                message(firestoreError(it))
             }
         }.addOnFailureListener {
             loading = false
@@ -1215,7 +1215,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                     }
                     .addOnFailureListener {
                         loading = false
-                        message("تعذر إرسال طلب التوثيق، حاول مرة أخرى")
+                        message(firestoreError(it))
                     }
             }
         }
@@ -1598,7 +1598,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                             }
                             .addOnFailureListener {
                                 loading = false
-                                message("تعذر حفظ بيانات الملف الشخصي")
+                                message(firestoreError(it))
                             }
                     }
                 }
@@ -1639,7 +1639,7 @@ private fun ForsaApp(paymentIntent: Intent? = null) {
                             }
                             .addOnFailureListener {
                                 loading = false
-                                message("تعذر حفظ بيانات الشركة")
+                                message(firestoreError(it))
                             }
                     }
                 }
@@ -3710,43 +3710,69 @@ private fun ProfileActionCard(
         title.contains("المحفوظة") -> Icons.Default.Bookmark
         title.contains("السيرة") -> Icons.Default.Description
         title.contains("الشركة") || title.contains("التوثيق") -> Icons.Default.BusinessCenter
+        title.contains("طلباتي") -> Icons.Default.Description
         else -> Icons.Default.ArrowForward
     }
+
     Card(
-        Modifier.fillMaxWidth().clickable(onClick = onClick),
+        Modifier.fillMaxWidth(),
         shape = ForsaUi.CardShape,
         colors = CardDefaults.cardColors(containerColor = ForsaUi.Surface),
         border = BorderStroke(1.dp, ForsaUi.Border),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Row(Modifier.padding(15.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            Modifier.padding(14.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Surface(
-                Modifier.size(46.dp),
+                Modifier.size(48.dp),
                 shape = ForsaUi.SmallShape,
                 color = ForsaUi.PrimarySoft,
                 contentColor = ForsaUi.Primary
             ) {
-                androidx.compose.foundation.layout.Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                androidx.compose.foundation.layout.Box(
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Icon(icon, null, Modifier.size(21.dp))
                 }
             }
-            Spacer(Modifier.width(11.dp))
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+
+            Spacer(Modifier.width(12.dp))
+
+            Column(
+                Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(3.dp)
+            ) {
                 Text(title, style = MaterialTheme.typography.titleMedium)
                 Text(
                     description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = ForsaUi.Muted,
-                    maxLines = 2
+                    maxLines = 3
                 )
-                Text(
-                    actionLabel,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = ForsaUi.Secondary,
-                    modifier = Modifier.padding(top = 3.dp)
-                )
+                TextButton(
+                    onClick = onClick,
+                    contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                        horizontal = 0.dp,
+                        vertical = 4.dp
+                    )
+                ) {
+                    Text(
+                        actionLabel,
+                        color = ForsaUi.Secondary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-            Icon(Icons.Default.ArrowForward, null, tint = ForsaUi.Muted)
+
+            Icon(
+                Icons.Default.ArrowForward,
+                null,
+                tint = ForsaUi.Muted,
+                modifier = Modifier.size(18.dp)
+            )
         }
     }
 }
@@ -6102,6 +6128,24 @@ private fun tabIcon(tab: MainTab) = when (tab) {
     MainTab.Jobs -> Icons.Default.Search
     MainTab.Publish -> Icons.Default.AddCircle
     MainTab.Profile -> Icons.Default.Person
+}
+
+private fun firestoreError(exception: Exception?): String {
+    val firebase = exception as? com.google.firebase.firestore.FirebaseFirestoreException
+    return when (firebase?.code) {
+        com.google.firebase.firestore.FirebaseFirestoreException.Code.PERMISSION_DENIED ->
+            "تم رفض العملية من Firebase. قواعد Firestore المنشورة تحتاج تحديث."
+        com.google.firebase.firestore.FirebaseFirestoreException.Code.UNAVAILABLE ->
+            "خدمة Firebase غير متاحة حالياً. تحقق من الإنترنت وحاول مرة أخرى."
+        com.google.firebase.firestore.FirebaseFirestoreException.Code.NETWORK ->
+            "تعذر الاتصال بـFirebase. تحقق من الإنترنت وحاول مرة أخرى."
+        com.google.firebase.firestore.FirebaseFirestoreException.Code.NOT_FOUND ->
+            "بيانات الحساب غير موجودة في Firebase."
+        else -> {
+            val suffix = firebase?.code?.toString()?.let { " ($it)" }.orEmpty()
+            "تعذر تنفيذ العملية في Firebase" + suffix + "."
+        }
+    }
 }
 
 private fun firebaseError(exception: Exception?): String {
