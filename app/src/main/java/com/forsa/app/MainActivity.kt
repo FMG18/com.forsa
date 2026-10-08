@@ -4668,7 +4668,7 @@ private fun NotificationsScreen(
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
                         notifications = emptyList()
-                        onMessage("تعذر تحميل الإشعارات")
+                        onMessage(firestoreError(error))
                         return@addSnapshotListener
                     }
 
@@ -5348,7 +5348,7 @@ private fun CvProfileScreen(
                     }
                     .addOnFailureListener {
                         saving = false
-                        onMessage("تعذر حفظ السيرة الذاتية")
+                        onMessage(firestoreError(it))
                     }
             },
             enabled = !saving,
@@ -6137,8 +6137,6 @@ private fun firestoreError(exception: Exception?): String {
             "تم رفض العملية من Firebase. قواعد Firestore المنشورة تحتاج تحديث."
         com.google.firebase.firestore.FirebaseFirestoreException.Code.UNAVAILABLE ->
             "خدمة Firebase غير متاحة حالياً. تحقق من الإنترنت وحاول مرة أخرى."
-        com.google.firebase.firestore.FirebaseFirestoreException.Code.NETWORK ->
-            "تعذر الاتصال بـFirebase. تحقق من الإنترنت وحاول مرة أخرى."
         com.google.firebase.firestore.FirebaseFirestoreException.Code.NOT_FOUND ->
             "بيانات الحساب غير موجودة في Firebase."
         else -> {
