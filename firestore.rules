@@ -1,4 +1,4 @@
-// Forsa Firebase rules — keep this file synchronized with the live project.\nrules_version = '2';
+// Forsa Firebase rules — deployed to the live project through GitHub Actions.\nrules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
